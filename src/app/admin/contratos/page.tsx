@@ -66,7 +66,10 @@ export default function ContratosAdminPage() {
                             )}
                          </td>
                          <td className="px-5 py-3.5 text-[13px] text-gray-500">{c.date}</td>
-                         <td className="px-5 py-3.5 text-right">
+                         <td className="px-5 py-3.5 text-right flex justify-end gap-2">
+                            <a href="/imprimir" target="_blank" className="p-1 rounded hover:bg-gray-200 text-gray-400 group-hover:text-emerald-600 transition-colors" title="Descargar PDF">
+                               <Download className="w-4 h-4" />
+                            </a>
                             <button className="p-1 rounded hover:bg-gray-200 text-gray-400 group-hover:text-blue-600 transition-colors" title="Ver detalle">
                                <ExternalLink className="w-4 h-4" />
                             </button>

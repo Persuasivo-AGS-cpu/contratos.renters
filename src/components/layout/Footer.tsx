@@ -34,7 +34,7 @@ export function Footer() {
       </div>
       
       <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-border-layout flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-muted">
-         <p>© {new Date().getFullYear()} Renters.mx. Todos los derechos reservados.</p>
+         <p>© {new Date().getFullYear()} Renters.mx. Todos los derechos reservados. | Desarrollado por <a href="https://www.persuasivo.mx" target="_blank" rel="noreferrer" className="hover:underline text-inherit">Persuasivo MKT</a></p>
          <div className="flex items-center gap-2 text-brand-primary bg-brand-primary/5 px-3 py-1.5 rounded-full border border-brand-primary/10">
             <ShieldCheck className="w-4 h-4" /> Plataforma Legal Segura
          </div>

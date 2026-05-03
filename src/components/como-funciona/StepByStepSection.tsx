@@ -14,7 +14,7 @@ export function StepByStepSection() {
         "Renta mensual, depósito y duración del contrato",
         "Cláusulas opcionales: fiador, penalidades, inventario"
       ],
-      image: "/images/step1_laptop_1775677142791.png",
+      image: "/images/step1_latin_laptop_1775795637922.png",
       imagePill: "Persona llenando formulario en laptop"
     },
     {
@@ -28,7 +28,7 @@ export function StepByStepSection() {
         "Cláusulas legales obligatorias incluidas",
         "Anexo de inventario si la propiedad es amueblada"
       ],
-      image: "/images/step2_legal_1775677157973.png",
+      image: "/images/step2_latin_legal_1775795652381.png",
       imagePill: "Documentos legales y contrato",
       reverse: true
     },
@@ -43,7 +43,7 @@ export function StepByStepSection() {
         "Factura CFDI disponible a solicitud",
         "Garantía de satisfacción"
       ],
-      image: "/images/step3_payment_1775677173285.png",
+      image: "/images/step3_latin_payment_1775795667532.png",
       imagePill: "Pago seguro con tarjeta"
     },
     {
@@ -57,7 +57,7 @@ export function StepByStepSection() {
         "Copia en tu dashboard permanentemente",
         "Reenvío por correo sin costo"
       ],
-      image: "/images/step4_pdf_1775677189838.png",
+      image: "/images/step4_latin_contract_1775795679209.png",
       imagePill: "Persona revisando contrato en PDF",
       reverse: true
     }

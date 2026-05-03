@@ -54,7 +54,14 @@ export default function SuccessPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <Link 
-              href="/"
+              href="/imprimir"
+              target="_blank"
+              onClick={(e) => {
+                // Pequeño delay visual para que el usuario perciba la acción
+                setTimeout(() => {
+                  /* track download event if needed */
+                }, 100);
+              }}
               className="flex flex-col items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-900 rounded-2xl p-6 transition-all group"
             >
               <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
