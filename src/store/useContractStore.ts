@@ -16,7 +16,7 @@ export type ContractState = {
     type: 'departamento' | 'casa' | 'local' | 'oficina' | '';
     furnished: boolean;
     inventory: Record<string, number>;
-    additional_inventory: string;
+    additional_items: Array<{ id: string; name: string; qty: number }>;
   };
   landlord: { name: string; id_number: string; email: string; phone: string; address: string };
   tenant: { name: string; id_number: string; email: string; phone: string; address: string };
@@ -63,8 +63,8 @@ const initialState: ContractState = {
     address: { street: '', ext_num: '', int_num: '', neighborhood: '', municipality: '', zip_code: '', state: '' }, 
     type: '', 
     furnished: false, 
-    inventory: {}, 
-    additional_inventory: '' 
+    inventory: {},
+    additional_items: []
   },
   landlord: { name: '', id_number: '', email: '', phone: '', address: '' },
   tenant: { name: '', id_number: '', email: '', phone: '', address: '' },

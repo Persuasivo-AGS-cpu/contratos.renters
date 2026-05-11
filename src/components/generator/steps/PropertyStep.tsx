@@ -1,6 +1,6 @@
 "use client";
 import { useContractStore } from "@/store/useContractStore";
-import { Home, Building2, Store, Briefcase, Package, Box, Minus, Plus } from "lucide-react";
+import { Home, Building2, Store, Briefcase, Package, Box, Minus, Plus, X, PlusCircle } from "lucide-react";
 
 export function PropertyStep() {
   const { contract, updateContract, nextStep, prevStep } = useContractStore();
@@ -21,7 +21,34 @@ export function PropertyStep() {
     { id: 'tv', label: 'Televisor', icon: '📺' },
   ];
 
-  const totalItems = Object.values(contract.property.inventory).reduce((acc, curr) => acc + curr, 0);
+  const additionalItems = contract.property.additional_items ?? [];
+
+  const addAdditionalItem = () => {
+    updateContract('property', {
+      additional_items: [
+        ...additionalItems,
+        { id: crypto.randomUUID(), name: '', qty: 1 },
+      ],
+    });
+  };
+
+  const updateAdditionalItem = (id: string, field: 'name' | 'qty', value: string | number) => {
+    updateContract('property', {
+      additional_items: additionalItems.map(item =>
+        item.id === id ? { ...item, [field]: value } : item
+      ),
+    });
+  };
+
+  const removeAdditionalItem = (id: string) => {
+    updateContract('property', {
+      additional_items: additionalItems.filter(item => item.id !== id),
+    });
+  };
+
+  const totalItems =
+    Object.values(contract.property.inventory).reduce((acc, curr) => acc + curr, 0) +
+    additionalItems.reduce((acc, i) => acc + (i.qty > 0 ? i.qty : 0), 0);
 
   const updateAddress = (field: string, value: string) => {
     updateContract('property', { 
@@ -205,23 +232,23 @@ export function PropertyStep() {
                      <span className="text-xl bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">{item.icon}</span>
                      <span className="text-[14px] font-semibold text-gray-800">{item.label}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-4">
-                    <button 
+                    <button
                       className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-100 hover:border-gray-300 disabled:opacity-30 transition-all font-bold"
                       disabled={qty === 0}
-                      onClick={() => 
-                        updateContract('property', { 
-                          inventory: { ...contract.property.inventory, [item.id]: Math.max(0, qty - 1) } 
+                      onClick={() =>
+                        updateContract('property', {
+                          inventory: { ...contract.property.inventory, [item.id]: Math.max(0, qty - 1) }
                         })
                       }
                     ><Minus className="w-4 h-4"/></button>
                     <span className="w-4 text-center font-black text-[15px] select-none text-gray-900">{qty}</span>
-                    <button 
+                    <button
                       className="w-8 h-8 flex items-center justify-center rounded-full border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100 hover:border-blue-300 transition-all font-bold"
-                      onClick={() => 
-                        updateContract('property', { 
-                          inventory: { ...contract.property.inventory, [item.id]: qty + 1 } 
+                      onClick={() =>
+                        updateContract('property', {
+                          inventory: { ...contract.property.inventory, [item.id]: qty + 1 }
                         })
                       }
                     ><Plus className="w-4 h-4"/></button>
@@ -229,6 +256,52 @@ export function PropertyStep() {
                 </div>
               );
             })}
+          </div>
+
+          {/* ARTÍCULOS ADICIONALES */}
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-[14px] font-bold text-gray-700">Artículos adicionales</h4>
+            </div>
+
+            {additionalItems.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {additionalItems.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3 bg-white border border-blue-100 rounded-xl px-4 py-3">
+                    <input
+                      type="text"
+                      className="flex-1 text-[14px] font-medium text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
+                      placeholder="Ej. Espejo de pared, Escritorio, Lámpara de pie..."
+                      value={item.name}
+                      onChange={(e) => updateAdditionalItem(item.id, 'name', e.target.value)}
+                    />
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30 transition-all"
+                        disabled={item.qty <= 1}
+                        onClick={() => updateAdditionalItem(item.id, 'qty', Math.max(1, item.qty - 1))}
+                      ><Minus className="w-3.5 h-3.5" /></button>
+                      <span className="w-5 text-center font-black text-[14px] select-none text-gray-900">{item.qty}</span>
+                      <button
+                        className="w-7 h-7 flex items-center justify-center rounded-full border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100 transition-all"
+                        onClick={() => updateAdditionalItem(item.id, 'qty', item.qty + 1)}
+                      ><Plus className="w-3.5 h-3.5" /></button>
+                    </div>
+                    <button
+                      className="w-7 h-7 flex items-center justify-center rounded-full border border-red-200 text-red-400 hover:bg-red-50 hover:border-red-300 transition-all shrink-0"
+                      onClick={() => removeAdditionalItem(item.id)}
+                    ><X className="w-3.5 h-3.5" /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button
+              onClick={addAdditionalItem}
+              className="flex items-center gap-2 text-[13px] font-bold text-[#4F46E5] hover:text-[#4338CA] transition-colors"
+            >
+              <PlusCircle className="w-4 h-4" /> Agregar artículo
+            </button>
           </div>
 
         </div>

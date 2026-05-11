@@ -161,7 +161,7 @@ export function NuevoLeonTemplate() {
           <ul className="list-disc pl-8 space-y-2">
             {Object.entries(c.property.inventory).map(([key, qty]) => {
               if (qty <= 0) return null;
-              
+
               const labelMap: Record<string, string> = {
                 sofas: 'Sofás o Sillones',
                 camas: 'Camas / Colchones',
@@ -173,21 +173,19 @@ export function NuevoLeonTemplate() {
                 abanicos: 'Abanicos de Techo',
                 boiler: 'Boiler / Calentador de Agua',
               };
-              
+
               return (
                 <li key={key}>
                   <span className="font-bold">{qty}</span> x {labelMap[key] || key}
                 </li>
               );
             })}
+            {c.property.additional_items?.filter(i => i.name.trim() && i.qty > 0).map((item) => (
+              <li key={item.id}>
+                <span className="font-bold">{item.qty}</span> x {item.name}
+              </li>
+            ))}
           </ul>
-
-          {c.property.additional_inventory && (
-             <div className="mt-4 pl-4 border-l-2 border-gray-300">
-               <p className="font-bold text-xs mb-1">Artículos Adicionales:</p>
-               <p className="text-xs">{c.property.additional_inventory}</p>
-             </div>
-          )}
 
           <p className="mt-8 italic text-xs text-gray-500 text-justify">
              "EL ARRENDATARIO" se obliga a mantener los bienes listados en correcto estado, respondiendo por el detrimento de los mismos más allá de su uso normal, pudiendo "EL ARRENDADOR" descontar de la garantía cualquier falta o afectación reportada al término del arrendamiento.
