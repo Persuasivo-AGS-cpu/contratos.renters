@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = 'Renters.mx <contratos@renters.mx>';
+const FROM = 'Renters.mx <contratos@contratos.renters.mx>';
 
 const estadoLabel: Record<string, string> = {
   'nuevo-leon': 'Nuevo León',
