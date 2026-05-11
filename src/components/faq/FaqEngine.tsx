@@ -25,7 +25,7 @@ const faqData: FaqItem[] = [
     id: "leg-2",
     category: "Legal",
     question: "¿Para qué estados están disponibles los contratos?",
-    answer: "Actualmente nuestro motor soporta con precisión milimétrica las legislaciones de: Ciudad de México, Nuevo León, Jalisco y Estado de México. Pronto abriremos más estados."
+    answer: "Actualmente disponible para Nuevo León. Estamos trabajando para agregar más estados próximamente."
   },
   {
     id: "leg-3",

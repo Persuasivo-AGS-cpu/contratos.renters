@@ -14,8 +14,8 @@ export function FaqSection() {
        a: "El tiempo que te tome responder el cuestionario dinámico. En promedio son menos de 6 minutos. Una vez realizado el pago, el archivo PDF final es despachado de forma instantánea."
     },
     {
-       q: "¿Para qué estados están disponibles?",
-       a: "Renters ofrece cobertura garantizada para Nuevo León, Yucatán, Querétaro, Coahuila, CDMX y Estado de México. Estamos expandiendo al resto del país velozmente."
+       q: "¿Para qué estados está disponible?",
+       a: "Actualmente disponible para Nuevo León. Más estados próximamente."
     },
     {
        q: "¿Necesito un abogado para usarlo?",

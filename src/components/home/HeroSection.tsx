@@ -10,10 +10,10 @@ export function HeroSection() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const states = [
-    { id: "NL", label: "Nuevo León" },
-    { id: "CDMX", label: "CDMX" },
-    { id: "JAL", label: "Jalisco" },
-    { id: "EDOMEX", label: "Estado de México" },
+    { id: "NL", label: "Nuevo León", available: true },
+    { id: "CDMX", label: "CDMX", available: false },
+    { id: "JAL", label: "Jalisco", available: false },
+    { id: "EDOMEX", label: "Estado de México", available: false },
   ];
 
   useEffect(() => {
@@ -77,17 +77,26 @@ export function HeroSection() {
                   {states.map((s) => (
                     <button
                       key={s.id}
+                      disabled={!s.available}
                       onClick={() => {
+                        if (!s.available) return;
                         setSelectedState(s.id);
                         setIsOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center transition-colors ${
-                        selectedState === s.id 
-                          ? "bg-[#4D6BFE] text-white font-medium" 
+                      className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between transition-colors ${
+                        !s.available
+                          ? "opacity-40 cursor-not-allowed text-gray-500"
+                          : selectedState === s.id
+                          ? "bg-[#4D6BFE] text-white font-medium"
                           : "text-gray-300 hover:bg-white/10 hover:text-white"
                       }`}
                     >
-                      {s.label}
+                      <span>{s.label}</span>
+                      {!s.available && (
+                        <span className="text-[9px] font-bold uppercase tracking-wider bg-white/10 px-1.5 py-0.5 rounded-full">
+                          Próximamente
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -110,8 +119,8 @@ export function HeroSection() {
               <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Contratos Generados</p>
            </div>
            <div>
-              <p className="text-3xl md:text-4xl font-black text-white">4 <span className="text-xl md:text-2xl font-normal">estados</span></p>
-              <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Cobertura Legal</p>
+              <p className="text-3xl md:text-4xl font-black text-white">NL</p>
+              <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Disponible Ahora</p>
            </div>
            <div>
               <p className="text-3xl md:text-4xl font-black text-white">&lt; 10 <span className="text-xl md:text-2xl font-normal">min</span></p>
