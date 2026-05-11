@@ -1,91 +1,106 @@
-import { Search, Filter, Download, MoreHorizontal, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { ArrowUpRight, Clock } from "lucide-react";
+import { supabaseAdmin } from "@/lib/supabase";
 
-export default function TransaccionesPage() {
-  const transactions = [
-    { id: "pi_1NqZ...", email: "juan.perez@example.com", plan: "Protección", amount: "$499.00", status: "succeeded", date: "08 Abr, 14:32" },
-    { id: "pi_1NqX...", email: "m.gomez@empresa.mx", plan: "Básico", amount: "$299.00", status: "succeeded", date: "08 Abr, 11:15" },
-    { id: "pi_1NyP...", email: "desconocido", plan: "N/A", amount: "$0.00", status: "failed", date: "08 Abr, 09:42" },
-    { id: "pi_1NzQ...", email: "luis.t@hotmail.com", plan: "Protección", amount: "$499.00", status: "refunded", date: "07 Abr, 18:20" },
-    { id: "pi_1NaW...", email: "ana.sofia@realestate.com", plan: "Pack x5", amount: "$1,499.00", status: "succeeded", date: "07 Abr, 16:05" },
-  ];
+function formatDate(iso: string | null) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleString("es-MX", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
+function truncate(str: string | null, len = 20) {
+  if (!str) return "—";
+  return str.length > len ? str.slice(0, len) + "…" : str;
+}
+
+export default async function TransaccionesPage() {
+  const { data: transactions, count } = await supabaseAdmin
+    .from("contratos")
+    .select(
+      "id, folio, stripe_session_id, stripe_payment_id, arrendador_email, status, paid_at, created_at",
+      { count: "exact" }
+    )
+    .order("created_at", { ascending: false })
+    .limit(50);
 
   return (
     <div className="animate-in fade-in duration-500">
-      
       <div className="flex items-center justify-between mb-8">
-         <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 mb-1">Transacciones</h1>
-            <p className="text-[13px] text-gray-500 font-medium">Historial de pagos procesados por Stripe (Modo Real).</p>
-         </div>
-         <button className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-md text-[13px] font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
-            <Download className="w-4 h-4" /> Exportar CSV
-         </button>
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900 mb-1">Transacciones</h1>
+          <p className="text-[13px] text-gray-500 font-medium">
+            Historial de sesiones de pago · {count ?? 0} registros · Supabase + Stripe
+          </p>
+        </div>
       </div>
 
-      {/* Filter Bar */}
-      <div className="bg-white p-2 rounded-t-xl border border-gray-200 border-b-0 flex items-center justify-between gap-4">
-         <div className="flex-1 w-full max-w-sm relative ml-2">
-            <Search className="absolute left-3 top-[10px] w-4 h-4 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Buscar por ID, email o monto..." 
-              className="w-full h-9 pl-9 pr-3 text-[13px] bg-transparent text-gray-900 focus:outline-none placeholder-gray-400"
-            />
-         </div>
-         <div className="flex items-center gap-2 pr-2">
-             <button className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[12px] font-medium text-gray-700 hover:bg-gray-100 transition-colors">
-                <Filter className="w-3.5 h-3.5" /> Estado: Todos
-             </button>
-         </div>
+      {/* Filter bar */}
+      <div className="bg-white p-2 rounded-t-xl border border-gray-200 border-b-0 flex items-center gap-4 px-4">
+        <span className="text-[13px] text-gray-400 font-medium">Mostrando los 50 más recientes</span>
       </div>
 
-      {/* Data Table */}
-      <div className="bg-white rounded-b-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="overflow-x-auto">
-             <table className="w-full text-left border-collapse">
-                <thead>
-                   <tr className="bg-gray-50 border-b border-gray-200">
-                      <th className="px-5 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">ID Pago</th>
-                      <th className="px-5 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Cliente</th>
-                      <th className="px-5 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Plan</th>
-                      <th className="px-5 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Monto</th>
-                      <th className="px-5 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Estado</th>
-                      <th className="px-5 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
-                      <th className="px-5 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">Acción</th>
-                   </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                   {transactions.map((t, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 transition-colors group">
-                         <td className="px-5 py-3.5 text-[13px] font-mono text-gray-500">{t.id}</td>
-                         <td className="px-5 py-3.5 text-[13px] font-medium text-gray-900">{t.email}</td>
-                         <td className="px-5 py-3.5 text-[13px] text-gray-600">{t.plan}</td>
-                         <td className="px-5 py-3.5 text-[13px] font-medium text-gray-900">{t.amount}</td>
-                         <td className="px-5 py-3.5">
-                            {t.status === 'succeeded' && <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100"><ArrowUpRight className="w-3 h-3"/> Completado</span>}
-                            {t.status === 'failed' && <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-50 text-red-700 border border-red-100"><ArrowDownRight className="w-3 h-3"/> Fallido</span>}
-                            {t.status === 'refunded' && <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-gray-100 text-gray-700 border border-gray-200">Reembolsado</span>}
-                         </td>
-                         <td className="px-5 py-3.5 text-[13px] text-gray-500">{t.date}</td>
-                         <td className="px-5 py-3.5 text-right">
-                            <button className="p-1 rounded hover:bg-gray-200 text-gray-400 group-hover:text-gray-600 transition-colors">
-                               <MoreHorizontal className="w-4 h-4" />
-                            </button>
-                         </td>
-                      </tr>
-                   ))}
-                </tbody>
-             </table>
+      {/* Table */}
+      <div className="bg-white rounded-b-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-200">
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Folio</th>
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Stripe Session ID</th>
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Payment ID</th>
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Monto</th>
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {(transactions ?? []).length === 0 && (
+                <tr>
+                  <td colSpan={7} className="px-4 py-16 text-center text-gray-400 text-sm">
+                    Sin transacciones registradas aún.
+                  </td>
+                </tr>
+              )}
+              {(transactions ?? []).map((t) => (
+                <tr key={t.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3 text-[13px] font-mono text-blue-600 font-medium">{t.folio}</td>
+                  <td className="px-4 py-3 text-[12px] font-mono text-gray-500">{truncate(t.stripe_session_id, 24)}</td>
+                  <td className="px-4 py-3 text-[12px] font-mono text-gray-500">
+                    {t.stripe_payment_id ? truncate(t.stripe_payment_id, 24) : (
+                      <span className="text-gray-300 italic">pendiente</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-[13px] text-gray-700 truncate max-w-[180px]">
+                    {t.arrendador_email ?? "—"}
+                  </td>
+                  <td className="px-4 py-3 text-[13px] font-medium text-gray-900">
+                    {t.status === "paid" ? "$499 MXN" : "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {t.status === "paid" ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                        <ArrowUpRight className="w-3 h-3" /> Completado
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-600 border border-amber-100">
+                        <Clock className="w-3 h-3" /> Pendiente
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-[13px] text-gray-500">
+                    {t.status === "paid" ? formatDate(t.paid_at) : formatDate(t.created_at)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {(count ?? 0) > 0 && (
+          <div className="px-5 py-3 border-t border-gray-200 bg-gray-50 text-[12px] text-gray-500 font-medium">
+            Mostrando {Math.min(50, count ?? 0)} de {count ?? 0} registros
           </div>
-          
-          <div className="px-5 py-3 border-t border-gray-200 bg-gray-50 flex items-center justify-between text-[12px] text-gray-500 font-medium">
-             <span>Mostrando 5 de 1,204 transacciones</span>
-             <div className="flex gap-2">
-                <button className="px-3 py-1 border border-gray-200 rounded hover:bg-white transition-colors" disabled>Anterior</button>
-                <button className="px-3 py-1 border border-gray-200 rounded bg-white shadow-sm hover:bg-gray-50 transition-colors">Siguiente</button>
-             </div>
-          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
