@@ -2,6 +2,8 @@ import { TrendingUp, FileText, Clock, DollarSign, ArrowUpRight } from "lucide-re
 import { supabaseAdmin } from "@/lib/supabase";
 import { ContratosChart } from "@/components/admin/ContratosChart";
 
+export const dynamic = "force-dynamic";
+
 const PRECIO_CONTRATO = 499;
 
 function formatMXN(n: number) {
