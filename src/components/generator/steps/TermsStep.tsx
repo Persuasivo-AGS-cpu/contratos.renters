@@ -3,6 +3,12 @@ import { useContractStore } from "@/store/useContractStore";
 
 export function TermsStep() {
   const { contract, updateContract, nextStep, prevStep } = useContractStore();
+
+  const canProceed =
+    contract.terms.monthly_rent > 0 &&
+    contract.terms.deposit_amount > 0 &&
+    contract.terms.lease_start_date !== '';
+
   return (
     <div className="max-w-xl pb-10">
       <h2 className="text-2xl font-bold mb-2">Términos del arrendamiento</h2>
@@ -59,7 +65,11 @@ export function TermsStep() {
 
       <div className="flex gap-4 pt-4 border-t border-border-layout mt-8">
         <button onClick={prevStep} className="px-6 py-3 border border-border-layout bg-white rounded-lg hover:bg-surface-subtle transition-colors font-medium">Anterior</button>
-        <button onClick={nextStep} className="px-6 py-3 bg-brand-primary/90 hover:bg-brand-primary transition-colors text-white rounded-lg flex-1 text-center font-bold">
+        <button
+          onClick={nextStep}
+          disabled={!canProceed}
+          className="px-6 py-3 bg-brand-primary/90 hover:bg-brand-primary transition-colors text-white rounded-lg flex-1 text-center font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           Siguiente &rarr;
         </button>
       </div>

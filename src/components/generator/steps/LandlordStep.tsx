@@ -10,8 +10,9 @@ export function LandlordStep() {
   const isIneValid = landlord.id_number.length === 18;
   const isPhoneValid = landlord.phone.length === 10;
   const isNameValid = landlord.name.trim().length > 3;
+  const isAddressValid = landlord.address.trim().length > 5;
 
-  const canProceed = isEmailValid && isIneValid && isPhoneValid && isNameValid;
+  const canProceed = isEmailValid && isIneValid && isPhoneValid && isNameValid && isAddressValid;
 
   return (
     <div className="max-w-xl pb-10">
@@ -79,6 +80,18 @@ export function LandlordStep() {
               }}
             />
           </div>
+        </div>
+
+        <div>
+          <label className="block text-[14px] font-bold text-gray-900 mb-2">Domicilio del arrendador</label>
+          <input
+            type="text"
+            className="w-full h-12 px-4 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px]"
+            placeholder="Calle, Número, Colonia, Municipio, Estado, CP"
+            value={landlord.address}
+            onChange={(e) => updateContract('landlord', { address: e.target.value })}
+          />
+          <span className="text-[11px] text-gray-400 mt-1 block">Se usará como domicilio legal para notificaciones en el contrato.</span>
         </div>
       </div>
 

@@ -4,9 +4,6 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { sendContractEmail } from '@/lib/email';
 import Stripe from 'stripe';
 
-// Next.js 13+ App Router: deshabilitar body parsing para Stripe webhook
-export const config = { api: { bodyParser: false } };
-
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');

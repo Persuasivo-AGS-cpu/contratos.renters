@@ -12,7 +12,7 @@ function isAuthenticated(req: NextRequest): boolean {
   return user === ADMIN_USER && pass === ADMIN_PASS;
 }
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Proteger /admin con Basic Auth

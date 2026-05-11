@@ -80,6 +80,18 @@ export function TenantStep() {
             />
           </div>
         </div>
+
+        <div>
+          <label className="block text-[14px] font-bold text-gray-900 mb-2">Domicilio del inquilino</label>
+          <input
+            type="text"
+            className="w-full h-12 px-4 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px]"
+            placeholder="Calle, Número, Colonia, Municipio, Estado, CP"
+            value={tenant.address}
+            onChange={(e) => updateContract('tenant', { address: e.target.value })}
+          />
+          <span className="text-[11px] text-gray-400 mt-1 block">Domicilio actual del inquilino (puede ser diferente al inmueble rentado).</span>
+        </div>
       </div>
 
       <div className="flex items-center justify-between pt-8 border-t border-gray-200 mt-10">
