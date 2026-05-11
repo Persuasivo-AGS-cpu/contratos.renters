@@ -20,7 +20,7 @@ export default function SandboxPage() {
         </div>
         
         <div className="bg-white p-12 shadow-2xl rounded-sm">
-           <NuevoLeonTemplate data={contract} />
+           <NuevoLeonTemplate />
         </div>
       </div>
     </div>

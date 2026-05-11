@@ -1,25 +1,29 @@
-"use client";
+import { redirect } from 'next/navigation';
+import { supabaseAdmin } from '@/lib/supabase';
+import ImprimirClient from './ImprimirClient';
 
-import { useEffect, useState } from "react";
-import { NuevoLeonTemplate } from "@/components/generator/templates/NuevoLeonTemplate";
+interface PageProps {
+  searchParams: Promise<{ token?: string; folio?: string }>;
+}
 
-export default function ImprimirPage() {
-  const [mounted, setMounted] = useState(false);
+export default async function ImprimirPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const token = params.token;
 
-  useEffect(() => {
-    setMounted(true);
-    // Lanzar diálogo de impresión automáticamente
-    const timer = setTimeout(() => {
-      window.print();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  if (!token) {
+    redirect('/contrato');
+  }
 
-  if (!mounted) return null;
+  const { data, error } = await supabaseAdmin
+    .from('contratos')
+    .select('id, folio, status, contract_data')
+    .eq('pdf_token', token)
+    .eq('status', 'paid')
+    .single();
 
-  return (
-    <main id="print-area" className="bg-white min-h-screen p-8 max-w-4xl mx-auto print:p-0 print:m-0">
-      <NuevoLeonTemplate />
-    </main>
-  );
+  if (error || !data) {
+    redirect('/contrato?error=acceso_denegado');
+  }
+
+  return <ImprimirClient contractData={data.contract_data} folio={data.folio} />;
 }
