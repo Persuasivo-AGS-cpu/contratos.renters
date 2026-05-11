@@ -58,7 +58,7 @@ export const BANK_CATALOG: Record<string, string> = {
 export function validateClabeChecksum(clabe: string): boolean {
   if (clabe.length !== 18) return false;
   
-  const weights = [3, 2, 7, 3, 2, 7, 3, 2, 7, 3, 2, 7, 3, 2, 7, 3, 2];
+  const weights = [3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7];
   let sum = 0;
   
   // Sum=( (digito * peso) mod 10 )
