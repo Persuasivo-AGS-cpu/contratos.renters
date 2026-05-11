@@ -48,6 +48,5 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     folio: data.folio,
     pdf_token: data.pdf_token,
-    contract_data: data.contract_data,
   });
 }

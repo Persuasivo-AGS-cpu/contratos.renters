@@ -5,15 +5,11 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export const PLAN_PRICES: Record<string, number> = {
-  basico: 49900,       // $499 MXN en centavos
-  proteccion: 89900,   // $899 MXN
-  pack: 199900,        // $1,999 MXN
+  basico: 49900,  // $499 MXN en centavos
 };
 
 export const PLAN_NAMES: Record<string, string> = {
   basico: 'Contrato de Arrendamiento — Plan Básico',
-  proteccion: 'Contrato + Póliza de Protección',
-  pack: 'Pack Inmobiliario (5 Contratos)',
 };
 
 export function generateFolio(estado: string): string {

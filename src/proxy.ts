@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'renters2026';
+const ADMIN_USER = process.env.ADMIN_USER;
+const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 
 function isAuthenticated(req: NextRequest): boolean {
   const authHeader = req.headers.get('authorization');
   if (!authHeader?.startsWith('Basic ')) return false;
 
+  if (!ADMIN_USER || !ADMIN_PASS) return false;
   const base64 = authHeader.slice(6);
   const [user, pass] = Buffer.from(base64, 'base64').toString().split(':');
   return user === ADMIN_USER && pass === ADMIN_PASS;
