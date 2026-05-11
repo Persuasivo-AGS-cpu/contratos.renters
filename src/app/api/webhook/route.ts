@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
+import { sendContractEmail } from '@/lib/email';
 import Stripe from 'stripe';
 
 // Next.js 13+ App Router: deshabilitar body parsing para Stripe webhook
@@ -43,6 +44,37 @@ export async function POST(req: NextRequest) {
       if (error) {
         console.error('[webhook] Supabase update error:', error);
         return NextResponse.json({ error: 'DB update failed' }, { status: 500 });
+      }
+
+      // Obtener pdf_token para el link de descarga
+      const { data: contrato } = await supabaseAdmin
+        .from('contratos')
+        .select('pdf_token, arrendador_nombre, arrendador_email, inquilino_email, estado')
+        .eq('stripe_session_id', session.id)
+        .single();
+
+      if (contrato) {
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx';
+        const downloadUrl = `${appUrl}/api/download?token=${contrato.pdf_token}`;
+        const folio = session.metadata?.folio || '';
+        const recipients = [
+          { email: contrato.arrendador_email, name: contrato.arrendador_nombre || 'Arrendador' },
+          { email: contrato.inquilino_email, name: 'Inquilino' },
+        ].filter((r) => r.email);
+
+        for (const recipient of recipients) {
+          try {
+            await sendContractEmail({
+              toEmail: recipient.email!,
+              toName: recipient.name,
+              folio,
+              estado: contrato.estado,
+              downloadUrl,
+            });
+          } catch (emailErr) {
+            console.error(`[webhook] Email failed for ${recipient.email}:`, emailErr);
+          }
+        }
       }
 
       console.log(`[webhook] Contrato pagado: session=${session.id} folio=${session.metadata?.folio}`);

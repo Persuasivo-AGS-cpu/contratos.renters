@@ -2,7 +2,30 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe, PLAN_PRICES, PLAN_NAMES, generateFolio } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
 
+// Rate limiting en memoria: máx 5 sesiones por IP por 10 minutos
+const ipRequestMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 5;
+const WINDOW_MS = 10 * 60 * 1000;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = ipRequestMap.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    ipRequestMap.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return true;
+  }
+
+  if (entry.count >= RATE_LIMIT) return false;
+  entry.count++;
+  return true;
+}
+
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json({ error: 'Demasiadas solicitudes. Intenta en unos minutos.' }, { status: 429 });
+  }
   try {
     const body = await req.json();
     const { contract, plan } = body;
