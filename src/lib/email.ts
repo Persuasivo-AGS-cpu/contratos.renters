@@ -27,7 +27,7 @@ export async function sendContractEmail(params: SendContractEmailParams) {
   };
 
   await transporter.sendMail({
-    from: `"Renters.mx — Contratos" <${process.env.GMAIL_USER}>`,
+    from: '"Renters.mx — Contratos" <renters.mx@gmail.com>',
     to: toEmail,
     bcc: process.env.GMAIL_USER, // copia de respaldo a la marca
     subject: `Tu contrato está listo — Folio ${folio}`,
