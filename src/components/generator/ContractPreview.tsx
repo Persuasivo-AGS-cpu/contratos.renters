@@ -4,22 +4,14 @@ import { useContractStore } from "@/store/useContractStore";
 import { Lock, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { NuevoLeonTemplate } from "./templates/NuevoLeonTemplate";
+import { getStateTemplate, getStateName as getStateNameHelper } from "./templates/getStateTemplate";
 
 export function ContractPreview() {
   const { contract } = useContractStore();
   
   const isPaid = contract.status === 'paid' || contract.status === 'completed';
 
-  const getStateName = (stateId: string) => {
-    switch(stateId) {
-      case 'nuevo-leon': return 'NUEVO LEÓN';
-      case 'jalisco': return 'JALISCO';
-      case 'cdmx': return 'CIUDAD DE MÉXICO';
-      case 'edomex': return 'ESTADO DE MÉXICO';
-      default: return '[ESTADO SELECCIONADO]';
-    }
-  }
+  const StateTemplate = getStateTemplate(contract.state);
 
   return (
     <div className="w-full flex-col flex text-[10px] sm:text-[11px] tracking-normal mb-8">
@@ -47,14 +39,14 @@ export function ContractPreview() {
             <p className="font-mono text-[9px] text-gray-400 font-bold uppercase tracking-widest">Instrumento Legal</p>
             <h3 className="font-display font-bold uppercase text-gray-900 text-base leading-tight pt-2">Contrato de Arrendamiento<br/>Residencial</h3>
             <p className="text-gray-400 uppercase font-mono text-[9px] font-bold tracking-wider pt-2">
-              CÓDIGO CIVIL PARA EL ESTADO DE {getStateName(contract.state)}
+              CÓDIGO CIVIL PARA EL ESTADO DE {getStateNameHelper(contract.state)}
             </p>
           </div>
         </div>
 
         {/* Contenido Dinámico Legal */}
         <div className="px-4 md:px-8 pt-0 flex-1 relative overflow-y-auto scrollbar-hide pb-20 select-none">
-          <NuevoLeonTemplate />
+          <StateTemplate />
 
           {isPaid && (
             <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 font-bold animate-in slide-in-from-bottom-2">

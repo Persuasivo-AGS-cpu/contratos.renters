@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { NuevoLeonTemplate } from "@/components/generator/templates/NuevoLeonTemplate";
+import { getStateTemplate } from "@/components/generator/templates/getStateTemplate";
 import { useContractStore } from "@/store/useContractStore";
 import type { ContractState } from "@/store/useContractStore";
 
@@ -12,6 +12,7 @@ interface Props {
 
 export default function ImprimirClient({ contractData, folio }: Props) {
   const { updateContract } = useContractStore();
+  const StateTemplate = getStateTemplate(contractData.state);
 
   useEffect(() => {
     // Hidratar store con los datos del contrato verificado en servidor
@@ -37,7 +38,7 @@ export default function ImprimirClient({ contractData, folio }: Props) {
           Descargar / Imprimir PDF
         </button>
       </div>
-      <NuevoLeonTemplate />
+      <StateTemplate />
     </main>
   );
 }
