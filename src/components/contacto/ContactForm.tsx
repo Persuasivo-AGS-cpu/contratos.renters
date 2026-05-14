@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Send, Lock } from "lucide-react";
+import { Send, Lock, CheckCircle, AlertCircle } from "lucide-react";
 
 export function ContactForm() {
   const [selectedMotiveId, setSelectedMotiveId] = useState<string>("duda");
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [mensaje, setMensaje] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   
   const motives = [
     { 
@@ -46,6 +50,23 @@ export function ContactForm() {
 
   const activeMotiveInfo = motives.find(m => m.id === selectedMotiveId) || motives[0];
 
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, correo, motivo: activeMotiveInfo.label, mensaje }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+      setNombre(""); setCorreo(""); setMensaje("");
+    } catch {
+      setStatus("error");
+    }
+  }
+
   return (
     <div className="w-full bg-[#fcfcfc] text-[#111] py-16 px-6 sm:px-12 md:px-16 lg:px-24 flex flex-col justify-center h-full">
       
@@ -79,21 +100,27 @@ export function ContactForm() {
         </div>
 
         {/* Form Fields */}
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
               <label className="text-[14px] font-bold text-[#111]">Nombre</label>
-              <input 
-                type="text" 
-                placeholder="Tu nombre" 
+              <input
+                type="text"
+                required
+                placeholder="Tu nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
                 className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#1a56ff] focus:border-transparent transition-all"
               />
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-[14px] font-bold text-[#111]">Correo electrónico</label>
-              <input 
-                type="email" 
-                placeholder="tu@email.com" 
+              <input
+                type="email"
+                required
+                placeholder="tu@email.com"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
                 className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#1a56ff] focus:border-transparent transition-all"
               />
             </div>
@@ -103,18 +130,34 @@ export function ContactForm() {
             <label className="text-[14px] font-bold text-[#111] transition-all">
               {activeMotiveInfo.msgLabel}
             </label>
-            <textarea 
+            <textarea
               rows={5}
-              placeholder={activeMotiveInfo.msgPlaceholder} 
+              required
+              placeholder={activeMotiveInfo.msgPlaceholder}
+              value={mensaje}
+              onChange={(e) => setMensaje(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#1a56ff] focus:border-transparent transition-all resize-none"
             ></textarea>
           </div>
 
-          <button 
+          {status === "success" && (
+            <div className="flex items-center gap-2 text-[#10b981] font-bold text-[15px]">
+              <CheckCircle className="w-5 h-5" /> ¡Mensaje enviado! Te respondemos pronto.
+            </div>
+          )}
+          {status === "error" && (
+            <div className="flex items-center gap-2 text-red-500 font-bold text-[15px]">
+              <AlertCircle className="w-5 h-5" /> Error al enviar. Intenta de nuevo.
+            </div>
+          )}
+
+          <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 bg-[#0d52ff] hover:bg-[#003ee6] text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all text-[16px] mt-2"
+            disabled={status === "loading" || status === "success"}
+            className="w-full flex items-center justify-center gap-2 bg-[#0d52ff] hover:bg-[#003ee6] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all text-[16px] mt-2"
           >
-            <Send className="w-5 h-5" /> Enviar mensaje
+            <Send className="w-5 h-5" />
+            {status === "loading" ? "Enviando..." : "Enviar mensaje"}
           </button>
         </form>
 
