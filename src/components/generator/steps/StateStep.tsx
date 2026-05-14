@@ -2,16 +2,30 @@
 
 import { useContractStore } from "@/store/useContractStore";
 import { MapPin } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const ESTATES = [
   { id: 'nuevo-leon', name: 'Nuevo León', code: 'NL', available: true },
-  { id: 'jalisco', name: 'Jalisco', code: 'JAL', available: false },
+  { id: 'jalisco', name: 'Jalisco', code: 'JAL', available: true },
+  { id: 'queretaro', name: 'Querétaro', code: 'QRO', available: true },
+  { id: 'merida', name: 'Mérida', code: 'MER', available: true },
+  { id: 'san-luis-potosi', name: 'San Luis Potosí', code: 'SLP', available: true },
   { id: 'cdmx', name: 'Ciudad de México', code: 'CDMX', available: false },
   { id: 'edomex', name: 'Estado de México', code: 'EDOMEX', available: false },
 ];
 
 export function StateStep() {
   const { contract, updateContract, nextStep } = useContractStore();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const estadoParam = searchParams.get('estado');
+    if (estadoParam && !contract.state) {
+      const match = ESTATES.find(e => e.id === estadoParam && e.available);
+      if (match) updateContract('state', match.id);
+    }
+  }, []);
 
   return (
     <div className="max-w-xl pb-10">
@@ -52,9 +66,9 @@ export function StateStep() {
          <button disabled className="flex items-center gap-2 font-bold text-gray-400 opacity-50 cursor-not-allowed">
             &larr; Anterior
          </button>
-         <button 
-           onClick={nextStep} 
-           disabled={!contract.state} 
+         <button
+           onClick={nextStep}
+           disabled={!contract.state}
            className="flex items-center justify-center gap-2 px-8 py-3 bg-[#4F46E5] hover:bg-[#4338CA] transition-all text-white rounded-xl shadow-md font-bold disabled:opacity-50 disabled:cursor-not-allowed"
          >
             Siguiente &rarr;

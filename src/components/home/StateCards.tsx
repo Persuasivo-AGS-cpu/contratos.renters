@@ -4,9 +4,11 @@ import { ArrowRight, MapPin } from "lucide-react";
 export function StateCards() {
   const states = [
     { id: 'nuevo-leon', name: 'Nuevo León', code: 'CÓDIGO CIVIL DE NUEVO LEÓN', count: '1,429', image: '/images/states/nuevo-leon.png', available: true },
-    { id: 'jalisco', name: 'Jalisco', code: 'CÓDIGO CIVIL DE JALISCO', count: '1,102', image: '/images/states/jalisco.png', available: false },
+    { id: 'jalisco', name: 'Jalisco', code: 'CÓDIGO CIVIL DE JALISCO', count: '1,102', image: '/images/states/jalisco.png', available: true },
+    { id: 'queretaro', name: 'Querétaro', code: 'CÓDIGO CIVIL DE QUERÉTARO', count: '683', image: '/images/states/queretaro.png', available: true },
+    { id: 'merida', name: 'Mérida', code: 'CÓDIGO CIVIL DE YUCATÁN', count: '547', image: '/images/states/merida.png', available: true },
+    { id: 'san-luis-potosi', name: 'San Luis Potosí', code: 'CÓDIGO CIVIL DE SAN LUIS POTOSÍ', count: '412', image: '/images/states/san-luis-potosi.png', available: true },
     { id: 'cdmx', name: 'Ciudad de México', code: 'CÓDIGO CIVIL PARA EL D.F.', count: '3,842', image: '/images/states/cdmx.png', available: false },
-    { id: 'edomex', name: 'Estado de México', code: 'CÓDIGO CIVIL DEL EDO. DE MÉXICO', count: '2,156', image: '/images/states/edomex.png', available: false },
   ];
 
   return (
@@ -17,10 +19,10 @@ export function StateCards() {
            <p className="text-lg text-text-muted max-w-2xl mx-auto leading-relaxed">Cada contrato cumple con la legislación local vigente. Selecciona tu estado y genera tu contrato en minutos.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {states.map((state) => {
             const CardWrapper = state.available ? Link : 'div';
-            const wrapperProps = state.available ? { href: '/contrato' } : {};
+            const wrapperProps = state.available ? { href: `/contrato?estado=${state.id}` } : {};
             return (
               <CardWrapper
                 key={state.id}
