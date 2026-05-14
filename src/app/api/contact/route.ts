@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     await resend.emails.send({
-      from: "Renters Contratos <onboarding@resend.dev>",
+      from: "Renters Contratos <contacto@contratos.renters.mx>",
       to: "hola@renters.mx",
       replyTo: correo,
       subject: `[Contacto] ${motivo} — ${nombre}`,
