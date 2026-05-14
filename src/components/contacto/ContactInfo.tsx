@@ -62,7 +62,7 @@ export function ContactInfo() {
           </li>
           <li className="flex items-center gap-4">
             <Phone className="w-5 h-5 text-gray-500" />
-            <span className="text-gray-300 font-medium">+52 (81) 1234 5678</span>
+            <a href="https://wa.me/528110610111" target="_blank" rel="noreferrer" className="text-gray-300 font-medium hover:text-[#10b981] transition-colors">+52 81 1061 0111</a>
           </li>
           <li className="flex items-center gap-4">
             <MapPin className="w-5 h-5 text-gray-500" />
@@ -88,8 +88,10 @@ export function ContactInfo() {
             +1,200 arrendadores nos contactaron este mes
           </p>
 
-          <a 
-            href="#" 
+          <a
+            href="https://wa.me/528110610111"
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center gap-2 mt-4 text-[#10b981] font-bold hover:text-[#059669] transition-colors"
           >
             <WhatsAppIcon /> También puedes escribirnos por WhatsApp
