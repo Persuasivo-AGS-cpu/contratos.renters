@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type ContractState = {
-  state: 'nuevo-leon' | 'jalisco' | 'cdmx' | 'edomex' | '';
+  state: 'nuevo-leon' | 'jalisco' | 'queretaro' | 'merida' | 'san-luis-potosi' | 'cdmx' | 'edomex' | '';
   property: {
     address: {
       street: string;
