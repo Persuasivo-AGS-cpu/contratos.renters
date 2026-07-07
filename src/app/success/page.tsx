@@ -139,7 +139,7 @@ function SuccessContent() {
         <div className="w-full bg-[#111827]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl">
 
           <Link
-            href={result?.pdf_token ? `/imprimir?token=${result.pdf_token}&folio=${result.folio}` : '#'}
+            href={result?.pdf_token ? `/api/pdf?token=${result.pdf_token}` : '#'}
             target="_blank"
             className="flex flex-col items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-900 rounded-2xl p-6 transition-all group w-full mb-4"
           >

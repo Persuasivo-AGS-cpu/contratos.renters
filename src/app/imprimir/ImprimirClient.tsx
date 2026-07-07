@@ -8,9 +8,11 @@ import type { ContractState } from "@/store/useContractStore";
 interface Props {
   contractData: ContractState;
   folio: string;
+  // true cuando renderiza Chromium headless en /api/pdf — sin print() automático
+  pdfMode?: boolean;
 }
 
-export default function ImprimirClient({ contractData, folio }: Props) {
+export default function ImprimirClient({ contractData, folio, pdfMode = false }: Props) {
   const { updateContract } = useContractStore();
   const StateTemplate = getStateTemplate(contractData.state);
 
@@ -20,6 +22,8 @@ export default function ImprimirClient({ contractData, folio }: Props) {
       updateContract(key as keyof ContractState, value);
     });
     updateContract('status', 'paid');
+
+    if (pdfMode) return;
 
     const timer = setTimeout(() => {
       window.print();

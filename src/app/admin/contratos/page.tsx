@@ -123,7 +123,7 @@ export default async function ContratosAdminPage() {
                   <td className="px-4 py-3 text-right">
                     {c.status === "paid" && c.pdf_token ? (
                       <a
-                        href={`/imprimir?token=${c.pdf_token}`}
+                        href={`/api/pdf?token=${c.pdf_token}`}
                         target="_blank"
                         className="p-1.5 rounded hover:bg-gray-200 text-gray-400 group-hover:text-emerald-600 transition-colors inline-flex"
                         title="Ver PDF"

@@ -2,14 +2,16 @@
 
 import { useContractStore } from "@/store/useContractStore";
 import { STATES } from "@/lib/states";
+import { WaitlistCapture } from "@/components/generator/WaitlistCapture";
 import { MapPin } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ESTATES = Object.entries(STATES).map(([id, s]) => ({ id, ...s }));
 
 export function StateStep() {
   const { contract, updateContract, nextStep } = useContractStore();
+  const [waitlistState, setWaitlistState] = useState<string | null>(null);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -29,11 +31,14 @@ export function StateStep() {
         {ESTATES.map((estate) => (
           <button
             key={estate.id}
-            onClick={() => estate.available && updateContract('state', estate.id)}
-            disabled={!estate.available}
+            onClick={() =>
+              estate.available
+                ? updateContract('state', estate.id)
+                : setWaitlistState(estate.id)
+            }
             className={`flex items-center gap-4 p-4 border rounded-xl text-left transition-all relative ${
               !estate.available
-                ? 'border-border-layout bg-surface-subtle opacity-60 cursor-not-allowed'
+                ? 'border-border-layout bg-surface-subtle opacity-60'
                 : contract.state === estate.id
                 ? 'border-brand-primary bg-brand-primary/5 ring-1 ring-brand-primary'
                 : 'border-border-layout hover:border-brand-primary/50 hover:bg-surface-subtle'
@@ -54,6 +59,10 @@ export function StateStep() {
           </button>
         ))}
       </div>
+
+      {waitlistState && (
+        <WaitlistCapture estado={waitlistState} onClose={() => setWaitlistState(null)} />
+      )}
 
       <div className="flex items-center justify-between pt-8 border-t border-border-layout mt-10">
          <button disabled className="flex items-center gap-2 font-bold text-gray-400 opacity-50 cursor-not-allowed">

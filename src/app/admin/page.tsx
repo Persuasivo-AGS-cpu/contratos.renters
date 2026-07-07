@@ -4,8 +4,6 @@ import { ContratosChart } from "@/components/admin/ContratosChart";
 
 export const dynamic = "force-dynamic";
 
-const PRECIO_CONTRATO = 499;
-
 function formatMXN(n: number) {
   return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(n);
 }
@@ -17,12 +15,12 @@ function formatDate(iso: string | null) {
 
 export default async function AdminDashboardPage() {
   const [
-    { count: countPaid },
+    { data: paidAmounts, count: countPaid },
     { count: countPending },
     { data: recent },
     { data: chartRaw },
   ] = await Promise.all([
-    supabaseAdmin.from("contratos").select("*", { count: "exact", head: true }).eq("status", "paid"),
+    supabaseAdmin.from("contratos").select("monto_pagado", { count: "exact" }).eq("status", "paid"),
     supabaseAdmin.from("contratos").select("*", { count: "exact", head: true }).eq("status", "pending"),
     supabaseAdmin
       .from("contratos")
@@ -37,7 +35,9 @@ export default async function AdminDashboardPage() {
       .not("paid_at", "is", null),
   ]);
 
-  const totalIngresos = (countPaid ?? 0) * PRECIO_CONTRATO;
+  // Suma de montos reales cobrados (centavos → pesos). Filas pagadas antes de
+  // la migración 003 usan el backfill de $499.
+  const totalIngresos = (paidAmounts ?? []).reduce((sum, r) => sum + (r.monto_pagado ?? 49900), 0) / 100;
 
   // Agrupar por día para la gráfica
   const dayMap = new Map<string, number>();
@@ -77,7 +77,7 @@ export default async function AdminDashboardPage() {
           <div className="flex items-baseline gap-2 mt-auto">
             <span className="text-2xl font-bold text-gray-900">{formatMXN(totalIngresos)}</span>
           </div>
-          <p className="text-[11px] text-gray-400 mt-1">{totalContratos} contratos × $499</p>
+          <p className="text-[11px] text-gray-400 mt-1">{totalContratos} contratos · monto real cobrado</p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col">

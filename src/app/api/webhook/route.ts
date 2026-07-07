@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
           status: 'paid',
           stripe_payment_id: session.payment_intent as string,
           paid_at: new Date().toISOString(),
+          monto_pagado: session.amount_total, // centavos MXN
         })
         .eq('stripe_session_id', session.id)
         .eq('status', 'pending')
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
 
       if (contrato) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx';
-        const downloadUrl = `${appUrl}/api/download?token=${contrato.pdf_token}`;
+        const downloadUrl = `${appUrl}/api/pdf?token=${contrato.pdf_token}`;
         const folio = session.metadata?.folio || '';
         const recipients = [
           { email: contrato.arrendador_email, name: contrato.arrendador_nombre || 'Arrendador' },
