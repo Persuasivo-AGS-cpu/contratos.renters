@@ -85,7 +85,7 @@ export function ContactInfo() {
             <span className="ml-2 font-bold text-gray-300">4.9/5 en Google</span>
           </div>
           <p className="text-gray-500 text-[14px]">
-            +1,200 arrendadores nos contactaron este mes
+            Soporte real, respuesta rápida — sin bots.
           </p>
 
           <a
