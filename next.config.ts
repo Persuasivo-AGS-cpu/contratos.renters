@@ -28,6 +28,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // @sparticuz/chromium unpacks its binary from bin/ at runtime via fs, not
+  // require(), so Next's automatic file tracing misses it — must list explicitly.
+  outputFileTracingIncludes: {
+    "/api/pdf": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+  },
   async headers() {
     return [
       {
