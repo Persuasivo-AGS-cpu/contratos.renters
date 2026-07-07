@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { getStateCode } from './states';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2026-04-22.dahlia',
@@ -13,13 +14,7 @@ export const PLAN_NAMES: Record<string, string> = {
 };
 
 export function generateFolio(estado: string): string {
-  const stateCode: Record<string, string> = {
-    'nuevo-leon': 'NL',
-    jalisco: 'JAL',
-    cdmx: 'CDMX',
-    edomex: 'EDO',
-  };
-  const code = stateCode[estado] || 'XX';
+  const code = getStateCode(estado);
   const year = new Date().getFullYear();
   const rand = Math.floor(10000 + Math.random() * 90000);
   return `${code}-${year}-${rand}`;

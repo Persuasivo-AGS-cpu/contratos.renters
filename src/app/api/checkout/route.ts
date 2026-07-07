@@ -1,29 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, PLAN_PRICES, PLAN_NAMES, generateFolio } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
-// Rate limiting en memoria: máx 5 sesiones por IP por 10 minutos
-const ipRequestMap = new Map<string, { count: number; resetAt: number }>();
+// Máx 5 sesiones de checkout por IP por 10 minutos
 const RATE_LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;
 
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = ipRequestMap.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    ipRequestMap.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-
-  if (entry.count >= RATE_LIMIT) return false;
-  entry.count++;
-  return true;
-}
-
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  if (!checkRateLimit(ip)) {
+  const ip = getClientIp(req);
+  if (!checkRateLimit('checkout', ip, RATE_LIMIT, WINDOW_MS)) {
     return NextResponse.json({ error: 'Demasiadas solicitudes. Intenta en unos minutos.' }, { status: 429 });
   }
   try {
@@ -39,7 +25,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Plan inválido' }, { status: 400 });
     }
 
-    const folio = generateFolio(contract.state);
+    // El folio va en la metadata de Stripe antes del insert, así que se verifica
+    // disponibilidad aquí; la colisión de Math.random (5 dígitos) es rara pero
+    // con volumen pasa, y sin esto el insert fallaría con UNIQUE ya cobrando.
+    let folio = generateFolio(contract.state);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const { data: existing } = await supabaseAdmin
+        .from('contratos')
+        .select('id')
+        .eq('folio', folio)
+        .maybeSingle();
+      if (!existing) break;
+      folio = generateFolio(contract.state);
+    }
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
     const session = await stripe.checkout.sessions.create({
@@ -71,7 +70,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Guardar contrato pendiente en Supabase
-    await supabaseAdmin.from('contratos').insert({
+    const { error: insertError } = await supabaseAdmin.from('contratos').insert({
       folio,
       estado: contract.state,
       tipo_propiedad: contract.property?.type || null,
@@ -86,6 +85,11 @@ export async function POST(req: NextRequest) {
       contract_data: contract,
       status: 'pending',
     });
+
+    if (insertError) {
+      console.error('[checkout] insert error:', insertError);
+      return NextResponse.json({ error: 'Error al crear sesión de pago' }, { status: 500 });
+    }
 
     return NextResponse.json({ url: session.url });
   } catch (err) {

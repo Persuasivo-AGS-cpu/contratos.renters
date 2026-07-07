@@ -1,15 +1,9 @@
 import { Resend } from 'resend';
+import { getStateName } from './states';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM = 'Renters.mx <contratos@contratos.renters.mx>';
-
-const estadoLabel: Record<string, string> = {
-  'nuevo-leon': 'Nuevo León',
-  jalisco: 'Jalisco',
-  cdmx: 'Ciudad de México',
-  edomex: 'Estado de México',
-};
 
 interface SendContractEmailParams {
   toEmail: string;
@@ -34,7 +28,7 @@ export async function sendContractEmail(params: SendContractEmailParams) {
         </h1>
         <p style="color: #64748b; margin-bottom: 24px;">
           Hola ${toName}, tu contrato de arrendamiento para
-          <strong>${estadoLabel[estado] || estado}</strong>
+          <strong>${getStateName(estado)}</strong>
           ha sido generado y pagado exitosamente.
         </p>
 
@@ -50,6 +44,53 @@ export async function sendContractEmail(params: SendContractEmailParams) {
 
         <p style="color: #94a3b8; font-size: 13px; border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 24px; line-height: 1.6;">
           Si tienes problemas para descargar tu contrato, responde este correo y te ayudamos en menos de 24 horas.<br/><br/>
+          — Equipo Renters.mx
+        </p>
+      </div>
+    `,
+  });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
+}
+
+interface SendRecoveryEmailParams {
+  toEmail: string;
+  toName: string;
+  folio: string;
+  estado: string;
+}
+
+// Recuperación de checkout abandonado: el formulario quedó completo pero el
+// pago no se realizó. Los datos siguen en el localStorage del navegador del
+// usuario, así que el CTA lo regresa al generador.
+export async function sendRecoveryEmail(params: SendRecoveryEmailParams) {
+  const { toEmail, toName, folio, estado } = params;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx';
+
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to: toEmail,
+    subject: `Tu contrato de arrendamiento quedó a un paso — ${getStateName(estado)}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #fff;">
+        <h1 style="font-size: 24px; font-weight: 900; color: #0f172a; margin-bottom: 8px;">
+          Tu contrato quedó guardado
+        </h1>
+        <p style="color: #64748b; margin-bottom: 24px;">
+          Hola ${toName}, completaste todos los datos de tu contrato de arrendamiento para
+          <strong>${getStateName(estado)}</strong> (folio ${folio}), pero el pago no se concretó.
+          Tu información sigue guardada en tu navegador: solo falta el último paso.
+        </p>
+
+        <a href="${appUrl}/contrato"
+           style="display: inline-block; background: #4F46E5; color: #fff; font-weight: 700; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 16px; margin-bottom: 24px;">
+          Completar mi contrato
+        </a>
+
+        <p style="color: #94a3b8; font-size: 13px; border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 24px; line-height: 1.6;">
+          Si tuviste algún problema con el pago o tienes dudas, responde este correo y te ayudamos.<br/><br/>
           — Equipo Renters.mx
         </p>
       </div>

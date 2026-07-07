@@ -2,18 +2,12 @@
 import { useContractStore } from "@/store/useContractStore";
 import { useState } from "react";
 import { CheckoutModal } from "@/components/checkout/CheckoutModal";
+import { getStateName, getLegalStateName } from "@/lib/states";
 import { MapPin, Home, User, UserCheck, DollarSign, Scale, Check } from "lucide-react";
 
 export function SummaryStep() {
   const { contract, prevStep } = useContractStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const stateLabels: Record<string, string> = {
-    'nuevo-leon': 'Nuevo León',
-    'jalisco': 'Jalisco',
-    'cdmx': 'Ciudad de México',
-    'edomex': 'Estado de México'
-  };
 
   const typeLabels: Record<string, string> = {
     casa: 'Casa',
@@ -37,8 +31,8 @@ export function SummaryStep() {
               <MapPin className="w-4 h-4 text-blue-600" />
               <span className="text-[11px] font-bold text-gray-500 tracking-wider">ESTADO</span>
            </div>
-           <p className="font-bold text-gray-900 text-[16px]">{stateLabels[contract.state] || 'Nuevo León'}</p>
-           <p className="text-[13px] text-gray-500">Código Civil para el Estado de {stateLabels[contract.state] || 'Nuevo León'}</p>
+           <p className="font-bold text-gray-900 text-[16px]">{getStateName(contract.state)}</p>
+           <p className="text-[13px] text-gray-500">Código Civil para el Estado de {getLegalStateName(contract.state)}</p>
         </div>
 
         {/* PROPIEDAD */}
@@ -134,7 +128,7 @@ export function SummaryStep() {
       <div className="mb-10 p-5 bg-[#ecfdf5] border border-[#a7f3d0] rounded-xl flex items-start gap-3">
          <Check className="w-5 h-5 text-[#059669] shrink-0 mt-0.5" />
          <p className="text-[14px] text-[#065f46]">
-            Al generar el contrato, se creará un PDF legal basado en la plantilla de <strong>{stateLabels[contract.state] || 'Nuevo León'}</strong>, conforme al Código Civil de {contract.state.toUpperCase()}.
+            Al generar el contrato, se creará un PDF legal basado en la plantilla de <strong>{getStateName(contract.state)}</strong>, conforme al Código Civil de {getLegalStateName(contract.state).toUpperCase()}.
          </p>
       </div>
 

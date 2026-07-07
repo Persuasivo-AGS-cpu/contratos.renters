@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle2, ShieldCheck, DownloadCloud, Loader2, AlertCircle } from "lucide-react";
 import { useContractStore } from "@/store/useContractStore";
+import { trackPurchase } from "@/lib/analytics";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -12,14 +13,17 @@ interface ContractResult {
   pdf_token: string;
 }
 
+const MAX_VERIFY_ATTEMPTS = 30; // ~1 minuto a 2s por intento
+
 function SuccessContent() {
-  const { updateContract, resetContract } = useContractStore();
+  const { resetContract } = useContractStore();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ContractResult | null>(null);
+  const [stillProcessing, setStillProcessing] = useState(false);
 
   useEffect(() => {
     if (!sessionId) {
@@ -28,7 +32,7 @@ function SuccessContent() {
       return;
     }
 
-    const verify = async () => {
+    const verify = async (attempt: number) => {
       try {
         const res = await fetch('/api/download', {
           method: 'POST',
@@ -38,7 +42,12 @@ function SuccessContent() {
 
         if (res.status === 402) {
           // Pago aún procesándose — reintentar en 2s
-          setTimeout(verify, 2000);
+          if (attempt >= MAX_VERIFY_ATTEMPTS) {
+            setStillProcessing(true);
+            setLoading(false);
+            return;
+          }
+          setTimeout(() => verify(attempt + 1), 2000);
           return;
         }
 
@@ -49,7 +58,8 @@ function SuccessContent() {
         }
 
         setResult({ folio: data.folio, pdf_token: data.pdf_token });
-        updateContract('status', 'paid');
+        trackPurchase(data.folio);
+        resetContract();
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error desconocido');
@@ -57,8 +67,8 @@ function SuccessContent() {
       }
     };
 
-    verify();
-  }, [sessionId, updateContract]);
+    verify(0);
+  }, [sessionId, resetContract]);
 
   if (loading) {
     return (
@@ -75,6 +85,21 @@ function SuccessContent() {
         <AlertCircle className="w-12 h-12 text-red-400 mb-4" />
         <h2 className="text-white text-2xl font-bold mb-2">Algo salió mal</h2>
         <p className="text-gray-400 text-center max-w-sm mb-6">{error}</p>
+        <Link href="/contacto" className="px-6 py-3 bg-white/10 text-white rounded-xl font-bold hover:bg-white/20 transition-colors">
+          Contactar Soporte
+        </Link>
+      </div>
+    );
+  }
+
+  if (stillProcessing) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center min-h-screen bg-[#0a0f1c] px-6">
+        <Loader2 className="w-12 h-12 text-blue-400 mb-4" />
+        <h2 className="text-white text-2xl font-bold mb-2">Tu pago se está procesando</h2>
+        <p className="text-gray-400 text-center max-w-sm mb-6">
+          Está tardando más de lo normal. En cuanto se confirme te llegará el contrato por correo — si en unos minutos no te llega, contáctanos.
+        </p>
         <Link href="/contacto" className="px-6 py-3 bg-white/10 text-white rounded-xl font-bold hover:bg-white/20 transition-colors">
           Contactar Soporte
         </Link>

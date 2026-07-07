@@ -1,19 +1,12 @@
 "use client";
 
 import { useContractStore } from "@/store/useContractStore";
+import { STATES } from "@/lib/states";
 import { MapPin } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-const ESTATES = [
-  { id: 'nuevo-leon', name: 'Nuevo León', code: 'NL', available: true },
-  { id: 'jalisco', name: 'Jalisco', code: 'JAL', available: true },
-  { id: 'queretaro', name: 'Querétaro', code: 'QRO', available: true },
-  { id: 'merida', name: 'Mérida', code: 'MER', available: true },
-  { id: 'san-luis-potosi', name: 'San Luis Potosí', code: 'SLP', available: true },
-  { id: 'cdmx', name: 'Ciudad de México', code: 'CDMX', available: false },
-  { id: 'edomex', name: 'Estado de México', code: 'EDOMEX', available: false },
-];
+const ESTATES = Object.entries(STATES).map(([id, s]) => ({ id, ...s }));
 
 export function StateStep() {
   const { contract, updateContract, nextStep } = useContractStore();

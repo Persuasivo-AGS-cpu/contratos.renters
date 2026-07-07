@@ -29,26 +29,25 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     if (session.payment_status === 'paid') {
-      const { error } = await supabaseAdmin
+      // Update condicional pending→paid: si Stripe reintenta el webhook, la fila
+      // ya está en 'paid', el update no matchea y no se reenvían los emails.
+      const { data: updated, error } = await supabaseAdmin
         .from('contratos')
         .update({
           status: 'paid',
           stripe_payment_id: session.payment_intent as string,
           paid_at: new Date().toISOString(),
         })
-        .eq('stripe_session_id', session.id);
+        .eq('stripe_session_id', session.id)
+        .eq('status', 'pending')
+        .select('pdf_token, arrendador_nombre, arrendador_email, inquilino_email, estado');
 
       if (error) {
         console.error('[webhook] Supabase update error:', error);
         return NextResponse.json({ error: 'DB update failed' }, { status: 500 });
       }
 
-      // Obtener pdf_token para el link de descarga
-      const { data: contrato } = await supabaseAdmin
-        .from('contratos')
-        .select('pdf_token, arrendador_nombre, arrendador_email, inquilino_email, estado')
-        .eq('stripe_session_id', session.id)
-        .single();
+      const contrato = updated?.[0];
 
       if (contrato) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx';
