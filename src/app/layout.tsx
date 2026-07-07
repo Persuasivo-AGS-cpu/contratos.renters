@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
-import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
 import { Analytics } from "@/components/layout/Analytics";
 
 const inter = Inter({
@@ -55,7 +54,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-surface-clean text-text-main font-sans">
         <Navbar />
         {children}
-        <FloatingWhatsApp />
         <Analytics />
       </body>
     </html>
