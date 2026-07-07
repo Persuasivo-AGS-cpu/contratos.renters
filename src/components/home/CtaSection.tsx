@@ -20,7 +20,7 @@ export function CtaSection() {
           Protege tu patrimonio hoy
         </h2>
         
-        <p className="relative z-10 text-[#a1a1aa] text-[18px] md:text-[20px] max-w-[700px] mx-auto leading-relaxed mb-12 font-medium">
+        <p className="relative z-10 text-gray-200 text-[18px] md:text-[20px] max-w-[700px] mx-auto leading-relaxed mb-12 font-medium">
           No arriesgues tu propiedad con contratos improvisados. Genera un contrato legal profesional en menos de 10 minutos.
         </p>
         

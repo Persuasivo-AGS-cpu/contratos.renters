@@ -62,6 +62,48 @@ interface SendRecoveryEmailParams {
   estado: string;
 }
 
+interface SendReviewRequestEmailParams {
+  toEmail: string;
+  toName: string;
+  folio: string;
+}
+
+// Día 3-4 post-pago: pedir reseña. Las respuestas alimentan testimonios
+// reales con consentimiento (los actuales del sitio no son verificables y
+// son riesgo de compliance en pauta).
+export async function sendReviewRequestEmail(params: SendReviewRequestEmailParams) {
+  const { toEmail, toName, folio } = params;
+
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to: toEmail,
+    bcc: 'renters.mx@gmail.com',
+    subject: '¿Cómo te fue con tu contrato? — 1 minuto',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #fff;">
+        <h1 style="font-size: 22px; font-weight: 900; color: #0f172a; margin-bottom: 8px;">
+          ¿Cómo te fue, ${toName}?
+        </h1>
+        <p style="color: #64748b; margin-bottom: 20px; line-height: 1.6;">
+          Hace unos días generaste tu contrato de arrendamiento con nosotros (folio ${folio}).
+          ¿Nos cuentas en una línea cómo fue tu experiencia? Responde directamente este correo.
+        </p>
+        <p style="color: #64748b; margin-bottom: 20px; line-height: 1.6;">
+          Tu opinión nos ayuda a mejorar — y si nos das permiso, nos encantaría
+          compartirla para que otros propietarios se animen a proteger su patrimonio.
+        </p>
+        <p style="color: #94a3b8; font-size: 13px; border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 24px;">
+          — Equipo Renters.mx
+        </p>
+      </div>
+    `,
+  });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
+}
+
 // Recuperación de checkout abandonado: el formulario quedó completo pero el
 // pago no se realizó. Los datos siguen en el localStorage del navegador del
 // usuario, así que el CTA lo regresa al generador.

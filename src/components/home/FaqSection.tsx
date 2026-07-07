@@ -34,7 +34,7 @@ export function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="w-full py-16 px-6 bg-[#f8f9fa] overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
+    <section className="w-full py-20 px-6 bg-[#f8f9fa] overflow-hidden flex flex-col items-center justify-center">
       <div className="max-w-4xl mx-auto w-full">
         <div className="text-center mb-10">
           <div className="inline-block font-bold text-xs uppercase tracking-[0.2em] mb-4 text-[#1a56ff]">PREGUNTAS FRECUENTES</div>

@@ -120,8 +120,8 @@ export function HeroSection() {
         {/* Stats */}
         <div className="mt-16 pt-8 border-t border-white/10 w-full max-w-3xl flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-16">
            <div>
-              <p className="text-3xl md:text-4xl font-black text-white">4,200+</p>
-              <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Contratos Generados</p>
+              <p className="text-3xl md:text-4xl font-black text-white">$499</p>
+              <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Precio Único · IVA Incluido</p>
            </div>
            <div>
               <p className="text-3xl md:text-4xl font-black text-white">5</p>

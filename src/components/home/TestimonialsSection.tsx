@@ -29,7 +29,7 @@ export function TestimonialsSection() {
         <div className="text-center mb-16">
           <div className="inline-block px-4 py-1.5 rounded-full bg-[#E8F0FE] text-[#1a56ff] font-bold text-[11px] uppercase tracking-[0.2em] mb-6 shadow-sm">TESTIMONIOS</div>
           <h2 className="text-3xl md:text-[40px] font-display font-black text-text-main mb-4 tracking-tight">Arrendadores que confían en Renters</h2>
-          <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto">No arriesgues la plusvalía de tus bienes raíces. Únete a miles de propietarios que duermen tranquilos gracias a nuestro blindaje.</p>
+          <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto">No arriesgues la plusvalía de tus bienes raíces. Únete a los propietarios que duermen tranquilos gracias a nuestro blindaje.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

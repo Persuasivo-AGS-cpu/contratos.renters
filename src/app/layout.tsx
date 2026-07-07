@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Renters | Contratos de Arrendamiento Legales",
+  title: "Contratos de Arrendamiento Legales por Estado — desde $499 | Renters",
   description: "Genera tu contrato de arrendamiento personalizado y legalmente válido para Nuevo León, Jalisco, Querétaro, Mérida y San Luis Potosí. Basado en el Código Civil estatal. Listo para firmar en minutos. $499 MXN.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx'),
   openGraph: {

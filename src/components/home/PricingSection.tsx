@@ -39,6 +39,9 @@ export function PricingSection() {
 
           {/* Price */}
           <div className="mb-8">
+            <p className="text-sm font-semibold text-gray-400 mb-1">
+              Un despacho tradicional: <span className="line-through">$2,500 – $5,000</span>
+            </p>
             <div className="flex items-start justify-center gap-1">
               <span className="text-2xl font-bold text-gray-400 mt-3">$</span>
               <span className="text-7xl font-black font-display tracking-tight text-[#111]">499</span>
@@ -67,6 +70,11 @@ export function PricingSection() {
           >
             Generar mi contrato <ArrowRight className="w-5 h-5" />
           </Link>
+
+          <p className="mt-4 flex items-center gap-1.5 text-[13px] text-gray-500 font-medium">
+            <ShieldCheck className="w-4 h-4 text-[#0d944c] shrink-0" />
+            Corrección de datos gratis las primeras 24 horas
+          </p>
         </div>
       </div>
     </section>
