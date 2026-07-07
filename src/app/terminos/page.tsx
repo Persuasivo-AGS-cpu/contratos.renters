@@ -50,7 +50,7 @@ export default function TerminosPage() {
              <p>Al acceder, navegar o realizar cualquier uso del Generador de Contratos de Renters.mx ("La Plataforma"), usted declara conocer y acatar los presentes Términos y Condiciones, obligándose a no malversar el uso del sistema tecnológico aquí proporcionado.</p>
 
              <h2>2. Descripción de la Herramienta "Generador"</h2>
-             <p>Renters facilita la elaboración electrónica de Contratos de Arrendamiento Residencial y Comercial, adaptando automáticamente el clausulado basándose en el Código Civil de la Entidad Federativa seleccionada (Actualmente operando limitadamente en: Nuevo León, Jalisco, CDMX, EDOMEX). La plataforma inserta los datos inyectados por el usuario ("Usted") dentro de estas planillas pre-fijadas.</p>
+             <p>Renters facilita la elaboración electrónica de Contratos de Arrendamiento Residencial y Comercial, adaptando automáticamente el clausulado basándose en el Código Civil de la Entidad Federativa seleccionada (Actualmente operando limitadamente en: Nuevo León, Jalisco, Querétaro, Mérida —Yucatán— y San Luis Potosí). La plataforma inserta los datos inyectados por el usuario ("Usted") dentro de estas planillas pre-fijadas.</p>
 
              <h2>3. Obligación de Veracidad de Datos</h2>
              <p>Renters procesa de "buena fe" la información inyectada por el cliente. Queda bajo su estricta y exclusiva responsabilidad la veracidad de:</p>

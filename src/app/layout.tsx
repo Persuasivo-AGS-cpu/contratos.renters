@@ -3,6 +3,7 @@ import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
+import { Analytics } from "@/components/layout/Analytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,7 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Renters | Contratos de Arrendamiento Legales",
-  description: "Genera tu contrato de arrendamiento personalizado y legalmente válido para Nuevo León. Basado en el Código Civil estatal. Listo para firmar en minutos. $499 MXN.",
+  description: "Genera tu contrato de arrendamiento personalizado y legalmente válido para Nuevo León, Jalisco, Querétaro, Mérida y San Luis Potosí. Basado en el Código Civil estatal. Listo para firmar en minutos. $499 MXN.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx'),
   openGraph: {
     type: 'website',
@@ -55,6 +56,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <FloatingWhatsApp />
+        <Analytics />
       </body>
     </html>
   );

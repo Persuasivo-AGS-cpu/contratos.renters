@@ -25,7 +25,7 @@ const faqData: FaqItem[] = [
     id: "leg-2",
     category: "Legal",
     question: "¿Para qué estados están disponibles los contratos?",
-    answer: "Actualmente disponible para Nuevo León. Estamos trabajando para agregar más estados próximamente."
+    answer: "Actualmente disponible para Nuevo León, Jalisco, Querétaro, Mérida (Yucatán) y San Luis Potosí. Estamos trabajando para agregar más estados próximamente."
   },
   {
     id: "leg-3",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useContractStore } from "@/store/useContractStore";
+import { trackBeginCheckout } from "@/lib/analytics";
 import { Lock, FileText, CheckCircle2, Loader2 } from "lucide-react";
 import { useState } from "react";
 
@@ -22,6 +23,7 @@ export function CheckoutModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const handlePay = async () => {
     setIsProcessing(true);
     setError(null);
+    trackBeginCheckout(contract.state, plan);
 
     try {
       const res = await fetch('/api/checkout', {

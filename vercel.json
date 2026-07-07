@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/recover-pending",
+      "schedule": "0 16 * * *"
+    }
+  ]
+}

@@ -54,9 +54,9 @@ export function HeroProcessSection() {
             {/* Box 3 */}
             <div className="bg-[#fbfcff] border border-gray-100 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-sm">
               <div className="text-4xl lg:text-[44px] font-display font-black text-[#1a56ff] mb-2 tracking-tight">
-                Nuevo León
+                5 estados
               </div>
-              <p className="text-gray-600 font-medium text-[15px]">Disponible ahora</p>
+              <p className="text-gray-600 font-medium text-[15px]">Disponibles ahora</p>
             </div>
 
             {/* Box 4 */}

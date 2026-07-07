@@ -21,7 +21,7 @@ export function StepByStepSection() {
       pill: "PASO 02",
       subtitle: "Motor legal por estado",
       title: "El sistema arma tu contrato en segundos",
-      desc: "Seleccionamos automáticamente la plantilla legal correcta para tu estado — actualmente disponible para Nuevo León. Cada plantilla fue redactada por abogados especializados.",
+      desc: "Seleccionamos automáticamente la plantilla legal correcta para tu estado — disponible para Nuevo León, Jalisco, Querétaro, Mérida y San Luis Potosí. Cada plantilla fue redactada por abogados especializados.",
       bullets: [
         "Plantilla adaptada al código civil de tu estado",
         "Variables dinámicas con tus datos exactos",

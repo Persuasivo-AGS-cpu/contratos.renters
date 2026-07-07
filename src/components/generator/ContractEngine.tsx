@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { useContractStore } from "@/store/useContractStore";
+import { trackGeneratorStep } from "@/lib/analytics";
 import { ContractStepper } from "./ContractStepper";
 import { StateStep } from "./steps/StateStep";
 import { PropertyStep } from "./steps/PropertyStep";
@@ -12,6 +14,11 @@ import { SummaryStep } from "./steps/SummaryStep";
 
 export function ContractEngine() {
   const currentStep = useContractStore((state) => state.currentStep);
+  const contractState = useContractStore((state) => state.contract.state);
+
+  useEffect(() => {
+    trackGeneratorStep(currentStep, contractState || undefined);
+  }, [currentStep, contractState]);
 
   const renderStep = () => {
     switch (currentStep) {

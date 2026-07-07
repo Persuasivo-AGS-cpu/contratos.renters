@@ -60,7 +60,7 @@ export default function PrivacidadPage() {
              <h2>3. Finalidades del Tratamiento de Datos</h2>
              <p>Los datos personales que recabamos de usted los utilizaremos automatizadamente para las siguientes finalidades primarias y necesarias:</p>
              <ul>
-               <li>Asignación y redacción paramétrica del Contrato de Arrendamiento según la jurisdicción local aplicable (Ej. Nuevo León, CDMX).</li>
+               <li>Asignación y redacción paramétrica del Contrato de Arrendamiento según la jurisdicción local aplicable (Ej. Nuevo León, Jalisco).</li>
                <li>Envío del formato digitalizado a su bandeja de correo electrónico institucional o personal tras la validación del pago.</li>
                <li>Asistencia de Soporte Técnico en caso de solicitud explícita de corrección de datos durante las preventivas 24 horas posteriores.</li>
              </ul>

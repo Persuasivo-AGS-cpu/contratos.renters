@@ -15,7 +15,7 @@ export function FaqSection() {
     },
     {
        q: "¿Para qué estados está disponible?",
-       a: "Actualmente disponible para Nuevo León. Más estados próximamente."
+       a: "Actualmente disponible para Nuevo León, Jalisco, Querétaro, Mérida (Yucatán) y San Luis Potosí. Más estados próximamente."
     },
     {
        q: "¿Necesito un abogado para usarlo?",

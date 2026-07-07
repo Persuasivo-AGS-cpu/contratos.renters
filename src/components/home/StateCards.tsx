@@ -9,6 +9,7 @@ export function StateCards() {
     { id: 'merida', name: 'Mérida', code: 'CÓDIGO CIVIL DE YUCATÁN', count: '547', image: '/images/states/merida.png', available: true },
     { id: 'san-luis-potosi', name: 'San Luis Potosí', code: 'CÓDIGO CIVIL DE SAN LUIS POTOSÍ', count: '412', image: '/images/states/san-luis-potosi.png', available: true },
     { id: 'cdmx', name: 'Ciudad de México', code: 'CÓDIGO CIVIL PARA EL D.F.', count: '3,842', image: '/images/states/cdmx.png', available: false },
+    { id: 'edomex', name: 'Estado de México', code: 'CÓDIGO CIVIL DEL ESTADO DE MÉXICO', count: '2,156', image: '/images/states/edomex.png', available: false },
   ];
 
   return (
