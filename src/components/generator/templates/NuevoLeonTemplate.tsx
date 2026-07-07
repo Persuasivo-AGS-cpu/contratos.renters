@@ -3,7 +3,9 @@
 import { useContractStore } from "@/store/useContractStore";
 import { formatCurrencyText } from "@/utils/numberToWords";
 
-export function NuevoLeonTemplate() {
+// `preview` recorta el documento tras la cláusula CUARTA: el resto de cláusulas
+// no debe existir en el DOM del navegador hasta que el contrato esté pagado.
+export function NuevoLeonTemplate({ preview = false }: { preview?: boolean }) {
   const { contract } = useContractStore();
   const c = contract;
 
@@ -93,6 +95,7 @@ export function NuevoLeonTemplate() {
         <span className="font-bold">CUARTA. - IMPORTE DE LAS RENTAS Y FORMAS DE PAGO.</span> El importe que fijan ambas “LAS PARTES” de mutuo acuerdo por concepto de pensión rentaría y cuota de mantenimiento para “EL INMUEBLE” objeto de este contrato será la cantidad de <span className="font-bold">${c.terms.monthly_rent} ({rentText || '____________ PESOS 00/100 M.N.'}) MENSUALES</span> por cada uno de los <span className="font-bold">{c.terms.lease_duration_months} MESES</span> de vigencia del presente Contrato, a pagar el día <span className="font-bold">{c.terms.payment_day} de cada mes</span>, mismos que se realizará mediante transferencia electrónica al banco denominado <span className="font-bold">{c.terms.bank_name || '___________'}</span>, cuenta <span className="font-bold">{c.terms.bank_account || '___________'}</span>, y cuenta CLABE <span className="font-bold">{c.terms.bank_clabe || '__________________'}</span>, y cuyo recibo correspondiente será el comprobante bancario CEP de la transferencia realizada.
       </p>
 
+      {!preview && (<>
       <p>
         <span className="font-bold">QUINTA. - DEPÓSITO.</span> Para garantizar que “EL INMUEBLE” arrendado sea devuelto en buen estado, “EL ARRENDATARIO” constituye un depósito a favor de “EL ARRENDADOR” al momento de la firma del presente contrato, por un importe de <span className="font-bold">${c.terms.deposit_amount} ({depositText || '____________ PESOS 00/100 M.N.'})</span>. Este depósito no podrá ser usado para el pago de rentas y será devuelto a “EL ARRENDATARIO” 45 días naturales posteriores a la entrega de “EL INMUEBLE”, siempre que éste no presentare daño alguno y no existan adeudos.
       </p>
@@ -192,6 +195,7 @@ export function NuevoLeonTemplate() {
           </p>
         </div>
       )}
+      </>)}
     </div>
   );
 }

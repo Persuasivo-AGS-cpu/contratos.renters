@@ -44,9 +44,24 @@ export function ContractPreview() {
           </div>
         </div>
 
-        {/* Contenido Dinámico Legal */}
+        {/* Contenido Dinámico Legal — en modo preview el template corta tras la
+            cláusula CUARTA; las cláusulas restantes nunca llegan al DOM sin pago. */}
         <div className="px-4 md:px-8 pt-0 flex-1 relative overflow-y-auto scrollbar-hide pb-20 select-none">
-          <StateTemplate />
+          <StateTemplate preview={!isPaid} />
+          {!isPaid && (
+            <div className="mt-6 space-y-3 opacity-60">
+              {['QUINTA. - DEPÓSITO.', 'SEXTA. - PLAZO DEL CONTRATO.', 'SÉPTIMA. - REPORTE DE DESPERFECTOS.', 'OCTAVA. - PAGO DE SERVICIOS.', 'NOVENA. - INCUMPLIMIENTO Y PENALIDADES.', 'DÉCIMA. - FIADOR Y OBLIGADO SOLIDARIO.'].map((titulo) => (
+                <div key={titulo}>
+                  <p className="font-bold font-serif text-gray-800">{titulo}</p>
+                  <div className="mt-1 space-y-1.5">
+                    <div className="h-2 bg-gray-200 rounded w-full" />
+                    <div className="h-2 bg-gray-200 rounded w-11/12" />
+                    <div className="h-2 bg-gray-200 rounded w-4/5" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {isPaid && (
             <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 font-bold animate-in slide-in-from-bottom-2">

@@ -3,7 +3,9 @@
 import { useContractStore } from "@/store/useContractStore";
 import { formatCurrencyText } from "@/utils/numberToWords";
 
-export function MeridaTemplate() {
+// `preview` recorta el documento tras la cláusula CUARTA: el resto de cláusulas
+// no debe existir en el DOM del navegador hasta que el contrato esté pagado.
+export function MeridaTemplate({ preview = false }: { preview?: boolean }) {
   const { contract } = useContractStore();
   const c = contract;
 
@@ -73,6 +75,7 @@ export function MeridaTemplate() {
 
       <p><span className="font-bold">CUARTA. - IMPORTE DE LAS RENTAS Y FORMAS DE PAGO.</span> El importe que fijan ambas "LAS PARTES" de mutuo acuerdo por concepto de pensión rentaría y cuota de mantenimiento para "EL INMUEBLE" objeto de este contrato será la cantidad de <span className="font-bold">${c.terms.monthly_rent} ({rentText || '____________ PESOS 00/100 M.N.'}) MENSUALES</span> por cada uno de los <span className="font-bold">{c.terms.lease_duration_months} MESES</span> de vigencia del presente Contrato, a pagar el día <span className="font-bold">{c.terms.payment_day} de cada mes</span>, mismos que se realizará mediante transferencia electrónica al banco denominado <span className="font-bold">{c.terms.bank_name || '___________'}</span>, cuenta <span className="font-bold">{c.terms.bank_account || '___________'}</span>, y cuenta CLABE <span className="font-bold">{c.terms.bank_clabe || '__________________'}</span>, y cuyo recibo correspondiente será el comprobante bancario CEP de la transferencia realizada.</p>
 
+      {!preview && (<>
       <p><span className="font-bold">QUINTA. - DEPÓSITO.</span> Para garantizar que "EL INMUEBLE" arrendado sea devuelto en buen estado, "EL ARRENDATARIO" constituye un depósito a favor de "EL ARRENDADOR" al momento de la firma del presente contrato, por un importe de <span className="font-bold">${c.terms.deposit_amount} ({depositText || '____________ PESOS 00/100 M.N.'})</span>. Este depósito no podrá ser usado para el pago de rentas y será devuelto a "EL ARRENDATARIO" 45 días naturales posteriores a la entrega de "EL INMUEBLE", siempre que éste no presentare daño alguno y no existan adeudos.</p>
 
       <p><span className="font-bold">SEXTA. - PLAZO DEL CONTRATO.</span> El plazo de arrendamiento será de <span className="font-bold">{c.terms.lease_duration_months} MESES forzosos</span> para ambas partes, iniciando el día <span className="font-bold">{c.terms.lease_start_date || '_________'}</span>. En términos de lo que establece el Código Civil vigente en el estado de <span className="font-bold">Yucatán</span>, "LAS PARTES" convienen en que "EL ARRENDATARIO" no podrá en ningún caso prorrogar el plazo del presente contrato sin el consentimiento expreso y por escrito de "EL ARRENDADOR". Si el contrato se celebra por un plazo forzoso y "EL ARRENDATARIO" desea desocupar antes de su término, para hacerlo deberá estar al corriente en el pago de la renta y pagar la penalidad de <span className="font-bold">{c.terms.early_termination_penalty_months} meses</span> de renta del presente contrato de arrendamiento.</p>
@@ -138,6 +141,7 @@ export function MeridaTemplate() {
           <p className="mt-8 italic text-xs text-gray-500 text-justify">"EL ARRENDATARIO" se obliga a mantener los bienes listados en correcto estado, respondiendo por el detrimento de los mismos más allá de su uso normal, pudiendo "EL ARRENDADOR" descontar de la garantía cualquier falta o afectación reportada al término del arrendamiento.</p>
         </div>
       )}
+      </>)}
     </div>
   );
 }
