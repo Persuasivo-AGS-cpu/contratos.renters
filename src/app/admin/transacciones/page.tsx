@@ -17,7 +17,7 @@ export default async function TransaccionesPage() {
   const { data: transactions, count } = await supabaseAdmin
     .from("contratos")
     .select(
-      "id, folio, stripe_session_id, stripe_payment_id, arrendador_email, status, paid_at, created_at",
+      "id, folio, stripe_session_id, stripe_payment_id, arrendador_email, status, paid_at, created_at, monto_pagado",
       { count: "exact" }
     )
     .order("created_at", { ascending: false })
@@ -75,7 +75,9 @@ export default async function TransaccionesPage() {
                     {t.arrendador_email ?? "—"}
                   </td>
                   <td className="px-4 py-3 text-[13px] font-medium text-gray-900">
-                    {t.status === "paid" ? "$499 MXN" : "—"}
+                    {t.status === "paid"
+                      ? `$${(((t.monto_pagado ?? 49900) / 100)).toLocaleString("es-MX")} MXN`
+                      : "—"}
                   </td>
                   <td className="px-4 py-3">
                     {t.status === "paid" ? (
