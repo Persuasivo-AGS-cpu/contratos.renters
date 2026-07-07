@@ -1,4 +1,5 @@
-import { FileText, Download } from "lucide-react";
+import Link from "next/link";
+import { FileText, Download, Pencil } from "lucide-react";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
@@ -76,10 +77,15 @@ export default async function ContratosAdminPage() {
               {(contracts ?? []).map((c) => (
                 <tr key={c.id} className="hover:bg-gray-50 transition-colors group">
                   <td className="px-4 py-3">
-                    <span className="text-[13px] font-mono text-blue-600 font-medium flex items-center gap-2">
+                    <Link
+                      href={`/admin/contratos/${c.id}`}
+                      className="text-[13px] font-mono text-blue-600 font-medium flex items-center gap-2 hover:underline"
+                      title="Editar contrato"
+                    >
                       <FileText className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                       {c.folio}
-                    </span>
+                      <Pencil className="w-3 h-3 text-gray-300 group-hover:text-blue-500" />
+                    </Link>
                   </td>
                   <td className="px-4 py-3 text-[13px] text-gray-600">
                     {TIPO_LABEL[c.tipo_propiedad] ?? c.tipo_propiedad ?? "—"}
