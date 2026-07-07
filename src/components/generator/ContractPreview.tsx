@@ -2,14 +2,24 @@
 
 import { useContractStore } from "@/store/useContractStore";
 import { Lock, ShieldCheck } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import { getStateTemplate, getStateName as getStateNameHelper } from "./templates/getStateTemplate";
+
+// El generador SIEMPRE muestra el preview truncado, aunque el store local
+// diga 'paid' (p. ej. tras visitar /imprimir, que hidrata el store). La
+// entrega post-pago es exclusivamente vía /imprimir y /api/pdf — si aquí se
+// confiara en el status del cliente, editar datos tras una compra previa
+// desbloquearía contratos ilimitados gratis.
+const LOCKED_CLAUSES = [
+  'QUINTA. - DEPÓSITO.',
+  'SEXTA. - PLAZO DEL CONTRATO.',
+  'SÉPTIMA. - REPORTE DE DESPERFECTOS.',
+  'OCTAVA. - PAGO DE SERVICIOS.',
+  'NOVENA. - INCUMPLIMIENTO Y PENALIDADES.',
+  'DÉCIMA. - FIADOR Y OBLIGADO SOLIDARIO.',
+];
 
 export function ContractPreview() {
   const { contract } = useContractStore();
-  
-  const isPaid = contract.status === 'paid' || contract.status === 'completed';
 
   const StateTemplate = getStateTemplate(contract.state);
 
@@ -19,7 +29,7 @@ export function ContractPreview() {
         <h3 className="text-xs font-mono font-semibold tracking-widest text-text-muted uppercase">Vista Previa en Tiempo Real</h3>
       </div>
       <div className="w-full min-h-[600px] aspect-[1/1.4] bg-white border border-border-layout shadow-sm rounded-lg relative overflow-hidden flex flex-col pointer-events-none">
-        
+
         {/* Header Documento */}
         <div className="p-4 md:p-6 pb-2">
           <div className="flex justify-between items-start mb-6">
@@ -30,11 +40,11 @@ export function ContractPreview() {
             <div className="text-right flex flex-col items-end leading-tight">
                <span className="font-mono text-[9px] text-gray-400 font-bold uppercase tracking-widest">Folio Digital</span>
                <span className="font-mono text-[10px] text-gray-600 font-bold">
-                 {isPaid ? 'VAL-2026-99381' : `${contract.state ? contract.state.substring(0,2).toUpperCase() : 'XX'}-2026-18536`}
+                 {`${contract.state ? contract.state.substring(0,2).toUpperCase() : 'XX'}-2026-18536`}
                </span>
             </div>
           </div>
-          
+
           <div className="text-center space-y-1 mb-6 border-b border-gray-100 pb-6">
             <p className="font-mono text-[9px] text-gray-400 font-bold uppercase tracking-widest">Instrumento Legal</p>
             <h3 className="font-display font-bold uppercase text-gray-900 text-base leading-tight pt-2">Contrato de Arrendamiento<br/>Residencial</h3>
@@ -44,46 +54,35 @@ export function ContractPreview() {
           </div>
         </div>
 
-        {/* Contenido Dinámico Legal — en modo preview el template corta tras la
-            cláusula CUARTA; las cláusulas restantes nunca llegan al DOM sin pago. */}
+        {/* Contenido Dinámico Legal — el template corta tras la cláusula
+            CUARTA; las cláusulas restantes nunca llegan al DOM sin pago. */}
         <div className="px-4 md:px-8 pt-0 flex-1 relative overflow-y-auto scrollbar-hide pb-20 select-none">
-          <StateTemplate preview={!isPaid} />
-          {!isPaid && (
-            <div className="mt-6 space-y-3 opacity-60">
-              {['QUINTA. - DEPÓSITO.', 'SEXTA. - PLAZO DEL CONTRATO.', 'SÉPTIMA. - REPORTE DE DESPERFECTOS.', 'OCTAVA. - PAGO DE SERVICIOS.', 'NOVENA. - INCUMPLIMIENTO Y PENALIDADES.', 'DÉCIMA. - FIADOR Y OBLIGADO SOLIDARIO.'].map((titulo) => (
-                <div key={titulo}>
-                  <p className="font-bold font-serif text-gray-800">{titulo}</p>
-                  <div className="mt-1 space-y-1.5">
-                    <div className="h-2 bg-gray-200 rounded w-full" />
-                    <div className="h-2 bg-gray-200 rounded w-11/12" />
-                    <div className="h-2 bg-gray-200 rounded w-4/5" />
-                  </div>
+          <StateTemplate preview />
+          <div className="mt-6 space-y-3 opacity-60">
+            {LOCKED_CLAUSES.map((titulo) => (
+              <div key={titulo}>
+                <p className="font-bold font-serif text-gray-800">{titulo}</p>
+                <div className="mt-1 space-y-1.5">
+                  <div className="h-2 bg-gray-200 rounded w-full" />
+                  <div className="h-2 bg-gray-200 rounded w-11/12" />
+                  <div className="h-2 bg-gray-200 rounded w-4/5" />
                 </div>
-              ))}
-            </div>
-          )}
-
-          {isPaid && (
-            <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 font-bold animate-in slide-in-from-bottom-2">
-              <ShieldCheck className="w-5 h-5" />
-              CONTRATO DESBLOQUEADO
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Zona Borrosa Condicional (Fija sobre el scroll) */}
-        {!isPaid && (
-          <div className="absolute inset-x-0 bottom-0 h-[55%] flex flex-col items-center justify-center z-20 pointer-events-auto">
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/90 to-transparent backdrop-blur-[2px]" />
-            <div className="relative bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-6 rounded-2xl flex flex-col items-center text-center w-72 mt-20">
-              <Lock className="w-5 h-5 text-blue-600 mb-2" />
-              <h4 className="font-bold text-[15px] text-gray-900 mb-1">Cláusulas bloqueadas</h4>
-              <p className="text-gray-500 text-[12px] leading-tight">
-                Completa el pago para desbloquear el contrato completo y descargarlo en PDF.
-              </p>
-            </div>
+        {/* Zona Borrosa (Fija sobre el scroll) */}
+        <div className="absolute inset-x-0 bottom-0 h-[55%] flex flex-col items-center justify-center z-20 pointer-events-auto">
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/90 to-transparent backdrop-blur-[2px]" />
+          <div className="relative bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-6 rounded-2xl flex flex-col items-center text-center w-72 mt-20">
+            <Lock className="w-5 h-5 text-blue-600 mb-2" />
+            <h4 className="font-bold text-[15px] text-gray-900 mb-1">Cláusulas bloqueadas</h4>
+            <p className="text-gray-500 text-[12px] leading-tight">
+              Completa el pago para desbloquear el contrato completo y descargarlo en PDF.
+            </p>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
