@@ -5,6 +5,7 @@ import { TrustBar } from "@/components/home/TrustBar";
 import { StateCards } from "@/components/home/StateCards";
 import { PricingSection } from "@/components/home/PricingSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { AboutRenters } from "@/components/home/AboutRenters";
 import { CtaSection } from "@/components/home/CtaSection";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
         <StateCards />
         <PricingSection />
         <TestimonialsSection />
+        <AboutRenters />
         <CtaSection />
       </div>
 

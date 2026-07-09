@@ -169,6 +169,28 @@ function SuccessContent() {
               Contactar Soporte
             </Link>
           </div>
+
+          {/* Upsell de póliza jurídica — solo Nuevo León (folio NL-), donde hay cobertura */}
+          {result?.folio?.startsWith("NL-") && (
+            <div className="w-full bg-gradient-to-br from-[#0d3320] to-[#0a1f14] border border-emerald-500/20 rounded-2xl p-5 text-left">
+              <div className="flex items-center gap-2 mb-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+                <h5 className="text-[14px] font-bold text-white">Da el siguiente paso: protégete si tu inquilino no paga</h5>
+              </div>
+              <p className="text-[13px] text-gray-300 leading-relaxed mb-4">
+                Tu contrato te blinda en papel. Con la <strong className="text-white">Póliza Jurídica de Renters</strong>,
+                si tu inquilino deja de pagar, nosotros lo gestionamos por ti — cobranza y desalojo incluidos.
+              </p>
+              <a
+                href="https://www.renters.mx"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] font-bold rounded-lg transition-colors"
+              >
+                Conocer la Póliza Jurídica <ShieldCheck className="w-4 h-4" />
+              </a>
+            </div>
+          )}
         </div>
 
       </div>

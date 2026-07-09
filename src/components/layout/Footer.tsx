@@ -14,6 +14,14 @@ export function Footer() {
           <p className="text-sm text-text-muted text-center md:text-left max-w-xs mt-2">
              El motor de generación legal que asegura tu patrimonio sin complicaciones ni despachos costosos.
           </p>
+          <a
+            href="https://www.renters.mx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold text-brand-primary hover:underline"
+          >
+            <ShieldCheck className="w-3.5 h-3.5" /> Parte de Renters.mx
+          </a>
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 text-center md:text-left text-sm font-medium text-text-muted">
