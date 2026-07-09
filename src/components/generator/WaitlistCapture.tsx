@@ -48,19 +48,19 @@ export function WaitlistCapture({ estado, onClose }: Props) {
           <p className="text-[13px] text-gray-600 mb-3">
             Déjanos tu correo y te avisamos el día que se active — sin spam.
           </p>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && submit()}
               placeholder="tu@correo.com"
-              className="flex-1 h-10 px-3 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[14px]"
+              className="flex-1 min-w-0 h-10 px-3 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[14px]"
             />
             <button
               onClick={submit}
               disabled={status === "sending" || !email.includes("@")}
-              className="px-4 h-10 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50 flex items-center gap-1.5"
+              className="shrink-0 w-full sm:w-auto justify-center px-4 h-10 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50 flex items-center gap-1.5"
             >
               {status === "sending" ? <Loader2 className="w-4 h-4 animate-spin" /> : "Avisarme"}
             </button>

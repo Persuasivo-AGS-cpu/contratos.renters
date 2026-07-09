@@ -93,19 +93,19 @@ export function StateStep() {
               <p className="text-[13px] font-bold text-gray-800 mb-2 flex items-center gap-1.5">
                 <Save className="w-4 h-4 text-gray-400" /> Guarda tu avance (opcional)
               </p>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="email"
                   value={leadEmail}
                   onChange={(e) => setLeadEmail(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && saveLead()}
                   placeholder="tu@correo.com"
-                  className="flex-1 h-10 px-3 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[14px]"
+                  className="flex-1 min-w-0 h-10 px-3 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[14px]"
                 />
                 <button
                   onClick={saveLead}
                   disabled={!leadEmail.includes("@")}
-                  className="px-4 h-10 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 text-sm font-bold rounded-lg transition-colors disabled:opacity-40"
+                  className="shrink-0 w-full sm:w-auto px-4 h-10 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 text-sm font-bold rounded-lg transition-colors disabled:opacity-40"
                 >
                   Guardar
                 </button>
