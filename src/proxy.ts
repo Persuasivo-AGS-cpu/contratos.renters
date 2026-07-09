@@ -35,8 +35,13 @@ export function proxy(req: NextRequest) {
     }
   }
 
+  // Los iconos del panel (favicon / apple-touch-icon) deben ser públicos para
+  // que el navegador los cargue al instalar /admin como web app. No son datos
+  // sensibles y no exponen contenido del panel.
+  const isAdminIcon = pathname === '/admin/icon' || pathname === '/admin/apple-icon';
+
   // Proteger /admin con Basic Auth
-  if (pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/admin') && !isAdminIcon) {
     if (!isAuthenticated(req)) {
       return new NextResponse('Acceso denegado', {
         status: 401,

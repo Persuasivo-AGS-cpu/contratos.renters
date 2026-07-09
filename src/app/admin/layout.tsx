@@ -2,6 +2,12 @@ import { AdminNav } from "@/components/layout/AdminNav";
 
 export const metadata = {
   title: "Admin Dashboard | Renters HQ",
+  // Nombre e ícono al instalar /admin como web app en el celular
+  appleWebApp: {
+    capable: true,
+    title: "Renters HQ",
+    statusBarStyle: "black-translucent" as const,
+  },
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
