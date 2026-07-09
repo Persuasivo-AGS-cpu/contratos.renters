@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { sendContractEmail } from '@/lib/email';
+import { sendContractEmail, sendSaleNotification } from '@/lib/email';
 import Stripe from 'stripe';
 
 export async function POST(req: NextRequest) {
@@ -54,6 +54,20 @@ export async function POST(req: NextRequest) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx';
         const downloadUrl = `${appUrl}/api/pdf?token=${contrato.pdf_token}`;
         const folio = session.metadata?.folio || '';
+
+        // Notificación de venta al dueño (una vez por venta, gracias al update condicional)
+        try {
+          await sendSaleNotification({
+            folio,
+            estado: contrato.estado,
+            montoCentavos: session.amount_total,
+            arrendadorNombre: contrato.arrendador_nombre,
+            arrendadorEmail: contrato.arrendador_email,
+          });
+        } catch (notifErr) {
+          console.error('[webhook] Sale notification failed:', notifErr);
+        }
+
         const recipients = [
           { email: contrato.arrendador_email, name: contrato.arrendador_nombre || 'Arrendador' },
           { email: contrato.inquilino_email, name: 'Inquilino' },

@@ -62,6 +62,52 @@ interface SendRecoveryEmailParams {
   estado: string;
 }
 
+interface SendSaleNotificationParams {
+  folio: string;
+  estado: string;
+  montoCentavos: number | null;
+  arrendadorNombre: string | null;
+  arrendadorEmail: string | null;
+}
+
+// Notificación interna al dueño en cada venta pagada. Destino configurable con
+// SALE_NOTIFICATION_EMAIL; por defecto el correo del negocio.
+export async function sendSaleNotification(params: SendSaleNotificationParams) {
+  const { folio, estado, montoCentavos, arrendadorNombre, arrendadorEmail } = params;
+  const to = process.env.SALE_NOTIFICATION_EMAIL || 'renters.mx@gmail.com';
+  const monto = ((montoCentavos ?? 49900) / 100).toLocaleString('es-MX', {
+    style: 'currency', currency: 'MXN', maximumFractionDigits: 0,
+  });
+
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to,
+    subject: `💰 Nueva venta ${monto} — ${folio}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #fff;">
+        <h1 style="font-size: 22px; font-weight: 900; color: #0f172a; margin-bottom: 16px;">
+          💰 Nueva venta confirmada
+        </h1>
+        <table style="width: 100%; border-collapse: collapse; font-size: 15px; color: #334155;">
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Monto</td><td style="padding: 8px 0; font-weight: 700; text-align: right;">${monto} MXN</td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Folio</td><td style="padding: 8px 0; font-family: monospace; text-align: right;">${folio}</td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Estado</td><td style="padding: 8px 0; text-align: right;">${getStateName(estado)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Cliente</td><td style="padding: 8px 0; text-align: right;">${arrendadorNombre || '—'}</td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Correo</td><td style="padding: 8px 0; text-align: right;">${arrendadorEmail || '—'}</td></tr>
+        </table>
+        <a href="https://contratos.renters.mx/admin/contratos"
+           style="display: inline-block; margin-top: 24px; background: #0f172a; color: #fff; font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px;">
+          Ver en el panel
+        </a>
+      </div>
+    `,
+  });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
+}
+
 interface SendReviewRequestEmailParams {
   toEmail: string;
   toName: string;
