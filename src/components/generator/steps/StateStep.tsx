@@ -16,11 +16,13 @@ export function StateStep() {
   const [leadSaved, setLeadSaved] = useState(false);
   const searchParams = useSearchParams();
 
+  // El estado elegido en el banner/tarjetas de la home (?estado=) es una
+  // elección explícita: gana sobre lo que haya quedado en el store persistido.
   useEffect(() => {
     const estadoParam = searchParams.get('estado');
-    if (estadoParam && !contract.state) {
+    if (estadoParam) {
       const match = ESTATES.find(e => e.id === estadoParam && e.available);
-      if (match) updateContract('state', match.id);
+      if (match && match.id !== contract.state) updateContract('state', match.id);
     }
   }, []);
 
