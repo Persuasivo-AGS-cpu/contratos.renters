@@ -1,4 +1,8 @@
-import { ArrowUpRight, ShieldCheck, FileText } from "lucide-react";
+import { ArrowUpRight, ShieldCheck, FileText, MessageCircle } from "lucide-react";
+
+const WA_POLIZA = `https://wa.me/528110610111?text=${encodeURIComponent(
+  "Hola, rento en Nuevo León y me interesa saber más sobre la Póliza Jurídica de Renters."
+)}`;
 
 export function AboutRenters() {
   return (
@@ -36,20 +40,31 @@ export function AboutRenters() {
             </div>
             <h3 className="font-black text-gray-900 text-lg mb-2">La Póliza Jurídica: protección en la vida real</h3>
             <p className="text-gray-500 text-[15px] leading-relaxed">
-              Si tu inquilino deja de pagar, Renters lo gestiona por ti. El respaldo completo
-              que va más allá del papel <span className="text-gray-400">(disponible en Nuevo León)</span>.
+              Si tu inquilino deja de pagar, Renters lo gestiona por ti — cobranza y desalojo.
+              El respaldo que va más allá del papel <span className="text-gray-400">(disponible en Nuevo León)</span>.
             </p>
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <p className="text-[15px] text-gray-600 font-medium text-center">
+            ¿Rentas en <strong className="text-gray-800">Nuevo León</strong>? Pregúntanos por la Póliza Jurídica.
+          </p>
+          <a
+            href={WA_POLIZA}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-xl transition-colors shadow-sm"
+          >
+            <MessageCircle className="w-5 h-5" /> Escríbenos por WhatsApp
+          </a>
           <a
             href="https://www.renters.mx"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-7 py-3.5 bg-white border border-gray-300 hover:border-gray-400 text-gray-800 font-bold rounded-xl transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-gray-500 hover:text-gray-800 transition-colors mt-1"
           >
-            Conoce Renters <ArrowUpRight className="w-5 h-5" />
+            Conoce Renters <ArrowUpRight className="w-4 h-4" />
           </a>
         </div>
       </div>

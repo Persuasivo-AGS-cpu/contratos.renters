@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, ShieldCheck, DownloadCloud, Loader2, AlertCircle } from "lucide-react";
+import { CheckCircle2, ShieldCheck, DownloadCloud, Loader2, AlertCircle, ArrowUpRight } from "lucide-react";
 import { useContractStore } from "@/store/useContractStore";
 import { trackPurchase } from "@/lib/analytics";
 import { useEffect, useState } from "react";
@@ -180,14 +180,17 @@ function SuccessContent() {
               <p className="text-[13px] text-gray-300 leading-relaxed mb-4">
                 Tu contrato te blinda en papel. Con la <strong className="text-white">Póliza Jurídica de Renters</strong>,
                 si tu inquilino deja de pagar, nosotros lo gestionamos por ti — cobranza y desalojo incluidos.
+                Escríbenos y te contamos cómo funciona.
               </p>
               <a
-                href="https://www.renters.mx"
+                href={`https://wa.me/528110610111?text=${encodeURIComponent(
+                  `Hola, acabo de generar mi contrato de arrendamiento${result?.folio ? ` (folio ${result.folio})` : ""} y me interesa la Póliza Jurídica de Renters en Nuevo León.`
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] font-bold rounded-lg transition-colors"
               >
-                Conocer la Póliza Jurídica <ShieldCheck className="w-4 h-4" />
+                Pregúntanos por WhatsApp <ArrowUpRight className="w-4 h-4" />
               </a>
             </div>
           )}
