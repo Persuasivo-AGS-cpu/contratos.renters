@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useContractStore } from "@/store/useContractStore";
 import { trackGeneratorStep } from "@/lib/analytics";
 import { ContractStepper } from "./ContractStepper";
@@ -15,10 +15,18 @@ import { SummaryStep } from "./steps/SummaryStep";
 export function ContractEngine() {
   const currentStep = useContractStore((state) => state.currentStep);
   const contractState = useContractStore((state) => state.contract.state);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     trackGeneratorStep(currentStep, contractState || undefined);
   }, [currentStep, contractState]);
+
+  // Al cambiar de paso, volver arriba: la página (móvil) y el contenedor
+  // scrolleable interno (desktop) para que el paso nuevo empiece por arriba.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [currentStep]);
 
   const renderStep = () => {
     switch (currentStep) {
@@ -44,7 +52,7 @@ export function ContractEngine() {
   return (
     <div className="w-full h-full flex flex-col">
       <ContractStepper />
-      <div className="flex-1 w-full bg-surface-clean rounded-xl border border-border-layout shadow-sm p-6 overflow-y-auto">
+      <div ref={scrollRef} className="flex-1 w-full bg-surface-clean rounded-xl border border-border-layout shadow-sm p-6 overflow-y-auto">
         {renderStep()}
       </div>
     </div>
