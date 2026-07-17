@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { sendReviewRequestEmail } from '@/lib/email';
+import { buildAndSendWeeklyReport } from '@/lib/weeklyReport';
 
 // Corre 1 vez al día (vercel.json). Ventana 72-96h post-pago: cada contrato
 // pagado cae en exactamente una corrida — un solo email de reseña por cliente.
@@ -43,5 +44,19 @@ export async function GET(req: NextRequest) {
   }
 
   console.log(`[cron/review-request] window=${from}..${to} candidates=${paid?.length ?? 0} sent=${sent}`);
-  return NextResponse.json({ candidates: paid?.length ?? 0, sent });
+
+  // Los lunes, además de las reseñas, enviar el reporte semanal por correo.
+  // (Vercel Hobby limita a 2 crons; se engancha aquí en vez de tener uno propio.)
+  // El cron corre 16:30 UTC = 10:30 CDMX, mismo día de la semana en ambas zonas.
+  let weeklyReport = false;
+  if (new Date().getUTCDay() === 1) {
+    try {
+      await buildAndSendWeeklyReport();
+      weeklyReport = true;
+    } catch (err) {
+      console.error('[cron/review-request] weekly report failed:', err);
+    }
+  }
+
+  return NextResponse.json({ candidates: paid?.length ?? 0, sent, weeklyReport });
 }

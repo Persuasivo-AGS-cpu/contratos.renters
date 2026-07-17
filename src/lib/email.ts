@@ -70,6 +70,20 @@ interface SendSaleNotificationParams {
   arrendadorEmail: string | null;
 }
 
+// Reporte interno (embudo/ventas semanales). El endpoint arma el HTML; esta
+// función solo lo envía. Destino: REPORT_EMAIL, luego SALE_NOTIFICATION_EMAIL.
+export async function sendReportEmail(subject: string, html: string) {
+  const to =
+    process.env.REPORT_EMAIL ||
+    process.env.SALE_NOTIFICATION_EMAIL ||
+    'renters.mx@gmail.com';
+
+  const { error } = await resend.emails.send({ from: FROM, to, subject, html });
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
+}
+
 // Notificación interna al dueño en cada venta pagada. Destino configurable con
 // SALE_NOTIFICATION_EMAIL; por defecto el correo del negocio.
 export async function sendSaleNotification(params: SendSaleNotificationParams) {
