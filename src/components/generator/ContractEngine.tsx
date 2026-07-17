@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useContractStore } from "@/store/useContractStore";
 import { trackGeneratorStep } from "@/lib/analytics";
+import { trackFunnelStep } from "@/lib/funnel";
 import { ContractStepper } from "./ContractStepper";
 import { StateStep } from "./steps/StateStep";
 import { PropertyStep } from "./steps/PropertyStep";
@@ -19,6 +20,7 @@ export function ContractEngine() {
 
   useEffect(() => {
     trackGeneratorStep(currentStep, contractState || undefined);
+    trackFunnelStep(currentStep, contractState || undefined);
   }, [currentStep, contractState]);
 
   // Al cambiar de paso, volver arriba: la página (móvil) y el contenedor

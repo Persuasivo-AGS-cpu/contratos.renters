@@ -9,6 +9,7 @@ export function AdminNav() {
     { name: "Visión General", href: "/admin", exact: true },
     { name: "Transacciones", href: "/admin/transacciones" },
     { name: "Contratos", href: "/admin/contratos" },
+    { name: "Embudo", href: "/admin/funnel" },
     { name: "Lista de Espera", href: "/admin/waitlist" },
     { name: "Ajustes", href: "/admin/ajustes" },
   ];
