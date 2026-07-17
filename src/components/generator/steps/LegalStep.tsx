@@ -1,5 +1,6 @@
 "use client";
 import { useContractStore } from "@/store/useContractStore";
+import type { ContractState } from "@/store/useContractStore";
 
 import { analyzeClabe } from "@/utils/clabeValidator";
 
@@ -7,6 +8,7 @@ export function LegalStep() {
   const { contract, updateContract, nextStep, prevStep } = useContractStore();
 
   const clabeInfo = analyzeClabe(contract.terms.bank_clabe);
+  const bankDetailsPending = !!contract.terms.bank_details_pending;
 
   const handleClabeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawVal = e.target.value.replace(/\D/g, '');
@@ -15,7 +17,7 @@ export function LegalStep() {
     const analysis = analyzeClabe(rawVal);
     
     // Si metió menos de 18 o no fallé el limit, guardo en store 
-    const updates: any = { bank_clabe: rawVal, is_valid_clabe: analysis.isValidChecksum };
+    const updates: Partial<ContractState['terms']> = { bank_clabe: rawVal, is_valid_clabe: analysis.isValidChecksum };
     
     if (analysis.bankName && analysis.bankName !== 'No identificado') {
        updates.bank_name = analysis.bankName;
@@ -37,7 +39,8 @@ export function LegalStep() {
                <label className="block text-xs font-bold text-text-main mb-1">Banco</label>
                <input 
                  type="text"
-                 className="w-full h-10 px-3 border border-border-layout rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary/50 text-sm font-medium"
+                 disabled={bankDetailsPending}
+                 className="w-full h-10 px-3 border border-border-layout rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary/50 text-sm font-medium disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
                  placeholder="Ej. BANORTE"
                  value={contract.terms.bank_name || ''}
                  onChange={(e) => updateContract('terms', { bank_name: e.target.value })}
@@ -47,8 +50,11 @@ export function LegalStep() {
                <label className="block text-xs font-bold text-text-main mb-1">CLABE Interbancaria</label>
                <input 
                  type="text"
+                 disabled={bankDetailsPending}
                  className={`w-full h-10 px-3 border rounded-md focus:outline-none focus:ring-2 text-sm font-medium font-mono transition-colors ${
-                   clabeInfo.errorType !== 'none' 
+                   bankDetailsPending
+                     ? 'border-border-layout bg-gray-100 text-gray-400 cursor-not-allowed'
+                     : clabeInfo.errorType !== 'none'
                      ? 'border-red-400 focus:ring-red-400/50 bg-red-50 text-red-900' 
                      : clabeInfo.isValidChecksum 
                        ? 'border-green-400 focus:ring-green-400/50 bg-green-50 text-green-900'
@@ -66,6 +72,23 @@ export function LegalStep() {
                )}
              </div>
            </div>
+           <label className="flex items-start gap-3 rounded-lg border border-brand-primary/10 bg-white/70 p-3 text-[13px] text-text-muted">
+             <input
+               type="checkbox"
+               className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary"
+               checked={bankDetailsPending}
+               onChange={(e) => {
+                 updateContract('terms', {
+                   bank_details_pending: e.target.checked,
+                   bank_name: e.target.checked ? '' : contract.terms.bank_name,
+                   bank_account: e.target.checked ? '' : contract.terms.bank_account,
+                   bank_clabe: e.target.checked ? '' : contract.terms.bank_clabe,
+                   is_valid_clabe: e.target.checked ? false : contract.terms.is_valid_clabe,
+                 });
+               }}
+             />
+             <span>No tengo estos datos bancarios en este momento. Dejar espacio para completarlos antes de la firma.</span>
+           </label>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

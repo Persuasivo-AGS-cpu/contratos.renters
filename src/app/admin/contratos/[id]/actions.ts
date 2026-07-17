@@ -32,11 +32,15 @@ export async function updateContract(id: string, formData: FormData) {
   }
 
   const cd = row.contract_data ?? {};
+  const landlordInePending = formData.get('landlord_id_number_pending') === 'on';
+  const tenantInePending = formData.get('tenant_id_number_pending') === 'on';
+  const bankDetailsPending = formData.get('bank_details_pending') === 'on';
 
   const landlord = {
     ...cd.landlord,
     name: str(formData, 'landlord_name'),
-    id_number: str(formData, 'landlord_id_number'),
+    id_number: landlordInePending ? '' : str(formData, 'landlord_id_number'),
+    id_number_pending: landlordInePending,
     email: str(formData, 'landlord_email'),
     phone: str(formData, 'landlord_phone'),
     address: str(formData, 'landlord_address'),
@@ -44,7 +48,8 @@ export async function updateContract(id: string, formData: FormData) {
   const tenant = {
     ...cd.tenant,
     name: str(formData, 'tenant_name'),
-    id_number: str(formData, 'tenant_id_number'),
+    id_number: tenantInePending ? '' : str(formData, 'tenant_id_number'),
+    id_number_pending: tenantInePending,
     email: str(formData, 'tenant_email'),
     phone: str(formData, 'tenant_phone'),
     address: str(formData, 'tenant_address'),
@@ -68,9 +73,10 @@ export async function updateContract(id: string, formData: FormData) {
     payment_day: num(formData, 'payment_day'),
     late_penalty_percent: num(formData, 'late_penalty_percent'),
     early_termination_penalty_months: num(formData, 'early_termination_penalty_months'),
-    bank_name: str(formData, 'bank_name'),
-    bank_account: str(formData, 'bank_account'),
-    bank_clabe: str(formData, 'bank_clabe'),
+    bank_name: bankDetailsPending ? '' : str(formData, 'bank_name'),
+    bank_account: bankDetailsPending ? '' : str(formData, 'bank_account'),
+    bank_clabe: bankDetailsPending ? '' : str(formData, 'bank_clabe'),
+    bank_details_pending: bankDetailsPending,
   };
   const guarantor = {
     ...cd.guarantor,

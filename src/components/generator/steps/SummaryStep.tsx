@@ -66,7 +66,9 @@ export function SummaryStep() {
                 <p className="text-[12px] text-gray-500 mb-2">{contract.landlord.email || 'Sin correo'}</p>
               </div>
               <div className="pt-3 border-t border-gray-100 space-y-1">
-                 <p className="text-[11px] text-gray-400 font-mono">INE: {contract.landlord.id_number}</p>
+                 <p className="text-[11px] text-gray-400 font-mono">
+                   INE: {contract.landlord.id_number_pending ? 'Pendiente para firma' : contract.landlord.id_number}
+                 </p>
                  <p className="text-[11px] text-gray-400 capitalize">{contract.landlord.address}</p>
               </div>
            </div>
@@ -81,7 +83,9 @@ export function SummaryStep() {
                 <p className="text-[12px] text-gray-500 mb-2">{contract.tenant.email || 'Sin correo'}</p>
               </div>
               <div className="pt-3 border-t border-gray-100 space-y-1">
-                 <p className="text-[11px] text-gray-400 font-mono">INE: {contract.tenant.id_number}</p>
+                 <p className="text-[11px] text-gray-400 font-mono">
+                   INE: {contract.tenant.id_number_pending ? 'Pendiente para firma' : contract.tenant.id_number}
+                 </p>
                  <p className="text-[11px] text-gray-400 capitalize">{contract.tenant.address}</p>
               </div>
            </div>

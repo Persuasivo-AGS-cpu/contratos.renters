@@ -30,6 +30,19 @@ function Field({
   );
 }
 
+function CheckboxField({
+  label, name, defaultChecked, span = false,
+}: {
+  label: string; name: string; defaultChecked: boolean; span?: boolean;
+}) {
+  return (
+    <div className={`flex items-center gap-2 ${span ? 'md:col-span-2' : ''}`}>
+      <input type="checkbox" name={name} id={name} defaultChecked={defaultChecked} className="w-4 h-4" />
+      <label htmlFor={name} className="text-[13px] font-medium text-gray-700">{label}</label>
+    </div>
+  );
+}
+
 function Section({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
@@ -99,6 +112,7 @@ export default async function EditContratoPage({ params, searchParams }: PagePro
         <Section icon={<User className="w-4 h-4 text-gray-400" />} title="Arrendador">
           <Field label="Nombre completo" name="landlord_name" defaultValue={l.name ?? ''} span />
           <Field label="Clave de elector (INE)" name="landlord_id_number" defaultValue={l.id_number ?? ''} />
+          <CheckboxField label="INE pendiente para completar antes de firma" name="landlord_id_number_pending" defaultChecked={!!l.id_number_pending} />
           <Field label="Teléfono" name="landlord_phone" defaultValue={l.phone ?? ''} />
           <Field label="Correo" name="landlord_email" defaultValue={l.email ?? ''} type="email" />
           <Field label="Domicilio" name="landlord_address" defaultValue={l.address ?? ''} />
@@ -107,6 +121,7 @@ export default async function EditContratoPage({ params, searchParams }: PagePro
         <Section icon={<UserCheck className="w-4 h-4 text-gray-400" />} title="Inquilino">
           <Field label="Nombre completo" name="tenant_name" defaultValue={t.name ?? ''} span />
           <Field label="Clave de elector (INE)" name="tenant_id_number" defaultValue={t.id_number ?? ''} />
+          <CheckboxField label="INE pendiente para completar antes de firma" name="tenant_id_number_pending" defaultChecked={!!t.id_number_pending} />
           <Field label="Teléfono" name="tenant_phone" defaultValue={t.phone ?? ''} />
           <Field label="Correo" name="tenant_email" defaultValue={t.email ?? ''} type="email" />
           <Field label="Domicilio" name="tenant_address" defaultValue={t.address ?? ''} />
@@ -133,6 +148,7 @@ export default async function EditContratoPage({ params, searchParams }: PagePro
           <Field label="Banco" name="bank_name" defaultValue={tm.bank_name ?? ''} />
           <Field label="Cuenta" name="bank_account" defaultValue={tm.bank_account ?? ''} />
           <Field label="CLABE" name="bank_clabe" defaultValue={tm.bank_clabe ?? ''} />
+          <CheckboxField label="Datos bancarios pendientes para completar antes de firma" name="bank_details_pending" defaultChecked={!!tm.bank_details_pending} span />
         </Section>
 
         <Section icon={<Users className="w-4 h-4 text-gray-400" />} title="Fiador">

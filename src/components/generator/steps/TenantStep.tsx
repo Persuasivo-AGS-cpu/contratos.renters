@@ -7,7 +7,8 @@ export function TenantStep() {
   const tenant = contract.tenant;
   
   const isEmailValid = tenant.email.includes('@') && tenant.email.includes('.');
-  const isIneValid = tenant.id_number.length === 18;
+  const isInePending = !!tenant.id_number_pending;
+  const isIneValid = isInePending || tenant.id_number.length === 18;
   const isPhoneValid = tenant.phone.length === 10;
   const isNameValid = tenant.name.trim().length > 3;
 
@@ -38,7 +39,8 @@ export function TenantStep() {
           <input 
             type="text"
             maxLength={18}
-            className="w-full h-12 px-4 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px] uppercase"
+            disabled={isInePending}
+            className="w-full h-12 px-4 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px] uppercase disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
             placeholder="Clave de elector de 18 dígitos"
             value={tenant.id_number}
             onChange={(e) => {
@@ -46,9 +48,23 @@ export function TenantStep() {
               updateContract('tenant', { id_number: cleaned })
             }}
           />
-          {tenant.id_number.length > 0 && tenant.id_number.length < 18 && (
+          {tenant.id_number.length > 0 && tenant.id_number.length < 18 && !isInePending && (
             <span className="text-[11px] text-orange-500 mt-1 block font-medium">Debe tener 18 caracteres.</span>
           )}
+          <label className="mt-3 flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-[13px] text-gray-600">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              checked={isInePending}
+              onChange={(e) => {
+                updateContract('tenant', {
+                  id_number_pending: e.target.checked,
+                  id_number: e.target.checked ? '' : tenant.id_number,
+                });
+              }}
+            />
+            <span>No tengo este dato en este momento. Dejar espacio para completarlo antes de la firma.</span>
+          </label>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

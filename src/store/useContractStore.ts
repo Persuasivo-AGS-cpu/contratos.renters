@@ -18,8 +18,8 @@ export type ContractState = {
     inventory: Record<string, number>;
     additional_items: Array<{ id: string; name: string; qty: number }>;
   };
-  landlord: { name: string; id_number: string; email: string; phone: string; address: string };
-  tenant: { name: string; id_number: string; email: string; phone: string; address: string };
+  landlord: { name: string; id_number: string; id_number_pending: boolean; email: string; phone: string; address: string };
+  tenant: { name: string; id_number: string; id_number_pending: boolean; email: string; phone: string; address: string };
   terms: {
     monthly_rent: number;
     deposit_amount: number;
@@ -31,6 +31,7 @@ export type ContractState = {
     bank_name: string;
     bank_account: string;
     bank_clabe: string;
+    bank_details_pending: boolean;
     is_valid_clabe: boolean;
     early_termination_penalty_months: number;
   };
@@ -66,8 +67,8 @@ const initialState: ContractState = {
     inventory: {},
     additional_items: []
   },
-  landlord: { name: '', id_number: '', email: '', phone: '', address: '' },
-  tenant: { name: '', id_number: '', email: '', phone: '', address: '' },
+  landlord: { name: '', id_number: '', id_number_pending: false, email: '', phone: '', address: '' },
+  tenant: { name: '', id_number: '', id_number_pending: false, email: '', phone: '', address: '' },
   terms: {
     monthly_rent: 0,
     deposit_amount: 0,
@@ -79,6 +80,7 @@ const initialState: ContractState = {
     bank_name: 'BANORTE',
     bank_account: '',
     bank_clabe: '',
+    bank_details_pending: false,
     is_valid_clabe: false,
     early_termination_penalty_months: 2,
   },
