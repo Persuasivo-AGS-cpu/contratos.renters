@@ -4,6 +4,9 @@ import { getStateName } from './states';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM = 'Renters.mx <contratos@contratos.renters.mx>';
+// El remitente (contratos@...) es solo-envío y no recibe respuestas. Las
+// respuestas del cliente deben ir a un buzón real y monitoreado.
+const REPLY_TO = 'hola@renters.mx';
 
 interface SendContractEmailParams {
   toEmail: string;
@@ -18,6 +21,7 @@ export async function sendContractEmail(params: SendContractEmailParams) {
 
   const { error } = await resend.emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to: toEmail,
     bcc: 'renters.mx@gmail.com',
     subject: `Tu contrato está listo — Folio ${folio}`,
@@ -78,7 +82,7 @@ export async function sendReportEmail(subject: string, html: string) {
     process.env.SALE_NOTIFICATION_EMAIL ||
     'renters.mx@gmail.com';
 
-  const { error } = await resend.emails.send({ from: FROM, to, subject, html });
+  const { error } = await resend.emails.send({ from: FROM, replyTo: REPLY_TO, to, subject, html });
   if (error) {
     throw new Error(`Resend error: ${error.message}`);
   }
@@ -95,6 +99,7 @@ export async function sendSaleNotification(params: SendSaleNotificationParams) {
 
   const { error } = await resend.emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to,
     subject: `💰 Nueva venta ${monto} — ${folio}`,
     html: `
@@ -136,6 +141,7 @@ export async function sendReviewRequestEmail(params: SendReviewRequestEmailParam
 
   const { error } = await resend.emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to: toEmail,
     bcc: 'renters.mx@gmail.com',
     subject: '¿Cómo te fue con tu contrato? — 1 minuto',
@@ -173,6 +179,7 @@ export async function sendRecoveryEmail(params: SendRecoveryEmailParams) {
 
   const { error } = await resend.emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to: toEmail,
     subject: `Tu contrato de arrendamiento quedó a un paso — ${getStateName(estado)}`,
     html: `
