@@ -58,10 +58,16 @@ duración/fecha/día pago; INE/CLABE solo saltables con su flag.
 - Verificar en prod tras deploy (curl/Chrome MCP). Typecheck+build antes de commit.
 - Vercel Hobby: máx 2 crons (hoy usa 1). CLI sin login persistente.
 
-## En progreso (2026-07-17)
-Rediseño de `/como-funciona`: reemplazar `StepByStepSection` por scrollytelling
-(teléfono sticky + pantallazos reales del generador que cruzan por scroll, barra
-progreso azul, móvil apilado con fade-in). Spec en
-`docs/superpowers/specs/2026-07-17-como-funciona-scrollytelling-design.md`.
-Falta: capturar 4 pantallazos móviles del generador + construir componente
-`ProcessScrollytelling.tsx` con framer-motion (respetar prefers-reduced-motion).
+## Hecho (2026-07-17): scrollytelling /como-funciona
+`StepByStepSection` (fotos stock) reemplazado por
+`src/components/como-funciona/ProcessScrollytelling.tsx`. Desktop (≥1024px):
+teléfono sticky + 4 pantallazos reales del generador en crossfade + barra de
+progreso vertical `#4D6BFE`, ligada a `useScroll`. Móvil: apilado con
+`whileInView` fade-in, sin sticky. `useReducedMotion` → estático. Assets en
+`public/images/como-funciona/paso-{1..4}.png` (capturados con Puppeteer +
+store de Zustand seedeado, ver git log — script no se conservó en el repo).
+Spec: `docs/superpowers/specs/2026-07-17-como-funciona-scrollytelling-design.md`
+(sección "Estado" al final documenta bug encontrado/arreglado).
+Bug de paso encontrado en el camino: `CheckoutModal.tsx` mostraba el slug crudo
+(`NUEVO-LEON`) en vez de `getStateName()` → corregido.
+Verificado en Chrome headless a 1440px/375px + reduced-motion, build limpio.

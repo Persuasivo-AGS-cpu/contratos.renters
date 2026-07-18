@@ -121,3 +121,41 @@ Se guardan en `public/images/como-funciona/` (nombres tipo `paso-1.png` …
   prefers-reduced-motion) — debe verse estático y legible, sin animación.
 - Confirmar cero layout shift al cargar los pantallazos.
 - Afinar timing del crossfade (1–2 iteraciones esperadas).
+
+## Estado: implementado (2026-07-17)
+
+Construido tal cual el spec, con estos detalles de la implementación real:
+
+- **Assets:** los 4 pantallazos se capturaron con Puppeteer headless + Chrome
+  del sistema, seedeando `localStorage['renters-contract-storage']` con un
+  contrato de ejemplo (Nuevo León, INE del arrendador marcada "pendiente") y
+  navegando a `/contrato` en viewport 390×844. El script de captura era
+  temporal (`scripts/capture-screens.mjs`) y se borró tras generar los PNG;
+  si hay que recapturar (cambia el diseño del generador), reconstruirlo desde
+  este mismo patrón — store shape en `src/store/useContractStore.ts`.
+- **Crossfade (`useBandOpacity`):** la primera versión usaba
+  `useTransform(progress, [inputs...], [outputs...])` con arrays de
+  keyframes (una banda por paso, con `isFirst`/`isLast` para los extremos).
+  **Esto produjo opacidades incorrectas en producción** — el inline style
+  decía `opacity:1` pero `getComputedStyle` devolvía valores intermedios
+  (ej. `0.21` cuando debía ser `1`), verificado con Puppeteer + wheel-scroll
+  real (no fue artefacto del script de verificación). No se encontró la causa
+  raíz exacta (sospecha: interacción entre keyframes con inputs que comparten
+  límites exactos entre paso y paso, o el path de animación acelerada por
+  hardware de framer-motion). **Fix:** reescribir `useBandOpacity` como
+  transform funcional (`useTransform(progress, v => ...)`) en vez de arrays
+  de keyframes — mismo resultado visual (meseta + fade lineal en los bordes),
+  cero ambigüedad de rangos. Si se toca esta función, preferir la forma
+  funcional sobre keyframes array-based.
+- **`overflow-hidden` en la `<section>` rompía `position: sticky`** del
+  teléfono (bug clásico: un ancestro con `overflow` distinto de `visible`
+  corta el contexto de sticky). Se quitó `overflow-hidden` de la sección.
+- **Bug de paso encontrado y arreglado:** `CheckoutModal.tsx` mostraba
+  `contract.state.toUpperCase()` (slug crudo, ej. `NUEVO-LEON`) en vez del
+  nombre legible. Ahora usa `getStateName()` de `src/lib/states.ts`.
+- Verificado: `tsc --noEmit` limpio, `npm run build` limpio, Chrome headless
+  a 1440px (desktop, crossfade + barra confirmados paso a paso) y 375px
+  (móvil, stacked fade-in confirmado), `prefers-reduced-motion: reduce`
+  confirmado (scrolly no se monta, fallback estático apilado sí).
+- `StepByStepSection.tsx` sigue en el repo sin usarse (huérfano), tal como
+  preveía el spec — no se borró en este cambio.

@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroProcessSection } from "@/components/como-funciona/HeroProcessSection";
-import { StepByStepSection } from "@/components/como-funciona/StepByStepSection";
+import { ProcessScrollytelling } from "@/components/como-funciona/ProcessScrollytelling";
 import { ProcessFeaturesSection } from "@/components/como-funciona/ProcessFeaturesSection";
 import { FinalCtaProcessSection } from "@/components/como-funciona/FinalCtaProcessSection";
 
@@ -16,7 +16,7 @@ export default function ComoFuncionaPage() {
       
       <div className="flex-1">
         <HeroProcessSection />
-        <StepByStepSection />
+        <ProcessScrollytelling />
         <ProcessFeaturesSection />
         <FinalCtaProcessSection />
       </div>

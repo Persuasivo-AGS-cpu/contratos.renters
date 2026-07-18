@@ -1,6 +1,7 @@
 "use client";
 
 import { useContractStore } from "@/store/useContractStore";
+import { getStateName } from "@/lib/states";
 import { trackBeginCheckout } from "@/lib/analytics";
 import { Lock, FileText, CheckCircle2, Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -55,7 +56,7 @@ export function CheckoutModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <h3 className="font-display font-bold text-xl flex items-center gap-2">
               <Lock className="w-5 h-5 text-brand-primary" /> Checkout Seguro
             </h3>
-            <p className="text-sm text-text-muted">Desbloquear Contrato Legal — {contract.state.toUpperCase() || 'GENERAL'}</p>
+            <p className="text-sm text-text-muted">Desbloquear Contrato Legal — {contract.state ? getStateName(contract.state) : 'General'}</p>
           </div>
           <p className="text-2xl font-mono font-bold text-text-main">
             ${priceDisplay}
