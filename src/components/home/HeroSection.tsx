@@ -51,10 +51,9 @@ export function HeroSection() {
 
           {/* Headlines */}
           <h1 className="text-5xl md:text-7xl font-display font-extrabold text-white tracking-tight leading-[1.05] mb-6 max-w-4xl">
-            Contratos de <br className="hidden md:block" />
-            arrendamiento <br className="hidden md:block" />
-            <span className="text-[#4D6BFE]">legalmente válidos</span> en <br className="hidden md:block" />
-            minutos
+            Contratos de arrendamiento <br className="hidden md:block" />
+            <span className="text-[#4D6BFE]">legalmente válidos</span> <br className="hidden md:block" />
+            en minutos
           </h1>
 
           <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-10 leading-relaxed">
