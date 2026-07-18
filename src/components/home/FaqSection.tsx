@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ChevronDown, MessageCircle } from "lucide-react";
+import { Reveal } from "@/components/shared/Reveal";
 
 export function FaqSection() {
   const faqs = [
@@ -27,7 +29,7 @@ export function FaqSection() {
     },
     {
        q: "¿Puedo modificar el contrato después de generarlo?",
-       a: "Sí. Dentro de tu cuenta tendrás un periodo de gracia en el que podrás editar sin costo algunas correcciones menores, o usar tu Pack Inmobiliario si ya lo has adquirido."
+       a: "Sí. Tienes las primeras 24 horas después de la compra para pedirnos corrección de datos sin costo. Solo respóndenos el correo con tu contrato y lo ajustamos."
     }
   ];
 
@@ -44,7 +46,7 @@ export function FaqSection() {
 
         <div className="space-y-3 max-w-3xl mx-auto">
            {faqs.map((faq, i) => (
-             <div key={i} className="rounded-xl overflow-hidden bg-white shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-gray-100/50">
+             <Reveal key={i} delay={Math.min(i * 0.05, 0.25)} className="rounded-xl overflow-hidden bg-white shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-gray-100/50">
                 <button 
                   onClick={() => setOpenIndex(openIndex === i ? null : i)}
                   className="w-full text-left px-8 py-5 flex items-center justify-between gap-4 font-bold text-[17px] text-[#111] hover:text-[#1a56ff] transition-colors"
@@ -59,20 +61,42 @@ export function FaqSection() {
                      <p className="px-8 pb-6 text-gray-500 leading-relaxed text-[16px]">{faq.a}</p>
                    </div>
                 </div>
-             </div>
+             </Reveal>
            ))}
         </div>
 
         <div className="mt-10 pt-8 border-t border-gray-200/80 max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4">
           <p className="text-gray-500 font-medium mr-2">¿Tienes una pregunta diferente?</p>
-          <button className="px-5 py-2.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-[14px] text-gray-700 font-bold shadow-sm transition-colors">
+          <Link
+            href="/preguntas-frecuentes"
+            className="px-5 py-2.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-[14px] text-gray-700 font-bold shadow-sm transition-colors"
+          >
             Ver todas las preguntas
-          </button>
-          <button className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#0d52ff] hover:bg-[#003ee6] text-white text-[14px] font-bold shadow-md shadow-blue-500/20 transition-colors">
+          </Link>
+          <Link
+            href="/contacto"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#0d52ff] hover:bg-[#003ee6] text-white text-[14px] font-bold shadow-md shadow-blue-500/20 transition-colors"
+          >
             <MessageCircle className="w-5 h-5" /> Contáctanos
-          </button>
+          </Link>
         </div>
       </div>
+
+      {/* JSON-LD FAQPage para rich results en Google */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+          }),
+        }}
+      />
     </section>
   );
 }

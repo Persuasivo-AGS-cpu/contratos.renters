@@ -9,6 +9,8 @@ import {
   useReducedMotion,
   type MotionValue,
 } from "framer-motion";
+import { Phone } from "@/components/shared/Phone";
+import { BackgroundBlobs } from "@/components/shared/BackgroundBlobs";
 
 const BRAND = "#4D6BFE";
 
@@ -57,40 +59,6 @@ const STEPS: Step[] = [
 ];
 
 const N = STEPS.length;
-
-function Phone({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative w-full max-w-[300px] aspect-[390/844] rounded-[2.5rem] bg-slate-900 p-2.5 shadow-2xl shadow-blue-900/20 ring-1 ring-black/5">
-      <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-white">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-// Blobs decorativos con parallax sutil detrás del teléfono (solo desktop).
-function BackgroundBlobs({ progress }: { progress: MotionValue<number> }) {
-  const y1 = useTransform(progress, [0, 1], [-40, 40]);
-  const y2 = useTransform(progress, [0, 1], [30, -50]);
-  const y3 = useTransform(progress, [0, 1], [-20, 60]);
-
-  return (
-    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <motion.div
-        style={{ y: y1, backgroundColor: BRAND }}
-        className="absolute -right-10 top-[8%] h-64 w-64 rounded-full opacity-[0.08] blur-3xl"
-      />
-      <motion.div
-        style={{ y: y2, backgroundColor: BRAND }}
-        className="absolute right-[22%] top-[55%] h-48 w-48 rounded-full opacity-[0.10] blur-3xl"
-      />
-      <motion.div
-        style={{ y: y3 }}
-        className="absolute -right-16 bottom-[6%] h-72 w-72 rounded-full bg-emerald-400 opacity-[0.06] blur-3xl"
-      />
-    </div>
-  );
-}
 
 // Opacidad de crossfade para la banda `index` a lo largo del scroll (0→1):
 // meseta de 1 en el centro de su banda, fade lineal cerca de los bordes.

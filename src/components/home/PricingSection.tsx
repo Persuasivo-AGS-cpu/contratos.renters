@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Check, ArrowRight, ShieldCheck } from "lucide-react";
 import { useContractStore } from "@/store/useContractStore";
+import { Reveal } from "@/components/shared/Reveal";
 
 const features = [
   "Contrato legal completo",
@@ -25,7 +26,7 @@ export function PricingSection() {
         <p className="text-xl text-text-muted">Precio único. Sin suscripciones. Sin cargos ocultos.</p>
       </div>
 
-      <div className="max-w-md mx-auto">
+      <Reveal className="max-w-md mx-auto">
         <div className="relative bg-white rounded-2xl p-10 border-2 border-[#1a56ff] shadow-2xl shadow-blue-900/10 flex flex-col items-center text-center">
 
           {/* Badge */}
@@ -76,7 +77,7 @@ export function PricingSection() {
             Corrección de datos gratis las primeras 24 horas
           </p>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

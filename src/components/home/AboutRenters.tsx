@@ -1,4 +1,5 @@
 import { ArrowUpRight, ShieldCheck, FileText, MessageCircle } from "lucide-react";
+import { Reveal } from "@/components/shared/Reveal";
 
 const WA_POLIZA = `https://wa.me/528110610111?text=${encodeURIComponent(
   "Hola, rento en Nuevo León y me interesa saber más sobre la Póliza Jurídica de Renters."
@@ -23,7 +24,7 @@ export function AboutRenters() {
 
         {/* Dos niveles de protección */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
-          <div className="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
+          <Reveal className="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
             <div className="w-12 h-12 rounded-xl bg-[#E8F0FE] flex items-center justify-center mb-4">
               <FileText className="w-6 h-6 text-[#1a56ff]" />
             </div>
@@ -32,9 +33,9 @@ export function AboutRenters() {
               Un contrato legalmente válido, redactado por abogados y adaptado a tu estado.
               El primer blindaje de tu propiedad.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
+          <Reveal delay={0.1} className="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
             <div className="w-12 h-12 rounded-xl bg-[#E6F4EA] flex items-center justify-center mb-4">
               <ShieldCheck className="w-6 h-6 text-[#0d944c]" />
             </div>
@@ -43,7 +44,7 @@ export function AboutRenters() {
               Si tu inquilino deja de pagar, Renters lo gestiona por ti — cobranza y desalojo.
               El respaldo que va más allá del papel <span className="text-gray-400">(disponible en Nuevo León)</span>.
             </p>
-          </div>
+          </Reveal>
         </div>
 
         <div className="flex flex-col items-center gap-3">
