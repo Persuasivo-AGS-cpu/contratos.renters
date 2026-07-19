@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type ContractState = {
-  state: 'nuevo-leon' | 'jalisco' | 'queretaro' | 'merida' | 'san-luis-potosi' | 'cdmx' | 'edomex' | '';
+  state: 'nuevo-leon' | 'jalisco' | 'queretaro' | 'merida' | 'san-luis-potosi' | 'coahuila' | 'cdmx' | 'edomex' | '';
   property: {
     address: {
       street: string;
@@ -118,6 +118,19 @@ export const useContractStore = create<ContractStore>()(
     }),
     {
       name: 'renters-contract-storage',
+      // No persistir datos sensibles en localStorage (quedarían en texto plano
+      // indefinidamente, incluso en equipos compartidos). CLABE, cuenta bancaria
+      // e INE se re-capturan si el usuario retoma el formulario tras recargar.
+      partialize: (state) => ({
+        currentStep: state.currentStep,
+        contract: {
+          ...state.contract,
+          landlord: { ...state.contract.landlord, id_number: '' },
+          tenant: { ...state.contract.tenant, id_number: '' },
+          guarantor: { ...state.contract.guarantor, id_number: '' },
+          terms: { ...state.contract.terms, bank_clabe: '', bank_account: '', is_valid_clabe: false },
+        },
+      }),
     }
   )
 );

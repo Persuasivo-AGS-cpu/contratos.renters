@@ -28,7 +28,7 @@ export async function buildAndSendWeeklyReport() {
     { count: sesiones },
   ] = await Promise.all([
     supabaseAdmin.from('contratos').select('*', { count: 'exact', head: true }).gte('created_at', sinceIso),
-    supabaseAdmin.from('contratos').select('monto_pagado', { count: 'exact' }).eq('status', 'paid').gte('created_at', sinceIso),
+    supabaseAdmin.from('contratos').select('monto_pagado', { count: 'exact' }).eq('status', 'paid').gte('paid_at', sinceIso),
     supabaseAdmin.from('funnel_events').select('session_id', { count: 'exact', head: true }).gte('created_at', sinceIso),
   ]);
 

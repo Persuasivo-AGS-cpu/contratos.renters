@@ -13,9 +13,20 @@ export const PLAN_NAMES: Record<string, string> = {
   basico: 'Contrato de Arrendamiento — Plan Básico',
 };
 
-export function generateFolio(estado: string): string {
+// Prefijo determinístico: CÓDIGO-AÑO-DDMM (fecha en horario de México). Folio
+// final = prefijo + secuencia del día para ese estado (ej. COAH-2026-1807-1,
+// el segundo contrato de Coahuila ese mismo día sería COAH-2026-1807-2).
+export function getFolioPrefix(estado: string): string {
   const code = getStateCode(estado);
-  const year = new Date().getFullYear();
-  const rand = Math.floor(10000 + Math.random() * 90000);
-  return `${code}-${year}-${rand}`;
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Mexico_City',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+    }).formatToParts(new Date()).map((p) => [p.type, p.value])
+  );
+  return `${code}-${parts.year}-${parts.day}${parts.month}`;
+}
+
+export function generateFolio(estado: string, seq: number): string {
+  return `${getFolioPrefix(estado)}-${seq}`;
 }

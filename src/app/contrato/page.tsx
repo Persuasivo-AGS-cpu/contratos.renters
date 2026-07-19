@@ -6,7 +6,7 @@ import { ResumeContractToast } from "@/components/generator/ResumeContractToast"
 export default function ContractGeneratorPage() {
   return (
     <>
-      <div className="flex w-full bg-surface-subtle overflow-hidden h-[calc(100vh-64px)]">
+      <div className="flex w-full bg-surface-subtle overflow-hidden h-[calc(100vh-5rem)]">
         {/* Columna Izquierda: Engine */}
         <div className="w-full md:w-[650px] lg:w-[700px] flex-shrink-0 flex flex-col pt-8 md:pt-10 mb-6 px-6 md:px-10 border-r border-border-layout bg-surface-clean overflow-y-auto overflow-x-hidden z-50 shadow-lg relative h-full pb-10">
           <h1 className="text-3xl font-display font-bold mb-8 shrink-0">Generador de Contrato</h1>

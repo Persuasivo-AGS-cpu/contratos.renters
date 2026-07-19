@@ -1,4 +1,7 @@
 import { ImageResponse } from 'next/og';
+import { STATES } from '@/lib/states';
+
+const AVAILABLE_STATES_COUNT = Object.values(STATES).filter((s) => s.available).length;
 
 export const alt = 'Renters — Contratos de Arrendamiento Legales por Estado';
 export const size = { width: 1200, height: 630 };
@@ -48,7 +51,7 @@ export default function OpenGraphImage() {
         <div style={{ display: 'flex', gap: 40, marginTop: 56, fontSize: 28, color: '#9ca3af', fontWeight: 600 }}>
           <span style={{ display: 'flex' }}>✓ Redactado por abogados</span>
           <span style={{ display: 'flex' }}>✓ $499 MXN</span>
-          <span style={{ display: 'flex' }}>✓ 5 estados</span>
+          <span style={{ display: 'flex' }}>✓ {AVAILABLE_STATES_COUNT} estados</span>
         </div>
       </div>
     ),

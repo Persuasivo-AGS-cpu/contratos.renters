@@ -50,6 +50,35 @@ export async function POST(req: NextRequest) {
 
       const contrato = updated?.[0];
 
+      // 0 filas actualizadas tiene dos causas muy distintas: (a) reintento normal
+      // de Stripe sobre una fila ya 'paid' (idempotencia, esperado), o (b) NO
+      // existe fila 'pending' con este session_id → Stripe cobró pero no hay
+      // contrato local: cobro sin entrega. Hay que distinguirlas y alertar en (b).
+      if (!contrato) {
+        const { data: current } = await supabaseAdmin
+          .from('contratos')
+          .select('status')
+          .eq('stripe_session_id', session.id)
+          .maybeSingle();
+
+        if (!current) {
+          console.error(
+            `[webhook] ANOMALÍA: pago 'paid' sin fila local. session=${session.id} folio=${session.metadata?.folio} — cobro sin contrato en Supabase.`
+          );
+          try {
+            await sendSaleNotification({
+              folio: session.metadata?.folio || '(sin folio)',
+              estado: session.metadata?.estado || '(desconocido)',
+              montoCentavos: session.amount_total,
+              arrendadorNombre: '⚠️ PAGO SIN CONTRATO LOCAL — revisar en Stripe',
+              arrendadorEmail: session.metadata?.arrendador_email || null,
+            });
+          } catch (notifErr) {
+            console.error('[webhook] Alerta de anomalía falló:', notifErr);
+          }
+        }
+      }
+
       if (contrato) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx';
         const downloadUrl = `${appUrl}/api/pdf?token=${contrato.pdf_token}`;

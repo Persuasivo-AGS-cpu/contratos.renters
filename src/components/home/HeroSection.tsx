@@ -8,6 +8,9 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Phone } from "@/components/shared/Phone";
 import { AmbientBlobs } from "@/components/shared/BackgroundBlobs";
 import { CountUp } from "@/components/shared/CountUp";
+import { STATES } from "@/lib/states";
+
+const HERO_STATES = Object.entries(STATES).map(([id, s]) => ({ id, label: s.name, available: s.available }));
 
 export function HeroSection() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,15 +18,7 @@ export function HeroSection() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
 
-  const states = [
-    { id: "nuevo-leon", label: "Nuevo León", available: true },
-    { id: "jalisco", label: "Jalisco", available: true },
-    { id: "queretaro", label: "Querétaro", available: true },
-    { id: "merida", label: "Mérida", available: true },
-    { id: "san-luis-potosi", label: "San Luis Potosí", available: true },
-    { id: "cdmx", label: "CDMX", available: false },
-    { id: "edomex", label: "Estado de México", available: false },
-  ];
+  const states = HERO_STATES;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -122,19 +117,19 @@ export function HeroSection() {
                 <p className="text-3xl md:text-4xl font-black text-white">
                   $<CountUp target={499} />
                 </p>
-                <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Precio Único · IVA Incluido</p>
+                <p className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-[0.15em] mt-1">Precio Único · IVA Incluido</p>
              </div>
              <div>
                 <p className="text-3xl md:text-4xl font-black text-white">
-                  <CountUp target={5} />
+                  <CountUp target={HERO_STATES.filter(s => s.available).length} />
                 </p>
-                <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Estados Disponibles</p>
+                <p className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-[0.15em] mt-1">Estados Disponibles</p>
              </div>
              <div>
                 <p className="text-3xl md:text-4xl font-black text-white">
                   &lt; <CountUp target={10} /> <span className="text-xl md:text-2xl font-normal">min</span>
                 </p>
-                <p className="text-[10px] md:text-xs text-gray-500 uppercase font-bold tracking-[0.15em] mt-1">Tiempo Promedio</p>
+                <p className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-[0.15em] mt-1">Tiempo Promedio</p>
              </div>
           </div>
         </div>

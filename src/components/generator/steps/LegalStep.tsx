@@ -10,6 +10,10 @@ export function LegalStep() {
   const clabeInfo = analyzeClabe(contract.terms.bank_clabe);
   const bankDetailsPending = !!contract.terms.bank_details_pending;
 
+  // Igual que los demás pasos: no dejar avanzar con CLABE inválida salvo que el
+  // usuario haya marcado "no tengo estos datos" (pendiente para firma).
+  const canProceed = bankDetailsPending || clabeInfo.isValidChecksum;
+
   const handleClabeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawVal = e.target.value.replace(/\D/g, '');
     if (rawVal.length > 18) return; // Prevent more than 18
@@ -183,7 +187,7 @@ export function LegalStep() {
 
       <div className="flex gap-4 pt-4 border-t border-border-layout mt-8">
         <button onClick={prevStep} className="px-6 py-3 border border-border-layout bg-white rounded-lg hover:bg-surface-subtle transition-colors font-medium">Anterior</button>
-        <button onClick={nextStep} className="px-6 py-3 bg-brand-primary/90 hover:bg-brand-primary transition-colors text-white rounded-lg flex-1 text-center font-bold">
+        <button onClick={nextStep} disabled={!canProceed} className="px-6 py-3 bg-brand-primary/90 hover:bg-brand-primary transition-colors text-white rounded-lg flex-1 text-center font-bold disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-brand-primary/90">
           Siguiente &rarr;
         </button>
       </div>

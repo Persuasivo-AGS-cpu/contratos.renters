@@ -1,16 +1,21 @@
 import Link from "next/link";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
 import { Reveal } from "@/components/shared/Reveal";
+import { STATES } from "@/lib/states";
 
-const ALL_STATES = [
-  { id: 'nuevo-leon', name: 'Nuevo León', code: 'CÓDIGO CIVIL DE NUEVO LEÓN', image: '/images/states/nuevo-leon.png', available: true },
-  { id: 'jalisco', name: 'Jalisco', code: 'CÓDIGO CIVIL DE JALISCO', image: '/images/states/jalisco.png', available: true },
-  { id: 'queretaro', name: 'Querétaro', code: 'CÓDIGO CIVIL DE QUERÉTARO', image: '/images/states/queretaro.png', available: true },
-  { id: 'merida', name: 'Mérida', code: 'CÓDIGO CIVIL DE YUCATÁN', image: '/images/states/merida.png', available: true },
-  { id: 'san-luis-potosi', name: 'San Luis Potosí', code: 'CÓDIGO CIVIL DE SAN LUIS POTOSÍ', image: '/images/states/san-luis-potosi.png', available: true },
-  { id: 'cdmx', name: 'Ciudad de México', code: 'CÓDIGO CIVIL PARA EL D.F.', image: '/images/states/cdmx.png', available: false },
-  { id: 'edomex', name: 'Estado de México', code: 'CÓDIGO CIVIL DEL ESTADO DE MÉXICO', image: '/images/states/edomex.png', available: false },
-];
+// Rótulo del badge por estado; los irregulares (no siguen "CÓDIGO CIVIL DE X") van aquí.
+const CODE_LABEL_OVERRIDES: Partial<Record<string, string>> = {
+  cdmx: 'CÓDIGO CIVIL PARA EL D.F.',
+  edomex: 'CÓDIGO CIVIL DEL ESTADO DE MÉXICO',
+};
+
+const ALL_STATES = Object.entries(STATES).map(([id, s]) => ({
+  id,
+  name: s.name,
+  code: CODE_LABEL_OVERRIDES[id] ?? `CÓDIGO CIVIL DE ${s.legalName.toUpperCase()}`,
+  image: `/images/states/${id}.png`,
+  available: s.available,
+}));
 
 export function StateCards() {
   const available = ALL_STATES.filter((s) => s.available);

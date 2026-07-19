@@ -3,6 +3,7 @@ import { JaliscoTemplate } from "./JaliscoTemplate";
 import { QueretaroTemplate } from "./QueretaroTemplate";
 import { MeridaTemplate } from "./MeridaTemplate";
 import { SanLuisPotosiTemplate } from "./SanLuisPotosiTemplate";
+import { CoahuilaTemplate } from "./CoahuilaTemplate";
 import { getLegalStateName } from "@/lib/states";
 
 export function getStateTemplate(state: string) {
@@ -11,6 +12,7 @@ export function getStateTemplate(state: string) {
     case 'queretaro': return QueretaroTemplate;
     case 'merida': return MeridaTemplate;
     case 'san-luis-potosi': return SanLuisPotosiTemplate;
+    case 'coahuila': return CoahuilaTemplate;
     default: return NuevoLeonTemplate;
   }
 }

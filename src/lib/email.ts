@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { getStateName } from './states';
+import { escapeHtml } from './rateLimit';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -31,7 +32,7 @@ export async function sendContractEmail(params: SendContractEmailParams) {
           ¡Tu contrato está listo!
         </h1>
         <p style="color: #64748b; margin-bottom: 24px;">
-          Hola ${toName}, tu contrato de arrendamiento para
+          Hola ${escapeHtml(toName)}, tu contrato de arrendamiento para
           <strong>${getStateName(estado)}</strong>
           ha sido generado y pagado exitosamente.
         </p>
@@ -111,8 +112,8 @@ export async function sendSaleNotification(params: SendSaleNotificationParams) {
           <tr><td style="padding: 8px 0; color: #94a3b8;">Monto</td><td style="padding: 8px 0; font-weight: 700; text-align: right;">${monto} MXN</td></tr>
           <tr><td style="padding: 8px 0; color: #94a3b8;">Folio</td><td style="padding: 8px 0; font-family: monospace; text-align: right;">${folio}</td></tr>
           <tr><td style="padding: 8px 0; color: #94a3b8;">Estado</td><td style="padding: 8px 0; text-align: right;">${getStateName(estado)}</td></tr>
-          <tr><td style="padding: 8px 0; color: #94a3b8;">Cliente</td><td style="padding: 8px 0; text-align: right;">${arrendadorNombre || '—'}</td></tr>
-          <tr><td style="padding: 8px 0; color: #94a3b8;">Correo</td><td style="padding: 8px 0; text-align: right;">${arrendadorEmail || '—'}</td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Cliente</td><td style="padding: 8px 0; text-align: right;">${arrendadorNombre ? escapeHtml(arrendadorNombre) : '—'}</td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Correo</td><td style="padding: 8px 0; text-align: right;">${arrendadorEmail ? escapeHtml(arrendadorEmail) : '—'}</td></tr>
         </table>
         <a href="https://contratos.renters.mx/admin/contratos"
            style="display: inline-block; margin-top: 24px; background: #0f172a; color: #fff; font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px;">
@@ -148,7 +149,7 @@ export async function sendReviewRequestEmail(params: SendReviewRequestEmailParam
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #fff;">
         <h1 style="font-size: 22px; font-weight: 900; color: #0f172a; margin-bottom: 8px;">
-          ¿Cómo te fue, ${toName}?
+          ¿Cómo te fue, ${escapeHtml(toName)}?
         </h1>
         <p style="color: #64748b; margin-bottom: 20px; line-height: 1.6;">
           Hace unos días generaste tu contrato de arrendamiento con nosotros (folio ${folio}).
@@ -188,7 +189,7 @@ export async function sendRecoveryEmail(params: SendRecoveryEmailParams) {
           Tu contrato quedó guardado
         </h1>
         <p style="color: #64748b; margin-bottom: 24px;">
-          Hola ${toName}, completaste todos los datos de tu contrato de arrendamiento para
+          Hola ${escapeHtml(toName)}, completaste todos los datos de tu contrato de arrendamiento para
           <strong>${getStateName(estado)}</strong> (folio ${folio}), pero el pago no se concretó.
           Tu información sigue guardada en tu navegador: solo falta el último paso.
         </p>

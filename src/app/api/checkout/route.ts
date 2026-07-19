@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe, PLAN_PRICES, PLAN_NAMES, generateFolio } from '@/lib/stripe';
+import { stripe, PLAN_PRICES, PLAN_NAMES, generateFolio, getFolioPrefix } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
+import { getAppUrl } from '@/lib/appUrl';
 
 // Máx 5 sesiones de checkout por IP por 10 minutos
 const RATE_LIMIT = 5;
@@ -87,21 +88,30 @@ export async function POST(req: NextRequest) {
     const landlordEmail = String(valueAt(contract, 'landlord', 'email') || '');
     const tenantEmail = String(valueAt(contract, 'tenant', 'email') || '');
 
-    // El folio va en la metadata de Stripe antes del insert, así que se verifica
-    // disponibilidad aquí; la colisión de Math.random (5 dígitos) es rara pero
-    // con volumen pasa, y sin esto el insert fallaría con UNIQUE ya cobrando.
-    let folio = generateFolio(contractState);
-    for (let attempt = 0; attempt < 3; attempt++) {
+    // Folio legible: CÓDIGO-AÑO-DDMM-secuencia (ej. COAH-2026-1807-1 = primer
+    // contrato de Coahuila ese día). La secuencia parte del conteo de folios
+    // existentes con ese mismo prefijo; el retry cubre la carrera entre el
+    // conteo y el insert (dos checkouts del mismo estado el mismo día casi
+    // simultáneos) — sin esto el insert fallaría con UNIQUE ya cobrando.
+    const folioPrefix = getFolioPrefix(contractState);
+    const { count: existingCount } = await supabaseAdmin
+      .from('contratos')
+      .select('id', { count: 'exact', head: true })
+      .like('folio', `${folioPrefix}-%`);
+    let seq = (existingCount ?? 0) + 1;
+    let folio = generateFolio(contractState, seq);
+    for (let attempt = 0; attempt < 5; attempt++) {
       const { data: existing } = await supabaseAdmin
         .from('contratos')
         .select('id')
         .eq('folio', folio)
         .maybeSingle();
       if (!existing) break;
-      folio = generateFolio(contractState);
+      seq++;
+      folio = generateFolio(contractState, seq);
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appUrl = getAppUrl();
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

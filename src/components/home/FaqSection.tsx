@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown, MessageCircle } from "lucide-react";
 import { Reveal } from "@/components/shared/Reveal";
+import { getAvailableStatesList } from "@/lib/states";
 
 export function FaqSection() {
   const faqs = [
@@ -17,7 +18,7 @@ export function FaqSection() {
     },
     {
        q: "¿Para qué estados está disponible?",
-       a: "Actualmente disponible para Nuevo León, Jalisco, Querétaro, Mérida (Yucatán) y San Luis Potosí. Más estados próximamente."
+       a: `Actualmente disponible para ${getAvailableStatesList()}. Más estados próximamente.`
     },
     {
        q: "¿Necesito un abogado para usarlo?",

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FaqHeroSection } from "./FaqHeroSection";
 import { Scale, FileText, CreditCard, Headphones, MessageCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { getAvailableStatesList } from "@/lib/states";
 
 type Category = "Todas" | "Legal" | "Contratos" | "Pagos" | "Soporte";
 
@@ -25,7 +26,7 @@ const faqData: FaqItem[] = [
     id: "leg-2",
     category: "Legal",
     question: "¿Para qué estados están disponibles los contratos?",
-    answer: "Actualmente disponible para Nuevo León, Jalisco, Querétaro, Mérida (Yucatán) y San Luis Potosí. Estamos trabajando para agregar más estados próximamente."
+    answer: `Actualmente disponible para ${getAvailableStatesList()}. Estamos trabajando para agregar más estados próximamente.`
   },
   {
     id: "leg-3",

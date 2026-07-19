@@ -3,6 +3,7 @@ import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Analytics } from "@/components/layout/Analytics";
+import { getAvailableStatesList } from "@/lib/states";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,7 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Contratos de Arrendamiento Legales por Estado — desde $499 | Renters",
-  description: "Genera tu contrato de arrendamiento personalizado y legalmente válido para Nuevo León, Jalisco, Querétaro, Mérida y San Luis Potosí. Basado en el Código Civil estatal. Listo para firmar en minutos. $499 MXN.",
+  description: `Genera tu contrato de arrendamiento personalizado y legalmente válido para ${getAvailableStatesList()}. Basado en el Código Civil estatal. Listo para firmar en minutos. $499 MXN.`,
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx'),
   openGraph: {
     type: 'website',

@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 import { Phone } from "@/components/shared/Phone";
 import { BackgroundBlobs } from "@/components/shared/BackgroundBlobs";
+import { getAvailableStatesList } from "@/lib/states";
 
 const BRAND = "#4D6BFE";
 
@@ -27,7 +28,7 @@ const STEPS: Step[] = [
   {
     n: "01",
     title: "Elige tu estado",
-    desc: "Selecciona dónde está la propiedad y cargamos la plantilla legal correcta — Nuevo León, Jalisco, Querétaro, Mérida o San Luis Potosí.",
+    desc: `Selecciona dónde está la propiedad y cargamos la plantilla legal correcta — ${getAvailableStatesList()}.`,
     bullets: ["Motor legal por estado", "Redactado por abogados"],
     image: "/images/como-funciona/paso-1.png",
     alt: "Selector de estado en el generador de contrato",

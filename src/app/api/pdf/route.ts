@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
+import { getAppUrl } from '@/lib/appUrl';
 
 export const maxDuration = 60;
 
@@ -27,7 +28,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Acceso denegado o contrato no encontrado' }, { status: 403 });
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = getAppUrl();
 
   let browser;
   try {

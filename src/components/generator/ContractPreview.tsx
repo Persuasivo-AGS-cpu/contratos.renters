@@ -3,6 +3,7 @@
 import { useContractStore } from "@/store/useContractStore";
 import { Lock, ShieldCheck } from "lucide-react";
 import { getStateTemplate, getStateName as getStateNameHelper } from "./templates/getStateTemplate";
+import { getStateCode } from "@/lib/states";
 
 // El generador SIEMPRE muestra el preview truncado, aunque el store local
 // diga 'paid' (p. ej. tras visitar /imprimir, que hidrata el store). La
@@ -40,7 +41,7 @@ export function ContractPreview() {
             <div className="text-right flex flex-col items-end leading-tight">
                <span className="font-mono text-[9px] text-gray-400 font-bold uppercase tracking-widest">Folio Digital</span>
                <span className="font-mono text-[10px] text-gray-600 font-bold">
-                 {`${contract.state ? contract.state.substring(0,2).toUpperCase() : 'XX'}-2026-18536`}
+                 {`${contract.state ? getStateCode(contract.state) : 'XX'}-2026-18536`}
                </span>
             </div>
           </div>

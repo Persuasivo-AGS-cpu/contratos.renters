@@ -7,7 +7,7 @@ import { ordinalClause } from "./clauseOrdinal";
 
 // `preview` recorta el documento tras la cláusula CUARTA: el resto de cláusulas
 // no debe existir en el DOM del navegador hasta que el contrato esté pagado.
-export function MeridaTemplate({ preview = false }: { preview?: boolean }) {
+export function CoahuilaTemplate({ preview = false }: { preview?: boolean }) {
   const { contract } = useContractStore();
   const c = contract;
 
@@ -38,8 +38,12 @@ export function MeridaTemplate({ preview = false }: { preview?: boolean }) {
   const propertyLabel = propertyLabelMap[c.property.type] || 'CASA-HABITACIÓN';
   const propertyUsage = propertyUsageMap[c.property.type] || 'USO HABITACIONAL';
 
-  // Numeración dinámica: la cláusula de adicionales cae en 10 u 11 según haya fiador.
+  // Numeración dinámica: adicionales y tribunales corren según haya fiador y/o
+  // cláusulas adicionales (evita dos "DÉCIMA" en el mismo documento).
   const extraClauseOrd = ordinalClause(10 + (c.guarantor.includes ? 1 : 0));
+  const tribunalesOrd = ordinalClause(
+    10 + (c.guarantor.includes ? 1 : 0) + (c.additional_clauses ? 1 : 0)
+  );
 
   return (
     <div className="text-[10px] md:text-[11px] text-gray-800 leading-relaxed space-y-4 text-justify font-serif print:text-black">
@@ -82,20 +86,20 @@ export function MeridaTemplate({ preview = false }: { preview?: boolean }) {
 
       <p><span className="font-bold">SEGUNDA. - DESTINO DEL BIEN ARRENDADO.</span> "EL ARRENDATARIO" destinará el inmueble arrendado, única y exclusivamente para <span className="font-bold uppercase">{propertyUsage}</span>, por lo que en ningún caso y por ningún motivo "EL ARRENDATARIO" podrán ampliar o variar el giro antes mencionado sin la previa autorización por escrito de "EL ARRENDADOR".</p>
 
-      <p><span className="font-bold">TERCERA. - LIMITACIONES DEL INMUEBLE A SUBARRENDAMIENTO, CESIÓN Y TRASPASO.</span> "EL ARRENDATARIO" no podrá bajo ningún motivo o causa subarrendar todo o parte de "EL INMUEBLE" arrendado, así como ceder o traspasar total o parcialmente los derechos y obligaciones derivadas del presente contrato, salvo que "EL ARRENDADOR" dé su consentimiento en forma escrita.</p>
+      <p><span className="font-bold">TERCERA. - LIMITACIONES DEL INMUEBLE A SUBARRENDAMIENTO, CESIÓN Y TRASPASO.</span> "EL ARRENDATARIO" no podrá bajo ningún motivo o causa subarrendar todo o parte de "EL INMUEBLE" arrendado, así como ceder o traspasar total o parcialmente los derechos y obligaciones derivadas del presente contrato, salvo que "EL ARRENDADOR" dé su consentimiento en forma escrita. Asimismo, "EL ARRENDATARIO" renuncia expresamente a los derechos del tanto y de preferencia que le pudieran corresponder conforme a los artículos 2708, 2709 y 2710 del Código Civil para el Estado de Coahuila de Zaragoza, en caso de que "EL ARRENDADOR" deseara vender o arrendar nuevamente "EL INMUEBLE".</p>
 
       <p><span className="font-bold">CUARTA. - IMPORTE DE LAS RENTAS Y FORMAS DE PAGO.</span> El importe que fijan ambas "LAS PARTES" de mutuo acuerdo por concepto de pensión rentaría y cuota de mantenimiento para "EL INMUEBLE" objeto de este contrato será la cantidad de <span className="font-bold">${c.terms.monthly_rent} ({rentText || '____________ PESOS 00/100 M.N.'}) MENSUALES</span> por cada uno de los <span className="font-bold">{c.terms.lease_duration_months} MESES</span> de vigencia del presente Contrato, a pagar el día <span className="font-bold">{c.terms.payment_day} de cada mes</span>, mismos que se realizará mediante transferencia electrónica al banco denominado <span className="font-bold">{bankNameText}</span>, cuenta <span className="font-bold">{bankAccountText}</span>, y cuenta CLABE <span className="font-bold">{bankClabeText}</span>, y cuyo recibo correspondiente será el comprobante bancario CEP de la transferencia realizada.</p>
 
       {!preview && (<>
       <p><span className="font-bold">QUINTA. - DEPÓSITO.</span> Para garantizar que "EL INMUEBLE" arrendado sea devuelto en buen estado, "EL ARRENDATARIO" constituye un depósito a favor de "EL ARRENDADOR" al momento de la firma del presente contrato, por un importe de <span className="font-bold">${c.terms.deposit_amount} ({depositText || '____________ PESOS 00/100 M.N.'})</span>. Este depósito no podrá ser usado para el pago de rentas y será devuelto a "EL ARRENDATARIO" 45 días naturales posteriores a la entrega de "EL INMUEBLE", siempre que éste no presentare daño alguno y no existan adeudos.</p>
 
-      <p><span className="font-bold">SEXTA. - PLAZO DEL CONTRATO.</span> El plazo de arrendamiento será de <span className="font-bold">{c.terms.lease_duration_months} MESES forzosos</span> para ambas partes, iniciando el día <span className="font-bold">{c.terms.lease_start_date || '_________'}</span>. En términos de lo que establece el Código Civil vigente en el estado de <span className="font-bold">Yucatán</span>, "LAS PARTES" convienen en que "EL ARRENDATARIO" no podrá en ningún caso prorrogar el plazo del presente contrato sin el consentimiento expreso y por escrito de "EL ARRENDADOR". Si el contrato se celebra por un plazo forzoso y "EL ARRENDATARIO" desea desocupar antes de su término, para hacerlo deberá estar al corriente en el pago de la renta y pagar la penalidad de <span className="font-bold">{c.terms.early_termination_penalty_months} meses</span> de renta del presente contrato de arrendamiento.</p>
+      <p><span className="font-bold">SEXTA. - PLAZO DEL CONTRATO.</span> El plazo de arrendamiento será de <span className="font-bold">{c.terms.lease_duration_months} MESES forzosos</span> para ambas partes, iniciando el día <span className="font-bold">{c.terms.lease_start_date || '_________'}</span>. En términos de lo que establece el Código Civil vigente en el Estado de <span className="font-bold">Coahuila de Zaragoza</span>, "LAS PARTES" convienen en que "EL ARRENDATARIO" no podrá en ningún caso prorrogar el plazo del presente contrato sin el consentimiento expreso y por escrito de "EL ARRENDADOR". Si el contrato se celebra por un plazo forzoso y "EL ARRENDATARIO" desea desocupar antes de su término, para hacerlo deberá estar al corriente en el pago de la renta y pagar la penalidad de <span className="font-bold">{c.terms.early_termination_penalty_months} meses</span> de renta del presente contrato de arrendamiento.</p>
 
       <p><span className="font-bold">SÉPTIMA. - REPORTE DE DESPERFECTOS.</span> "EL ARRENDATARIO" contará con un plazo improrrogable de 30-treinta días naturales, contados a partir de la fecha de entrega física, para notificar por escrito a "EL ARRENDADOR" sobre la existencia de cualquier vicio.</p>
 
       <p><span className="font-bold">OCTAVA. - PAGO DE SERVICIOS.</span> "EL ARRENDATARIO" se obliga al pago del suministro de energía eléctrica, agua, gas, servicios de telefonía y/o internet, y cualquier otro servicio que utilice en la operación de "EL INMUEBLE".</p>
 
-      <p><span className="font-bold">NOVENA. - INCUMPLIMIENTO Y PENALIDADES.</span> Convienen "LAS PARTES" que en caso de retraso en el pago de la pensión rentaria, "EL ARRENDATARIO" pagará como pena convencional y por concepto de intereses moratorios obligatorios un <span className="font-bold">{c.terms.late_penalty_percent}% ({c.terms.late_penalty_percent} por ciento)</span> mensual sobre los saldos insolutos, aplicables desde el día siguiente a la fecha límite de pago. Adicionalmente, el incumplimiento de cualquiera de las obligaciones contraídas será causa de RESCISIÓN del contrato, sin necesidad de declaración judicial previa.</p>
+      <p><span className="font-bold">NOVENA. - INCUMPLIMIENTO Y PENALIDADES.</span> Convienen "LAS PARTES" que en caso de retraso en el pago de la pensión rentaria, "EL ARRENDATARIO" pagará como pena convencional y por concepto de intereses moratorios obligatorios un <span className="font-bold">{c.terms.late_penalty_percent}% ({c.terms.late_penalty_percent} por ciento)</span> mensual sobre los saldos insolutos, aplicables desde el día siguiente a la fecha límite de pago. Adicionalmente, el incumplimiento de cualquiera de las obligaciones contraídas será causa de RESCISIÓN del contrato, sin necesidad de declaración judicial previa, sirviendo la presente cláusula de pacto comisorio expreso en favor de "EL ARRENDADOR" en términos del Código Civil vigente en el Estado de Coahuila de Zaragoza.</p>
 
       {c.guarantor.includes && (
         <p><span className="font-bold">DÉCIMA. - FIADOR Y OBLIGADO SOLIDARIO.</span> "EL FIADOR" se constituye expresamente como deudor solidario y fiador principal pagador de todas las obligaciones que "EL ARRENDATARIO" contrae en el presente documento, renunciando expresamente a los beneficios de orden y excusión, vigiendo su responsabilidad hasta la entrega a entera satisfacción del inmueble.</p>
@@ -105,7 +109,9 @@ export function MeridaTemplate({ preview = false }: { preview?: boolean }) {
         <p><span className="font-bold">{extraClauseOrd}. - CLÁUSULAS ADICIONALES PACTADAS.</span> "LAS PARTES" convienen expresamente en las siguientes condiciones específicas relativas a este arrendamiento: <span className="italic">"{c.additional_clauses}"</span>.</p>
       )}
 
-      <p>ENTERADAS "LAS PARTES" CONTRATANTES DEL VALOR Y ALCANCE LEGAL DE TODAS Y CADA UNA DE LAS CLÁUSULAS EXPRESADAS, FIRMAN DE ENTERA CONFORMIDAD EL PRESENTE CONTRATO EN <span className="font-bold">MÉRIDA, YUCATÁN, MÉXICO</span>.</p>
+      <p><span className="font-bold">{tribunalesOrd}. - TRIBUNALES.</span> Para cualquier controversia que se suscite y que tenga su origen o se derive del presente Contrato, "LAS PARTES" están de acuerdo en someterse a la jurisdicción y competencia de los Tribunales de la Ciudad de Saltillo, Coahuila de Zaragoza, renunciando expresamente al fuero que les pudiere corresponder por razón de sus domicilios presentes o futuros.</p>
+
+      <p>ENTERADAS "LAS PARTES" CONTRATANTES DEL VALOR Y ALCANCE LEGAL DE TODAS Y CADA UNA DE LAS CLÁUSULAS EXPRESADAS, FIRMAN DE ENTERA CONFORMIDAD EL PRESENTE CONTRATO EN <span className="font-bold">SALTILLO, COAHUILA DE ZARAGOZA, MÉXICO</span>.</p>
 
       <div className={`grid ${c.guarantor.includes ? 'grid-cols-3 gap-6' : 'grid-cols-2 gap-12'} mt-16 text-center`}>
         <div>

@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { STATES } from "@/lib/states";
+
+const AVAILABLE_STATES_COUNT = Object.values(STATES).filter((s) => s.available).length;
 
 export function HeroProcessSection() {
   return (
@@ -54,7 +57,7 @@ export function HeroProcessSection() {
             {/* Box 3 */}
             <div className="bg-[#fbfcff] border border-gray-100 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-sm">
               <div className="text-4xl lg:text-[44px] font-display font-black text-[#1a56ff] mb-2 tracking-tight">
-                5 estados
+                {AVAILABLE_STATES_COUNT} estados
               </div>
               <p className="text-gray-600 font-medium text-[15px]">Disponibles ahora</p>
             </div>

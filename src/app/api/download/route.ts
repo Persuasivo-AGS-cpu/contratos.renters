@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getAppUrl } from '@/lib/appUrl';
 
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get('token');
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Redirigir a página de impresión con token verificado
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = getAppUrl();
   return NextResponse.redirect(`${appUrl}/imprimir?token=${token}&folio=${data.folio}`);
 }
 
