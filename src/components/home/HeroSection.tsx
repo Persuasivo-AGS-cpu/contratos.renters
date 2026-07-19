@@ -10,7 +10,11 @@ import { AmbientBlobs } from "@/components/shared/BackgroundBlobs";
 import { CountUp } from "@/components/shared/CountUp";
 import { STATES } from "@/lib/states";
 
-const HERO_STATES = Object.entries(STATES).map(([id, s]) => ({ id, label: s.name, available: s.available }));
+// Solo estados activos en el dropdown — CDMX/Edomex aún no tienen plantilla,
+// no tiene sentido mostrarlos como opción "Próximamente" aquí.
+const HERO_STATES = Object.entries(STATES)
+  .filter(([, s]) => s.available)
+  .map(([id, s]) => ({ id, label: s.name }));
 
 export function HeroSection() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +37,7 @@ export function HeroSection() {
   const ctaHref = selectedState ? `/contrato?estado=${selectedState}` : "/contrato";
 
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center pt-24 pb-20 px-6 overflow-hidden bg-[#0a0f1c]">
+    <section className="relative w-full min-h-[90vh] flex items-center pt-24 pb-20 px-6 bg-[#0a0f1c]">
       <AmbientBlobs reducedMotion={!!reducedMotion} />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-center gap-16">
@@ -68,7 +72,7 @@ export function HeroSection() {
               </button>
 
               {isOpen && (
-                <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-[#1e2023] border border-white/10 rounded-xl shadow-2xl py-2 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-[calc(100%+8px)] left-0 w-full max-h-[min(360px,60vh)] overflow-y-auto bg-[#1e2023] border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="px-4 pb-2 pt-1 mb-1 border-b border-white/5 flex items-center gap-2 text-white/50">
                      <Check className="w-3.5 h-3.5"/> <span className="text-[11px] font-semibold uppercase tracking-wider">Selecciona tu estado</span>
                   </div>
@@ -76,26 +80,17 @@ export function HeroSection() {
                     {states.map((s) => (
                       <button
                         key={s.id}
-                        disabled={!s.available}
                         onClick={() => {
-                          if (!s.available) return;
                           setSelectedState(s.id);
                           setIsOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between transition-colors ${
-                          !s.available
-                            ? "opacity-40 cursor-not-allowed text-gray-500"
-                            : selectedState === s.id
+                        className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors ${
+                          selectedState === s.id
                             ? "bg-[#4D6BFE] text-white font-medium"
                             : "text-gray-300 hover:bg-white/10 hover:text-white"
                         }`}
                       >
-                        <span>{s.label}</span>
-                        {!s.available && (
-                          <span className="text-[9px] font-bold uppercase tracking-wider bg-white/10 px-1.5 py-0.5 rounded-full">
-                            Próximamente
-                          </span>
-                        )}
+                        {s.label}
                       </button>
                     ))}
                   </div>
@@ -121,7 +116,7 @@ export function HeroSection() {
              </div>
              <div>
                 <p className="text-3xl md:text-4xl font-black text-white">
-                  <CountUp target={HERO_STATES.filter(s => s.available).length} />
+                  <CountUp target={HERO_STATES.length} />
                 </p>
                 <p className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-[0.15em] mt-1">Estados Disponibles</p>
              </div>
