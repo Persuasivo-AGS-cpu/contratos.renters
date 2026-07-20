@@ -83,6 +83,12 @@ export default async function FunnelAdminPage() {
                     <td className="px-4 py-3 text-right">
                       {r.isFirst ? (
                         <span className="text-[13px] text-gray-300">—</span>
+                      ) : r.dropFromPrev < 0 ? (
+                        // Sesiones "suben" vs. el paso previo — no es una caída real, es
+                        // tráfico no lineal (retomar desde otro paso, testing manual, etc.)
+                        <span className="inline-flex items-center gap-1 text-[13px] font-bold text-emerald-600">
+                          +{Math.abs(r.dropFromPrev).toFixed(0)}%
+                        </span>
                       ) : (
                         <span
                           className={`inline-flex items-center gap-1 text-[13px] font-bold ${
@@ -131,10 +137,19 @@ export default async function FunnelAdminPage() {
         </div>
       </div>
 
-      <p className="text-[12px] text-gray-400 mt-4">
-        Una sesión = un navegador (id anónimo). El paso con mayor caída en rojo es donde más gente abandona.
-        Los pagos son una unidad distinta (contratos), por eso van separados como referencia de conversión final.
-      </p>
+      <div className="mt-4 space-y-1.5">
+        <p className="text-[12px] text-gray-400">
+          Una sesión = un navegador (id anónimo). Cada fila cuenta sesiones que alguna vez
+          llegaron a ese paso — <strong>no</strong> es acumulado del anterior, así que un paso
+          puede mostrar más sesiones que el previo si hay tráfico no lineal (alguien retoma el
+          formulario desde otro punto, prueba manual del checkout saltando pasos, etc.). El paso
+          con mayor caída en rojo es donde más gente abandona linealmente.
+        </p>
+        <p className="text-[12px] text-gray-400">
+          Los pagos son una unidad distinta (contratos), por eso van separados como referencia de
+          conversión final.
+        </p>
+      </div>
     </div>
   );
 }
