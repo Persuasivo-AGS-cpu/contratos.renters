@@ -18,16 +18,23 @@ const STEPS = [
 ];
 
 export default async function FunnelAdminPage() {
-  // Sesiones que alcanzaron cada paso (UNIQUE(session_id,step) → COUNT = sesiones)
-  const counts = await Promise.all(
-    STEPS.map((s) =>
-      supabaseAdmin
-        .from("funnel_events")
-        .select("*", { count: "exact", head: true })
-        .eq("step", s.id)
-        .gte("created_at", FUNNEL_START_DATE)
-    )
-  );
+  // Un embudo real es monotónico: "sesiones que llegaron AL MENOS hasta este
+  // paso", no "sesiones que dispararon el evento exacto de este paso" (eso
+  // rompía con sesiones que retoman el formulario tras recargar — el store
+  // persiste currentStep y al rehidratar salta directo al paso guardado sin
+  // volver a disparar los intermedios). Se calcula el paso más lejano que
+  // alcanzó cada sesión y se cuenta cuántas llegaron a >= cada paso.
+  const { data: events } = await supabaseAdmin
+    .from("funnel_events")
+    .select("session_id, step")
+    .gte("created_at", FUNNEL_START_DATE);
+
+  const maxStepBySession = new Map<string, number>();
+  for (const e of events ?? []) {
+    const prev = maxStepBySession.get(e.session_id) ?? 0;
+    if (e.step > prev) maxStepBySession.set(e.session_id, e.step);
+  }
+  const maxSteps = [...maxStepBySession.values()];
 
   // Pagos: contratos que efectivamente se pagaron (unidad distinta, referencia)
   const { count: paidCount } = await supabaseAdmin
@@ -36,7 +43,7 @@ export default async function FunnelAdminPage() {
     .eq("status", "paid")
     .gte("paid_at", FUNNEL_START_DATE);
 
-  const rows = STEPS.map((s, i) => ({ ...s, sessions: counts[i].count ?? 0 }));
+  const rows = STEPS.map((s) => ({ ...s, sessions: maxSteps.filter((m) => m >= s.id).length }));
   const top = rows[0]?.sessions || 0;
 
   const rowsWithRates = rows.map((r, i) => {
@@ -90,12 +97,6 @@ export default async function FunnelAdminPage() {
                     <td className="px-4 py-3 text-right">
                       {r.isFirst ? (
                         <span className="text-[13px] text-gray-300">—</span>
-                      ) : r.dropFromPrev < 0 ? (
-                        // Sesiones "suben" vs. el paso previo — no es una caída real, es
-                        // tráfico no lineal (retomar desde otro paso, testing manual, etc.)
-                        <span className="inline-flex items-center gap-1 text-[13px] font-bold text-emerald-600">
-                          +{Math.abs(r.dropFromPrev).toFixed(0)}%
-                        </span>
                       ) : (
                         <span
                           className={`inline-flex items-center gap-1 text-[13px] font-bold ${
@@ -146,11 +147,9 @@ export default async function FunnelAdminPage() {
 
       <div className="mt-4 space-y-1.5">
         <p className="text-[12px] text-gray-400">
-          Una sesión = un navegador (id anónimo). Cada fila cuenta sesiones que alguna vez
-          llegaron a ese paso — <strong>no</strong> es acumulado del anterior, así que un paso
-          puede mostrar más sesiones que el previo si hay tráfico no lineal (alguien retoma el
-          formulario desde otro punto, prueba manual del checkout saltando pasos, etc.). El paso
-          con mayor caída en rojo es donde más gente abandona linealmente.
+          Una sesión = un navegador (id anónimo). Cada fila cuenta sesiones que llegaron
+          <strong> al menos</strong> hasta ese paso (acumulado del anterior, siempre igual o
+          menor). El paso con mayor caída en rojo es donde más gente abandona.
         </p>
         <p className="text-[12px] text-gray-400">
           Los pagos son una unidad distinta (contratos), por eso van separados como referencia de
