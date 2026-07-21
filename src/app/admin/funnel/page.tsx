@@ -3,6 +3,10 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
+// Arranque oficial de medición — antes de esta fecha solo hay pruebas propias
+// (compras de prueba, testing manual del wizard), no tráfico real de negocio.
+const FUNNEL_START_DATE = "2026-07-10T00:00:00Z";
+
 const STEPS = [
   { id: 1, title: "Estado" },
   { id: 2, title: "Propiedad" },
@@ -21,6 +25,7 @@ export default async function FunnelAdminPage() {
         .from("funnel_events")
         .select("*", { count: "exact", head: true })
         .eq("step", s.id)
+        .gte("created_at", FUNNEL_START_DATE)
     )
   );
 
@@ -28,7 +33,8 @@ export default async function FunnelAdminPage() {
   const { count: paidCount } = await supabaseAdmin
     .from("contratos")
     .select("*", { count: "exact", head: true })
-    .eq("status", "paid");
+    .eq("status", "paid")
+    .gte("paid_at", FUNNEL_START_DATE);
 
   const rows = STEPS.map((s, i) => ({ ...s, sessions: counts[i].count ?? 0 }));
   const top = rows[0]?.sessions || 0;
@@ -46,7 +52,8 @@ export default async function FunnelAdminPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-gray-900 mb-1">Embudo del Generador</h1>
           <p className="text-[13px] text-gray-500 font-medium">
-            Cuántas sesiones anónimas llegaron a cada paso · dónde abandona la gente
+            Cuántas sesiones anónimas llegaron a cada paso · dónde abandona la gente ·
+            desde el 10 jul 2026 (excluye pruebas propias previas)
           </p>
         </div>
       </div>
