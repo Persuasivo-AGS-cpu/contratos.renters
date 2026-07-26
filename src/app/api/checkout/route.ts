@@ -36,18 +36,23 @@ function hasCompleteAddress(contract: unknown) {
 function validateContractForCheckout(contract: unknown) {
   const missing: string[] = [];
 
+  // Arrendador sin inquilino todavía: el contrato se genera con el bloque del
+  // inquilino en blanco (ya lo resuelven las plantillas con "___" cuando el
+  // valor viene vacío) para llenarse a mano al momento de la firma.
+  const tenantPending = !!valueAt(contract, 'tenant', 'pending');
+
   if (!isNonEmpty(valueAt(contract, 'state'))) missing.push('estado');
   if (!isNonEmpty(valueAt(contract, 'property', 'type'))) missing.push('tipo de propiedad');
   if (!hasCompleteAddress(contract)) missing.push('dirección completa del inmueble');
   if (!isNonEmpty(valueAt(contract, 'landlord', 'name'), 4)) missing.push('nombre del arrendador');
-  if (!isNonEmpty(valueAt(contract, 'tenant', 'name'), 4)) missing.push('nombre del inquilino');
+  if (!tenantPending && !isNonEmpty(valueAt(contract, 'tenant', 'name'), 4)) missing.push('nombre del inquilino');
   if (!isNonEmpty(valueAt(contract, 'landlord', 'email')) || !String(valueAt(contract, 'landlord', 'email')).includes('@')) missing.push('correo del arrendador');
-  if (!isNonEmpty(valueAt(contract, 'tenant', 'email')) || !String(valueAt(contract, 'tenant', 'email')).includes('@')) missing.push('correo del inquilino');
+  if (!tenantPending && (!isNonEmpty(valueAt(contract, 'tenant', 'email')) || !String(valueAt(contract, 'tenant', 'email')).includes('@'))) missing.push('correo del inquilino');
   if (!isNonEmpty(valueAt(contract, 'landlord', 'phone'), 10)) missing.push('teléfono del arrendador');
-  if (!isNonEmpty(valueAt(contract, 'tenant', 'phone'), 10)) missing.push('teléfono del inquilino');
+  if (!tenantPending && !isNonEmpty(valueAt(contract, 'tenant', 'phone'), 10)) missing.push('teléfono del inquilino');
   if (!isNonEmpty(valueAt(contract, 'landlord', 'address'), 6)) missing.push('domicilio del arrendador');
   if (!valueAt(contract, 'landlord', 'id_number_pending') && !isNonEmpty(valueAt(contract, 'landlord', 'id_number'), 18)) missing.push('INE del arrendador');
-  if (!valueAt(contract, 'tenant', 'id_number_pending') && !isNonEmpty(valueAt(contract, 'tenant', 'id_number'), 18)) missing.push('INE del inquilino');
+  if (!tenantPending && !valueAt(contract, 'tenant', 'id_number_pending') && !isNonEmpty(valueAt(contract, 'tenant', 'id_number'), 18)) missing.push('INE del inquilino');
   if (!Number.isFinite(Number(valueAt(contract, 'terms', 'monthly_rent'))) || Number(valueAt(contract, 'terms', 'monthly_rent')) <= 0) missing.push('monto de renta');
   if (!Number.isFinite(Number(valueAt(contract, 'terms', 'deposit_amount'))) || Number(valueAt(contract, 'terms', 'deposit_amount')) < 0) missing.push('depósito');
   if (!Number.isFinite(Number(valueAt(contract, 'terms', 'lease_duration_months'))) || Number(valueAt(contract, 'terms', 'lease_duration_months')) <= 0) missing.push('duración');

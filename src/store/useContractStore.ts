@@ -19,7 +19,7 @@ export type ContractState = {
     additional_items: Array<{ id: string; name: string; qty: number }>;
   };
   landlord: { name: string; id_number: string; id_number_pending: boolean; email: string; phone: string; address: string };
-  tenant: { name: string; id_number: string; id_number_pending: boolean; email: string; phone: string; address: string };
+  tenant: { name: string; id_number: string; id_number_pending: boolean; email: string; phone: string; address: string; pending: boolean };
   terms: {
     monthly_rent: number;
     deposit_amount: number;
@@ -68,7 +68,7 @@ const initialState: ContractState = {
     additional_items: []
   },
   landlord: { name: '', id_number: '', id_number_pending: false, email: '', phone: '', address: '' },
-  tenant: { name: '', id_number: '', id_number_pending: false, email: '', phone: '', address: '' },
+  tenant: { name: '', id_number: '', id_number_pending: false, email: '', phone: '', address: '', pending: false },
   terms: {
     monthly_rent: 0,
     deposit_amount: 0,
