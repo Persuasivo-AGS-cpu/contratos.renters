@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { session_id, step, estado } = await req.json();
+    const { session_id, step, estado, variant } = await req.json();
 
     if (
       typeof session_id !== 'string' ||
@@ -28,7 +28,12 @@ export async function POST(req: NextRequest) {
     await supabaseAdmin
       .from('funnel_events')
       .upsert(
-        { session_id, step, estado: typeof estado === 'string' ? estado : null },
+        {
+          session_id,
+          step,
+          estado: typeof estado === 'string' ? estado : null,
+          variant: variant === 'a' || variant === 'b' ? variant : null,
+        },
         { onConflict: 'session_id,step', ignoreDuplicates: true }
       );
 

@@ -69,8 +69,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Demasiadas solicitudes. Intenta en unos minutos.' }, { status: 429 });
   }
   try {
-    const body = await req.json() as { contract?: JsonRecord; plan?: keyof typeof PLAN_PRICES };
-    const { contract, plan } = body;
+    const body = await req.json() as { contract?: JsonRecord; plan?: keyof typeof PLAN_PRICES; variant?: unknown };
+    const { contract, plan, variant } = body;
 
     if (!contract || !plan) {
       return NextResponse.json({ error: 'Datos incompletos' }, { status: 400 });
@@ -150,6 +150,7 @@ export async function POST(req: NextRequest) {
     const { error: insertError } = await supabaseAdmin.from('contratos').insert({
       folio,
       estado: contractState,
+      variant: variant === 'a' || variant === 'b' ? variant : null,
       tipo_propiedad: valueAt(contract, 'property', 'type') || null,
       arrendador_nombre: valueAt(contract, 'landlord', 'name') || null,
       arrendador_email: valueAt(contract, 'landlord', 'email') || null,

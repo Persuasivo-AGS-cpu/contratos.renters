@@ -1,6 +1,8 @@
 // Medición de drop-off del generador. Un id anónimo por navegador (localStorage)
 // identifica la sesión sin datos personales.
 
+import { getAbVariant } from './abVariant';
+
 const SID_KEY = 'renters_funnel_sid';
 
 function getFunnelSessionId(): string | null {
@@ -24,7 +26,7 @@ export function trackFunnelStep(step: number, estado?: string) {
   fetch('/api/track-step', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ session_id, step, estado: estado || null }),
+    body: JSON.stringify({ session_id, step, estado: estado || null, variant: getAbVariant() }),
     keepalive: true,
   }).catch(() => {});
 }

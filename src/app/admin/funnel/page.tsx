@@ -26,15 +26,30 @@ export default async function FunnelAdminPage() {
   // alcanzó cada sesión y se cuenta cuántas llegaron a >= cada paso.
   const { data: events } = await supabaseAdmin
     .from("funnel_events")
-    .select("session_id, step")
+    .select("session_id, step, variant")
     .gte("created_at", FUNNEL_START_DATE);
 
-  const maxStepBySession = new Map<string, number>();
+  // Por sesión: el paso más lejano alcanzado + la variante A/B vista (una
+  // sesión debería tener siempre la misma, la cookie no cambia a medio camino).
+  const bySession = new Map<string, { maxStep: number; variant: "a" | "b" | null }>();
   for (const e of events ?? []) {
-    const prev = maxStepBySession.get(e.session_id) ?? 0;
-    if (e.step > prev) maxStepBySession.set(e.session_id, e.step);
+    const cur = bySession.get(e.session_id);
+    const variant = e.variant === "a" || e.variant === "b" ? e.variant : null;
+    if (!cur) {
+      bySession.set(e.session_id, { maxStep: e.step, variant });
+    } else {
+      if (e.step > cur.maxStep) cur.maxStep = e.step;
+      if (!cur.variant && variant) cur.variant = variant;
+    }
   }
-  const maxSteps = [...maxStepBySession.values()];
+  const maxSteps = [...bySession.values()].map((v) => v.maxStep);
+
+  const stepsByVariant: Record<"a" | "b", number[]> = { a: [], b: [] };
+  for (const v of bySession.values()) {
+    if (v.variant === "a") stepsByVariant.a.push(v.maxStep);
+    else if (v.variant === "b") stepsByVariant.b.push(v.maxStep);
+  }
+  const hasVariantData = stepsByVariant.a.length > 0 || stepsByVariant.b.length > 0;
 
   // Pagos: contratos que efectivamente se pagaron (unidad distinta, referencia)
   const { count: paidCount } = await supabaseAdmin
@@ -42,6 +57,32 @@ export default async function FunnelAdminPage() {
     .select("*", { count: "exact", head: true })
     .eq("status", "paid")
     .gte("paid_at", FUNNEL_START_DATE);
+
+  const { data: paidVariantRows } = await supabaseAdmin
+    .from("contratos")
+    .select("variant")
+    .eq("status", "paid")
+    .gte("paid_at", FUNNEL_START_DATE);
+
+  const paidByVariant = { a: 0, b: 0 };
+  for (const r of paidVariantRows ?? []) {
+    if (r.variant === "a") paidByVariant.a++;
+    else if (r.variant === "b") paidByVariant.b++;
+  }
+
+  const variantRows = (["a", "b"] as const).map((v) => {
+    const steps = stepsByVariant[v];
+    const started = steps.length;
+    const reachedFinal = steps.filter((m) => m >= 7).length;
+    const paid = paidByVariant[v];
+    return {
+      variant: v,
+      started,
+      completionPct: started > 0 ? (reachedFinal / started) * 100 : 0,
+      paid,
+      conversionPct: started > 0 ? (paid / started) * 100 : 0,
+    };
+  });
 
   const rows = STEPS.map((s) => ({ ...s, sessions: maxSteps.filter((m) => m >= s.id).length }));
   const top = rows[0]?.sessions || 0;
@@ -144,6 +185,46 @@ export default async function FunnelAdminPage() {
           </table>
         </div>
       </div>
+
+      {hasVariantData && (
+        <div className="mt-8">
+          <h2 className="text-[15px] font-bold text-gray-900 mb-1">Comparación A/B</h2>
+          <p className="text-[12px] text-gray-500 mb-3">
+            /contrato (A, wizard actual) vs. /contrato-b (B, scroll continuo) — asignación por
+            src/proxy.ts. Sesiones sin cookie de variante (previas al test) no aparecen aquí.
+          </p>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Variante</th>
+                  <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">Sesiones iniciadas</th>
+                  <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">Llegaron a revisión</th>
+                  <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">Pagaron</th>
+                  <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">Conversión</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {variantRows.map((r) => (
+                  <tr key={r.variant} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3 text-[13px] font-bold text-gray-900">
+                      {r.variant === "a" ? "A · /contrato" : "B · /contrato-b"}
+                    </td>
+                    <td className="px-4 py-3 text-right text-[15px] font-bold text-gray-900">
+                      {r.started.toLocaleString("es-MX")}
+                    </td>
+                    <td className="px-4 py-3 text-right text-[13px] text-gray-600">{r.completionPct.toFixed(0)}%</td>
+                    <td className="px-4 py-3 text-right text-[13px] text-gray-600">{r.paid.toLocaleString("es-MX")}</td>
+                    <td className="px-4 py-3 text-right text-[13px] font-bold text-emerald-700">
+                      {r.conversionPct.toFixed(1)}%
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       <div className="mt-4 space-y-1.5">
         <p className="text-[12px] text-gray-400">
