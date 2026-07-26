@@ -13,9 +13,16 @@ const AB_COOKIE_NAME = 'ab_variant';
 const AB_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 días
 
 function handleContratoAbTest(req: NextRequest): NextResponse {
+  // Override manual para pruebas/soporte: /contrato?forceVariant=b — no pisa
+  // la cookie real, así no interfiere con la asignación 50/50 del experimento.
+  const forced = req.nextUrl.searchParams.get('forceVariant');
   const existing = req.cookies.get(AB_COOKIE_NAME)?.value;
   const variant: 'a' | 'b' =
-    existing === 'a' || existing === 'b' ? existing : Math.random() < 0.5 ? 'a' : 'b';
+    forced === 'a' || forced === 'b'
+      ? forced
+      : existing === 'a' || existing === 'b'
+        ? existing
+        : Math.random() < 0.5 ? 'a' : 'b';
 
   let response: NextResponse;
   if (variant === 'b') {
@@ -29,7 +36,7 @@ function handleContratoAbTest(req: NextRequest): NextResponse {
     response = NextResponse.next();
   }
 
-  if (!existing) {
+  if (!existing && !forced) {
     response.cookies.set(AB_COOKIE_NAME, variant, {
       maxAge: AB_COOKIE_MAX_AGE,
       path: '/',
