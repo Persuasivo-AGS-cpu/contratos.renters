@@ -3,6 +3,44 @@ import { NextRequest, NextResponse } from 'next/server';
 const ADMIN_USER = process.env.ADMIN_USER;
 const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 
+// Test A/B — Generador de Contrato: variante A (/contrato, actual) vs.
+// variante B (/contrato-b, flujo tipo scroll). Asignación 50/50 persistida
+// en cookie para que el mismo visitante siga viendo la misma variante.
+// Apagado hasta que exista app/contrato-b/page.tsx — activarlo antes mandaría
+// a la mitad del tráfico real de /contrato (producto en vivo, Stripe LIVE) a un 404.
+const AB_TEST_CONTRATO_B_ENABLED = false;
+const AB_COOKIE_NAME = 'ab_variant';
+const AB_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 días
+
+function handleContratoAbTest(req: NextRequest): NextResponse {
+  const existing = req.cookies.get(AB_COOKIE_NAME)?.value;
+  const variant: 'a' | 'b' =
+    existing === 'a' || existing === 'b' ? existing : Math.random() < 0.5 ? 'a' : 'b';
+
+  let response: NextResponse;
+  if (variant === 'b') {
+    // Reescribe internamente hacia /contrato-b sin cambiar la URL que ve el
+    // usuario, así los anuncios y links compartidos (con ?estado=... incluido,
+    // preservado automáticamente al clonar la URL completa) no se rompen.
+    const url = req.nextUrl.clone();
+    url.pathname = '/contrato-b';
+    response = NextResponse.rewrite(url);
+  } else {
+    response = NextResponse.next();
+  }
+
+  if (!existing) {
+    response.cookies.set(AB_COOKIE_NAME, variant, {
+      maxAge: AB_COOKIE_MAX_AGE,
+      path: '/',
+      sameSite: 'lax',
+      httpOnly: false, // el JS del cliente necesita leerla para taggear funnel_events
+    });
+  }
+
+  return response;
+}
+
 const ALLOWED_ORIGINS = [
   process.env.NEXT_PUBLIC_APP_URL,
   'https://contratos.renters.mx',
@@ -28,6 +66,10 @@ function isOriginAllowed(req: NextRequest): boolean {
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  if (AB_TEST_CONTRATO_B_ENABLED && pathname === '/contrato') {
+    return handleContratoAbTest(req);
+  }
 
   if (pathname.startsWith('/api/') && !pathname.startsWith('/api/webhook')) {
     if (!isOriginAllowed(req)) {
@@ -61,5 +103,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/sandbox', '/api/:path*'],
+  matcher: ['/admin/:path*', '/sandbox', '/api/:path*', '/contrato'],
 };
