@@ -6,9 +6,9 @@ const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 // Test A/B — Generador de Contrato: variante A (/contrato, actual) vs.
 // variante B (/contrato-b, flujo tipo scroll). Asignación 50/50 persistida
 // en cookie para que el mismo visitante siga viendo la misma variante.
-// Apagado hasta que exista app/contrato-b/page.tsx — activarlo antes mandaría
-// a la mitad del tráfico real de /contrato (producto en vivo, Stripe LIVE) a un 404.
-const AB_TEST_CONTRATO_B_ENABLED = false;
+// Activado: app/contrato-b/page.tsx ya existe y funnel_events/contratos ya
+// tienen la columna variant (migraciones 006/007) para poder comparar A vs B.
+const AB_TEST_CONTRATO_B_ENABLED = true;
 const AB_COOKIE_NAME = 'ab_variant';
 const AB_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 días
 
