@@ -147,10 +147,26 @@ export default async function FunnelAdminPage() {
   // persiste currentStep y al rehidratar salta directo al paso guardado sin
   // volver a disparar los intermedios). Se calcula el paso más lejano que
   // alcanzó cada sesión y se cuenta cuántas llegaron a >= cada paso.
-  const { data: events } = await supabaseAdmin
-    .from("funnel_events")
-    .select("session_id, step, variant")
-    .gte("created_at", FUNNEL_START_DATE);
+  //
+  // PostgREST limita cada respuesta a 1000 filas por default — sin paginar,
+  // una tabla que ya pasó de 1000 filas (como esta) devuelve solo un
+  // subconjunto silencioso, sin error. Como no hay ORDER BY, ese subconjunto
+  // suele ser "las primeras" en orden físico, es decir las MÁS VIEJAS —
+  // justo las sesiones recientes con variant='a'/'b' del test A/B quedaban
+  // afuera y la sección "Comparación A/B" nunca llegaba a renderizarse.
+  const events: { session_id: string; step: number; variant: string | null }[] = [];
+  const PAGE_SIZE = 1000;
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data: page } = await supabaseAdmin
+      .from("funnel_events")
+      .select("session_id, step, variant")
+      .gte("created_at", FUNNEL_START_DATE)
+      .order("created_at", { ascending: true })
+      .range(from, from + PAGE_SIZE - 1);
+    if (!page || page.length === 0) break;
+    events.push(...page);
+    if (page.length < PAGE_SIZE) break;
+  }
 
   // Por sesión: el paso más lejano alcanzado + la variante A/B vista (una
   // sesión debería tener siempre la misma, la cookie no cambia a medio camino).
