@@ -244,6 +244,21 @@ export function ContratoBEngine() {
     };
   }, []);
 
+  // El paso 1 ("estado") se cuenta al cargar la página, igual que
+  // ContractEngine.tsx en la Variante A (dispara con currentStep=1 al
+  // montar). Si dependiera del spotlight por scroll, alguien que aterriza
+  // aquí y no baja de inmediato — el hero ocupa buena parte del viewport —
+  // nunca disparaba NINGÚN evento: quedaba invisible en funnel_events aunque
+  // sí haya recibido la variante B. Esto explicó un sesgo real observado en
+  // producción (14 sesiones 'a' vs. 1 'b'), no un problema del sorteo 50/50.
+  useEffect(() => {
+    if (firedSteps.current.has(1)) return;
+    firedSteps.current.add(1);
+    trackFunnelStep(1, contract.state || undefined);
+    trackGeneratorStep(1, contract.state || undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // funnel_events (drop-off real) + GA4/Meta — un solo disparo por step
   // numérico alcanzado, igual que ContractEngine.tsx en la Variante A.
   useEffect(() => {
