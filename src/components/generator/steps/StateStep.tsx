@@ -26,6 +26,16 @@ export function StateStep() {
     }
   }, []);
 
+  // Fix A (test A/B, 2026-07-29): antes había que elegir el estado Y ADEMÁS
+  // hacer click en "Siguiente" — un click extra que el 99% no completaba.
+  // Ahora elegir el estado avanza solo, con una pausa breve para que se vea
+  // el resaltado de la selección antes de pasar al siguiente paso (igual
+  // patrón sin-gate que ya usa la variante B).
+  const selectState = (id: string) => {
+    updateContract('state', id);
+    setTimeout(() => nextStep(), 350);
+  };
+
   // Captura opcional: hace recuperable a quien abandona antes del checkout y
   // prellena el correo del arrendador en el paso 3.
   const saveLead = () => {
@@ -52,7 +62,7 @@ export function StateStep() {
             key={estate.id}
             onClick={() =>
               estate.available
-                ? updateContract('state', estate.id)
+                ? selectState(estate.id)
                 : setWaitlistState(estate.id)
             }
             className={`flex items-center gap-4 p-4 border rounded-xl text-left transition-all relative ${
