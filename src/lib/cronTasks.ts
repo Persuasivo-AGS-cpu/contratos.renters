@@ -76,3 +76,17 @@ export async function runReviewRequest() {
   console.log(`[review-request] window=${from}..${to} candidates=${paid?.length ?? 0} sent=${sent}`);
   return { candidates: paid?.length ?? 0, sent };
 }
+
+// client_context (IP, user agent, fbp, fbc) solo sirve para enviar el Purchase a
+// Meta: se borra a los 90 días del pago.
+export async function runPurgeClientContext() {
+  const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+  const { data, error } = await supabaseAdmin
+    .from('contratos')
+    .update({ client_context: null })
+    .lt('paid_at', cutoff)
+    .not('client_context', 'is', null)
+    .select('id');
+  if (error) throw error;
+  return { purged: data?.length ?? 0 };
+}

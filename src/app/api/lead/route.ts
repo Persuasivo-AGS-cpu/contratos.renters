@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
+import { sanitizeAttribution } from '@/lib/attribution';
 
 const RATE_LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;
@@ -13,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { email, estado } = await req.json();
+    const { email, estado, attribution } = await req.json();
 
     if (typeof email !== 'string' || !EMAIL_RE.test(email) || email.length > 200) {
       return NextResponse.json({ error: 'Correo inválido' }, { status: 400 });
@@ -22,7 +23,11 @@ export async function POST(req: NextRequest) {
     const { error } = await supabaseAdmin
       .from('leads')
       .upsert(
-        { email: email.toLowerCase().trim(), estado: typeof estado === 'string' ? estado : null },
+        {
+          email: email.toLowerCase().trim(),
+          estado: typeof estado === 'string' ? estado : null,
+          attribution: sanitizeAttribution(attribution),
+        },
         { onConflict: 'email' }
       );
 

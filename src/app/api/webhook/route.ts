@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
 import { sendContractEmail, sendSaleNotification } from '@/lib/email';
+import { sendPurchase } from '@/lib/metaCapi';
 import Stripe from 'stripe';
 
 export async function POST(req: NextRequest) {
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
         })
         .eq('stripe_session_id', session.id)
         .eq('status', 'pending')
-        .select('pdf_token, arrendador_nombre, arrendador_email, inquilino_email, estado');
+        .select('pdf_token, arrendador_nombre, arrendador_email, inquilino_email, estado, client_context');
 
       if (error) {
         console.error('[webhook] Supabase update error:', error);
@@ -115,6 +116,20 @@ export async function POST(req: NextRequest) {
           } catch (emailErr) {
             console.error(`[webhook] Email failed for ${recipient.email}:`, emailErr);
           }
+        }
+
+        try {
+          await sendPurchase({
+            folio,
+            amountCentavos: session.amount_total,
+            email: contrato.arrendador_email,
+            eventTime: Math.floor(Date.now() / 1000),
+            sourceUrl: `${appUrl}/contrato`,
+            context: contrato.client_context,
+          });
+        } catch (capiErr) {
+          // Un fallo de Meta nunca debe devolver error a Stripe: reintentaría y la fila ya está pagada.
+          console.error('[webhook] CAPI Purchase failed:', capiErr);
         }
       }
 
