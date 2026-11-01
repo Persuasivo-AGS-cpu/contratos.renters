@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isCronAuthorized } from '@/lib/cronAuth';
 import { runRecoverPending, runReviewRequest } from '@/lib/cronTasks';
 import { buildAndSendWeeklyReport } from '@/lib/weeklyReport';
 
@@ -7,7 +8,7 @@ import { buildAndSendWeeklyReport } from '@/lib/weeklyReport';
 // las demás igual corren. El reporte semanal se envía solo los lunes.
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization');
-  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!isCronAuthorized(auth, process.env.CRON_SECRET)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

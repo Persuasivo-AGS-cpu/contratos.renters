@@ -1,4 +1,7 @@
+"use client";
+
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
@@ -6,6 +9,10 @@ const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 // GA4 + Meta Pixel. Solo se cargan si sus IDs están configurados en env,
 // así dev/preview no ensucian los datos de producción.
 export function Analytics() {
+  const pathname = usePathname();
+  // /imprimir lleva el token del contrato en la URL (y /api/pdf la abre con
+  // Chromium): GA4 y el Pixel registrarían esa URL y se la enviarían a terceros.
+  if (pathname?.startsWith("/imprimir")) return null;
   return (
     <>
       {GA_ID && (

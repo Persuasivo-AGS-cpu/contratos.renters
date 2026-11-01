@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { tokenCutoff, tokenFreshFilter } from '@/lib/token';
 import { getAppUrl } from '@/lib/appUrl';
 
 export async function GET(req: NextRequest) {
@@ -14,6 +15,7 @@ export async function GET(req: NextRequest) {
     .select('id, folio, status, pdf_token, contract_data')
     .eq('pdf_token', token)
     .eq('status', 'paid')
+    .or(tokenFreshFilter(tokenCutoff()))
     .single();
 
   if (error || !data) {
@@ -22,7 +24,9 @@ export async function GET(req: NextRequest) {
 
   // Redirigir a página de impresión con token verificado
   const appUrl = getAppUrl();
-  return NextResponse.redirect(`${appUrl}/imprimir?token=${token}&folio=${data.folio}`);
+  const res = NextResponse.redirect(`${appUrl}/imprimir?token=${token}&folio=${data.folio}`);
+  res.headers.set('Cache-Control', 'no-store');
+  return res;
 }
 
 export async function POST(req: NextRequest) {

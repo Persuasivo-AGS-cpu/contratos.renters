@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
           status: 'paid',
           stripe_payment_id: session.payment_intent as string,
           paid_at: new Date().toISOString(),
+          pdf_token_issued_at: new Date().toISOString(),
           monto_pagado: session.amount_total, // centavos MXN
         })
         .eq('stripe_session_id', session.id)
