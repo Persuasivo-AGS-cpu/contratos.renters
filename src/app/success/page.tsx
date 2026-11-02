@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { CheckCircle2, ShieldCheck, DownloadCloud, Loader2, AlertCircle, ArrowUpRight } from "lucide-react";
 import { useContractStore } from "@/store/useContractStore";
-import { trackPurchase } from "@/lib/analytics";
+import { trackPurchase, trackUpsellClick } from "@/lib/analytics";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -188,6 +188,7 @@ function SuccessContent() {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackUpsellClick("poliza-nl", result?.folio ?? "")}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] font-bold rounded-lg transition-colors"
               >
                 Pregúntanos por WhatsApp <ArrowUpRight className="w-4 h-4" />
