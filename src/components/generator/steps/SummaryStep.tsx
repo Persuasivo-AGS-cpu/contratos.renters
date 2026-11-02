@@ -137,7 +137,7 @@ export function SummaryStep() {
          </p>
       </div>
 
-      <PurchaseValue legalStateName={getLegalStateName(contract.state)} furnished={contract.property.furnished} />
+      <PurchaseValue legalStateName={getLegalStateName(contract.state)} furnished={contract.property.furnished} includesGuarantor={contract.guarantor.includes} />
 
       <div className="flex items-center justify-between pt-8 border-t border-gray-200 mt-10">
          <button onClick={prevStep} className="flex items-center gap-2 font-bold text-gray-600 hover:text-gray-900 transition-colors">

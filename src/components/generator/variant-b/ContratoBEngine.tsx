@@ -961,11 +961,6 @@ export function ContratoBEngine() {
             quien se denominará &quot;EL ARRENDATARIO&quot;, respecto del inmueble ubicado en{" "}
             <Filled>{fullAddressLine || "[dirección]"}</Filled>, destinado a uso de <Filled>{typeLabel || "[tipo de propiedad]"}</Filled>.
           </p>
-          {contract.property.furnished && (
-            <p>
-              TERCERA BIS. El inmueble se entrega <Filled>AMUEBLADO{inventoryCount > 0 ? ` (${inventoryCount} artículos en inventario)` : ""}</Filled>.
-            </p>
-          )}
           <p>
             CUARTA. Renta mensual: <Filled>${(contract.terms.monthly_rent || 0).toLocaleString("es-MX")}</Filled> MXN, pagaderos el día{" "}
             <Filled>{contract.terms.payment_day || 5}</Filled> de cada mes, mediante{" "}
@@ -973,17 +968,6 @@ export function ContratoBEngine() {
           </p>
           <p>QUINTA. Depósito en garantía: <Filled>${(contract.terms.deposit_amount || 0).toLocaleString("es-MX")}</Filled> MXN.</p>
           <p>SEXTA. Plazo forzoso: <Filled>{contract.terms.lease_duration_months || 12}</Filled> meses.</p>
-          <p>
-            SÉPTIMA. Fiador y obligado solidario:{" "}
-            {!contract.guarantor.includes ? (
-              <Filled>No aplica — este contrato no incluye fiador</Filled>
-            ) : contract.guarantor.name ? (
-              <Filled>{contract.guarantor.name}</Filled>
-            ) : (
-              <BlankLine />
-            )}
-          </p>
-
           <div className="relative rounded-xl overflow-hidden mt-4">
             <div className="p-4 blur-[4px] select-none opacity-60 space-y-2.5">
               <div className="h-2.5 bg-border-layout rounded w-[92%]" />
@@ -991,9 +975,21 @@ export function ContratoBEngine() {
               <div className="h-2.5 bg-border-layout rounded w-[85%]" />
             </div>
             <div className="absolute inset-0 flex items-center justify-center gap-2 bg-white/55 text-sm font-semibold text-text-main text-center px-4">
-              🔒 3 cláusulas más — Reporte de desperfectos, Servicios, Incumplimiento
+              🔒 Cláusulas SÉPTIMA a NOVENA — Reporte de desperfectos, Pago de servicios, Incumplimiento y penalidades
             </div>
           </div>
+
+          {contract.guarantor.includes && (
+            <p>
+              DÉCIMA. Fiador y obligado solidario:{" "}
+              {contract.guarantor.name ? <Filled>{contract.guarantor.name}</Filled> : <BlankLine />}
+            </p>
+          )}
+          {contract.property.furnished && (
+            <p>
+              ANEXO A. Inventario de muebles: <Filled>{inventoryCount > 0 ? `${inventoryCount} artículos` : "amueblado"}</Filled>.
+            </p>
+          )}
         </div>
 
         <div className="mt-5 space-y-2">
@@ -1011,6 +1007,7 @@ export function ContratoBEngine() {
         <PurchaseValue
           legalStateName={contract.state ? getLegalStateName(contract.state) : "tu estado"}
           furnished={contract.property.furnished}
+          includesGuarantor={contract.guarantor.includes}
         />
       </Section>
 

@@ -5,7 +5,17 @@ import { CORRECCION_GRATIS_HORAS, ENLACE_VIGENCIA_DIAS, SOPORTE_RESPUESTA } from
 
 // Última pantalla antes de pagar: qué se obtiene y qué pasa al pagar.
 // Todo lo que promete sale de lib/compra.ts y lib/clausulas.ts, que tienen pruebas.
-export function PurchaseValue({ legalStateName, furnished }: { legalStateName: string; furnished: boolean }) {
+export function PurchaseValue({
+  legalStateName,
+  furnished,
+  includesGuarantor,
+}: {
+  legalStateName: string;
+  furnished: boolean;
+  includesGuarantor: boolean;
+}) {
+  // La cláusula de fiador solo está en el PDF cuando se incluye fiador.
+  const clausulas = CLAUSULAS.filter((c) => includesGuarantor || c.titulo !== 'FIADOR Y OBLIGADO SOLIDARIO');
   return (
     <div className="mt-8 space-y-6">
       <section className="bg-white border border-border-layout rounded-2xl p-6 shadow-sm">
@@ -42,10 +52,10 @@ export function PurchaseValue({ legalStateName, furnished }: { legalStateName: s
 
         <div className="mt-5 pt-5 border-t border-border-layout">
           <p className="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">
-            {CLAUSULAS.length} cláusulas incluidas{furnished ? " + anexo de inventario" : ""}
+            {clausulas.length} cláusulas incluidas{furnished ? " + anexo de inventario" : ""}
           </p>
           <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-text-main">
-            {CLAUSULAS.map((c) => (
+            {clausulas.map((c) => (
               <li key={c.titulo} className="flex gap-2">
                 <Check className="w-4 h-4 text-brand-accent shrink-0 mt-0.5" /> {c.nombre}
               </li>

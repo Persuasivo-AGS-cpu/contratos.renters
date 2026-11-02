@@ -25,3 +25,12 @@ test('las plantillas ya no imprimen claves internas del inventario', () => {
     assert.ok(!readFileSync(new URL(f, dir), 'utf8').includes('labelMap'), f);
   }
 });
+
+test('la cláusula de fiador solo se imprime si se incluye fiador (la pantalla de pago cuenta una menos si no)', () => {
+  assert.ok(CLAUSULAS.some((c) => c.titulo === 'FIADOR Y OBLIGADO SOLIDARIO'));
+  for (const f of plantillas) {
+    const fuente = readFileSync(new URL(f, dir), 'utf8');
+    const i = fuente.indexOf('FIADOR Y OBLIGADO SOLIDARIO');
+    assert.ok(fuente.slice(Math.max(0, i - 200), i).includes('guarantor.includes'), `${f}: el fiador ya no es condicional`);
+  }
+});
