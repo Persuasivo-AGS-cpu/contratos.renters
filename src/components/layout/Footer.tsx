@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
 
 export function Footer() {
@@ -7,17 +8,14 @@ export function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         
         <div className="flex flex-col items-center md:items-start gap-2">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center text-white font-bold text-xl leading-none">R</div>
-            <span className="font-display font-bold text-xl tracking-tight text-text-main">Renters</span>
+          <Link href="/" className="flex items-center" aria-label="Renters, contratos">
+            <Image src="/logo-renters.png" alt="Renters" width={666} height={440} className="h-14 w-auto" />
           </Link>
           <p className="text-sm text-text-muted text-center md:text-left max-w-xs mt-2">
              El motor de generación legal que asegura tu patrimonio sin complicaciones ni despachos costosos.
           </p>
           <a
             href="https://www.renters.mx"
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold text-brand-primary hover:underline"
           >
             <ShieldCheck className="w-3.5 h-3.5" /> Parte de Renters.mx
@@ -27,6 +25,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row gap-8 text-center md:text-left text-sm font-medium text-text-muted">
            <div className="flex flex-col gap-3">
               <span className="text-text-main font-bold uppercase tracking-wider text-xs">Producto</span>
+              <a href="https://www.renters.mx/paquetes" className="hover:text-brand-primary transition-colors">Póliza jurídica</a>
               <Link href="/como-funciona" className="hover:text-brand-primary transition-colors">Cómo Funciona</Link>
               <Link href="/#precios" className="hover:text-brand-primary transition-colors">Precios</Link>
               <Link href="/preguntas-frecuentes" className="hover:text-brand-primary transition-colors">Preguntas Frecuentes</Link>

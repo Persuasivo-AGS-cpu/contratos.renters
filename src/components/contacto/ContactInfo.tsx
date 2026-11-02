@@ -21,7 +21,7 @@ export function ContactInfo() {
         
         <h1 className="text-5xl md:text-[64px] font-display font-black leading-[1.05] tracking-tight mb-6">
           Hablemos.<br/>
-          <span className="text-[#1a56ff]">Estamos aquí.</span>
+          <span className="text-[#3563E9]">Estamos aquí.</span>
         </h1>
         
         <p className="text-[#a1a1aa] text-[18px] md:text-[20px] mb-10 font-medium leading-relaxed max-w-md">

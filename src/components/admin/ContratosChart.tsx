@@ -51,7 +51,7 @@ export function ContratosChart({ data }: { data: ChartDay[] }) {
           cursor={{ fill: "#f1f5f9" }}
           formatter={(val) => [`${val ?? 0} contrato${Number(val) !== 1 ? "s" : ""}`, ""]}
         />
-        <Bar dataKey="contratos" fill="#1a56ff" radius={[4, 4, 0, 0]} maxBarSize={40} />
+        <Bar dataKey="contratos" fill="#3563E9" radius={[4, 4, 0, 0]} maxBarSize={40} />
       </BarChart>
     </ResponsiveContainer>
   );

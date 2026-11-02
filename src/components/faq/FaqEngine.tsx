@@ -162,7 +162,7 @@ export function FaqEngine() {
 
           {/* Contact Support Card */}
           <div className="mt-8 bg-[#f0f4ff] border border-blue-100 rounded-2xl p-6">
-            <div className="flex items-center gap-2 text-[#1a56ff] font-bold text-[14px] mb-3">
+            <div className="flex items-center gap-2 text-[#3563E9] font-bold text-[14px] mb-3">
               <ZapIcon /> Respuesta en &lt; 2h
             </div>
             <p className="text-gray-600 text-[14px] leading-relaxed mb-5">
@@ -170,7 +170,7 @@ export function FaqEngine() {
             </p>
             <a 
               href="mailto:soporte@renters.mx"
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-blue-200 bg-white text-[#1a56ff] font-bold text-[14px] hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-blue-200 bg-white text-[#3563E9] font-bold text-[14px] hover:bg-blue-50 transition-colors"
             >
               <MessageCircle className="w-[18px] h-[18px]" /> Ir a Contacto
             </a>
@@ -189,7 +189,7 @@ export function FaqEngine() {
               const isExpanded = expandedId === faq.id;
               
               // Map category pill styling
-              let pillColor = "bg-[#f0f4ff] text-[#1a56ff]"; // Default (Soporte, etc)
+              let pillColor = "bg-[#f0f4ff] text-[#3563E9]"; // Default (Soporte, etc)
               if (faq.category === "Contratos") pillColor = "bg-[#f3e8ff] text-[#9333ea]";
               if (faq.category === "Pagos") pillColor = "bg-[#fff7ed] text-[#ea580c]";
               if (faq.category === "Soporte") pillColor = "bg-[#e0f2fe] text-[#0ea5e9]";
@@ -198,7 +198,7 @@ export function FaqEngine() {
                 <div 
                   key={faq.id} 
                   className={`w-full bg-white rounded-2xl border transition-all duration-300 overflow-hidden ${
-                    isExpanded ? "border-[#1a56ff] shadow-md shadow-blue-500/5" : "border-gray-200 hover:border-gray-300"
+                    isExpanded ? "border-[#3563E9] shadow-md shadow-blue-500/5" : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <button 

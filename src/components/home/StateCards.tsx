@@ -44,14 +44,14 @@ export function StateCards() {
                 <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
 
                 <div className="relative z-10 flex flex-col">
-                   <div className="flex items-center gap-2 mb-2 text-[#4D6BFE]">
+                   <div className="flex items-center gap-2 mb-2 text-[#3563E9]">
                       <MapPin className="w-4 h-4" />
                       <span className="text-[10px] md:text-xs uppercase font-bold tracking-[0.1em] text-gray-300">{state.code}</span>
                    </div>
                    <h3 className="text-3xl md:text-4xl font-bold font-display text-white mb-3">{state.name}</h3>
                    <div className="flex items-center justify-between w-full">
                       <span className="text-sm font-medium text-gray-400">Plantilla actualizada 2026</span>
-                      <span className="text-sm font-bold text-[#4D6BFE] flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
+                      <span className="text-sm font-bold text-[#3563E9] flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
                         Ver detalles <ArrowRight className="w-4 h-4" />
                       </span>
                    </div>

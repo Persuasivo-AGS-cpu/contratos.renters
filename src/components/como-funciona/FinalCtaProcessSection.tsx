@@ -13,7 +13,7 @@ export function FinalCtaProcessSection() {
         </p>
         <Link 
           href="/contrato"
-          className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#1a56ff] text-white text-[16px] font-bold rounded-xl hover:bg-[#003ee6] transition-all shadow-lg shadow-blue-500/20"
+          className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#3563E9] text-white text-[16px] font-bold rounded-full hover:bg-[#2951CB] transition-all shadow-lg shadow-blue-500/20"
         >
           Generar Contrato <ArrowRight className="w-5 h-5" />
         </Link>

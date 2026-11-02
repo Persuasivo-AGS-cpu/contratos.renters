@@ -19,7 +19,7 @@ export function PricingSection() {
   return (
     <section id="precios" className="w-full py-24 px-6 bg-surface-clean relative overflow-hidden">
       <div className="max-w-4xl mx-auto text-center mb-16">
-        <div className="inline-block px-3 py-1 font-bold text-xs uppercase tracking-[0.2em] mb-4 text-[#4D6BFE]">PRECIOS</div>
+        <div className="inline-block px-3 py-1 font-bold text-xs uppercase tracking-[0.2em] mb-4 text-[#3563E9]">PRECIOS</div>
         <h2 className="text-3xl md:text-5xl font-display font-black text-text-main mb-4 tracking-tight">
           Inversión que protege tu patrimonio
         </h2>
@@ -27,10 +27,10 @@ export function PricingSection() {
       </div>
 
       <Reveal className="max-w-md mx-auto">
-        <div className="relative bg-white rounded-2xl p-10 border-2 border-[#1a56ff] shadow-2xl shadow-blue-900/10 flex flex-col items-center text-center">
+        <div className="relative bg-white rounded-2xl p-10 border-2 border-[#3563E9] shadow-2xl shadow-blue-900/10 flex flex-col items-center text-center">
 
           {/* Badge */}
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#1a56ff] text-white px-5 py-1 rounded-full text-xs font-bold shadow-md whitespace-nowrap flex items-center gap-1.5">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#3563E9] text-white px-5 py-1 rounded-full text-xs font-bold shadow-md whitespace-nowrap flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5" /> Legalmente válido
           </div>
 
@@ -67,7 +67,7 @@ export function PricingSection() {
           <Link
             href="/contrato"
             onClick={() => updateContract("selectedPlan", "basico")}
-            className="w-full flex items-center justify-center gap-2 h-14 bg-[#1a56ff] hover:bg-[#003ee6] text-white text-lg font-bold rounded-xl transition-all shadow-lg shadow-blue-500/25"
+            className="w-full flex items-center justify-center gap-2 h-14 bg-[#3563E9] hover:bg-[#2951CB] text-white text-lg font-bold rounded-full transition-all shadow-lg shadow-blue-500/25"
           >
             Generar mi contrato <ArrowRight className="w-5 h-5" />
           </Link>

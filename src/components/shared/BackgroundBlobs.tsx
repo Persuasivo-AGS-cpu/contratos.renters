@@ -2,7 +2,7 @@
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
 
-const BRAND = "#4D6BFE";
+const BRAND = "#3563E9";
 
 // Blobs decorativos con parallax ligado al scroll (para secciones sticky/scrollytelling).
 export function BackgroundBlobs({ progress }: { progress: MotionValue<number> }) {
