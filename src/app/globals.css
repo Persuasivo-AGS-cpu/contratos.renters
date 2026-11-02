@@ -30,6 +30,17 @@ body {
   font-family: var(--font-sans);
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* barra fija de 5rem + aire */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @media print {
   body > *:not(#print-area) {
     display: none !important;
