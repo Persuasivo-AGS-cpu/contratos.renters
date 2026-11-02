@@ -83,7 +83,7 @@ export function PurchaseValue({
           <li className="flex gap-3">
             <Lock className="w-5 h-5 text-brand-primary shrink-0 mt-0.5" />
             <span>
-              Usamos tus datos solo para generar tu contrato. No los vendemos ni los compartimos con terceros.{" "}
+              Tus datos se usan para generar y entregarte tu contrato, y no los vendemos. Aquí explicamos cómo los tratamos:{" "}
               <Link href="/privacidad" className="text-brand-primary underline">Aviso de privacidad</Link>
             </span>
           </li>
