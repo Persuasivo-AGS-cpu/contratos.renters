@@ -51,7 +51,7 @@ export function ContratosMenu() {
         aria-controls="menu-contratos"
         // Con hover, el clic no debe cerrar lo que el mouse acaba de abrir.
         onClick={() => setAbierto((a) => (hayHover() ? true : !a))}
-        className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF2FF] px-3 py-2 text-[13.5px] font-medium text-[#3563E9] transition-colors"
+        className="inline-flex h-[33px] items-center gap-1.5 rounded-[20px] bg-[#EEF2FF] px-3 text-[13.6px] font-medium text-[#3563E9] transition-colors"
       >
         Contratos
         <ChevronDown className={`h-3.5 w-3.5 transition-transform ${abierto ? "rotate-180" : ""}`} />
