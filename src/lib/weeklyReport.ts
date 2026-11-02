@@ -1,5 +1,8 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { sendReportEmail } from '@/lib/email';
+import { escapeHtml } from '@/lib/rateLimit';
+import { summarizeSources } from '@/lib/sourceLabel';
+import type { Attribution } from '@/lib/attribution';
 
 // Reporte semanal (embudo + ventas), últimos 7 días. Se dispara desde el cron
 // diario existente los lunes (Vercel Hobby limita a 2 crons, por eso no tiene
@@ -28,7 +31,7 @@ export async function buildAndSendWeeklyReport() {
     { count: sesiones },
   ] = await Promise.all([
     supabaseAdmin.from('contratos').select('*', { count: 'exact', head: true }).gte('created_at', sinceIso),
-    supabaseAdmin.from('contratos').select('monto_pagado', { count: 'exact' }).eq('status', 'paid').gte('paid_at', sinceIso),
+    supabaseAdmin.from('contratos').select('monto_pagado, attribution', { count: 'exact' }).eq('status', 'paid').gte('paid_at', sinceIso),
     supabaseAdmin.from('funnel_events').select('session_id', { count: 'exact', head: true }).gte('created_at', sinceIso),
   ]);
 
@@ -36,6 +39,18 @@ export async function buildAndSendWeeklyReport() {
   const nIniciados = iniciados ?? 0;
   const nPagados = pagados ?? 0;
   const conversion = nIniciados > 0 ? `${((nPagados / nIniciados) * 100).toFixed(1)}%` : 'N/A';
+
+  const fuentes = summarizeSources((paidRows ?? []) as { attribution: Attribution | null }[]);
+  const fuentesHtml = fuentes.length
+    ? fuentes
+        .map(
+          (f) => `<tr>
+        <td style="padding:8px 10px;border-bottom:1px solid #eee;">${escapeHtml(f.label)}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;font-weight:700;">${f.count}</td>
+      </tr>`
+        )
+        .join('')
+    : `<tr><td colspan="2" style="padding:8px 10px;color:#94a3b8;">Sin ventas esta semana.</td></tr>`;
 
   const stepCounts = await Promise.all(
     STEPS.map((s) =>
@@ -87,6 +102,11 @@ export async function buildAndSendWeeklyReport() {
       <tr><td style="padding:8px 10px;border-bottom:1px solid #eee;color:#64748b;">Contratos iniciados</td><td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;font-weight:700;">${nIniciados}</td></tr>
       <tr><td style="padding:8px 10px;border-bottom:1px solid #eee;color:#64748b;">Sesiones en el generador</td><td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;font-weight:700;">${sesiones ?? 0}</td></tr>
       <tr><td style="padding:8px 10px;color:#64748b;">Conversión (pagados / iniciados)</td><td style="padding:8px 10px;text-align:right;font-weight:700;">${conversion}</td></tr>
+    </table>
+
+    <h2 style="font-size:15px;margin:0 0 10px;">Origen de las ventas</h2>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:14px;">
+      ${fuentesHtml}
     </table>
 
     <h2 style="font-size:15px;margin:0 0 10px;">Dónde se cae la gente (embudo del generador)</h2>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FileText, Download, Pencil } from "lucide-react";
 import { supabaseAdmin } from "@/lib/supabase";
+import { sourceLabel } from "@/lib/sourceLabel";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,7 @@ export default async function ContratosAdminPage() {
   const { data: contracts, count } = await supabaseAdmin
     .from("contratos")
     .select(
-      "id, folio, estado, tipo_propiedad, arrendador_nombre, arrendador_email, inquilino_nombre, inquilino_email, monto_renta, status, paid_at, created_at, pdf_token",
+      "id, folio, estado, tipo_propiedad, arrendador_nombre, arrendador_email, inquilino_nombre, inquilino_email, monto_renta, status, paid_at, created_at, pdf_token, attribution",
       { count: "exact" }
     )
     .order("created_at", { ascending: false })
@@ -61,6 +62,7 @@ export default async function ContratosAdminPage() {
                 <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Arrendador</th>
                 <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Inquilino</th>
                 <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Renta/Mes</th>
+                <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Origen</th>
                 <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Status</th>
                 <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Fecha Pago</th>
                 <th className="px-4 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">PDF</th>
@@ -69,7 +71,7 @@ export default async function ContratosAdminPage() {
             <tbody className="divide-y divide-gray-100">
               {(contracts ?? []).length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-16 text-center text-gray-400 text-sm">
+                  <td colSpan={10} className="px-4 py-16 text-center text-gray-400 text-sm">
                     Sin contratos registrados aún.
                   </td>
                 </tr>
@@ -111,6 +113,9 @@ export default async function ContratosAdminPage() {
                   </td>
                   <td className="px-4 py-3 text-[13px] font-medium text-gray-900">
                     {formatMXN(c.monto_renta)}
+                  </td>
+                  <td className="px-4 py-3 text-[12px] text-gray-500 max-w-[160px] truncate" title={sourceLabel(c.attribution)}>
+                    {sourceLabel(c.attribution)}
                   </td>
                   <td className="px-4 py-3">
                     <span
