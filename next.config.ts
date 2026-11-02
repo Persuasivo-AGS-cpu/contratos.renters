@@ -18,10 +18,10 @@ const securityHeaders = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net",   // unsafe-eval needed by Next.js dev/recharts
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://www.google-analytics.com https://www.facebook.com",
+      "img-src 'self' data: blob: https://www.google-analytics.com https://www.facebook.com https://*.g.doubleclick.net https://www.google.com https://www.google.com.mx https://www.googleadservices.com",
       "font-src 'self'",
-      "connect-src 'self' https://*.supabase.co https://api.stripe.com https://www.google-analytics.com https://*.google-analytics.com https://www.facebook.com",
-      "frame-src https://js.stripe.com https://hooks.stripe.com",
+      "connect-src 'self' https://*.supabase.co https://api.stripe.com https://www.google-analytics.com https://*.google-analytics.com https://www.facebook.com https://*.g.doubleclick.net https://www.google.com https://www.google.com.mx https://*.googleadservices.com",
+      "frame-src https://js.stripe.com https://hooks.stripe.com https://td.doubleclick.net",
       "frame-ancestors 'none'",
     ].join("; "),
   },
