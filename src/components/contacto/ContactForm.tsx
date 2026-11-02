@@ -26,13 +26,6 @@ export function ContactForm() {
       msgPlaceholder: "Necesito un contrato para..." 
     },
     { 
-      id: "factura", 
-      icon: "🧾", 
-      label: "Quiero mi factura", 
-      msgLabel: "Datos de facturación y número de orden", 
-      msgPlaceholder: "RFC, razón social, correo fiscal..." 
-    },
-    { 
       id: "soporte", 
       icon: "🛠", 
       label: "Soporte técnico", 

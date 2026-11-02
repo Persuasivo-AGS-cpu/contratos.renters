@@ -2,6 +2,7 @@
 import { useContractStore } from "@/store/useContractStore";
 import { useState } from "react";
 import { CheckoutModal } from "@/components/checkout/CheckoutModal";
+import { PurchaseValue } from "@/components/checkout/PurchaseValue";
 import { getStateName, getLegalStateName } from "@/lib/states";
 import { MapPin, Home, User, UserCheck, DollarSign, Scale, Check } from "lucide-react";
 
@@ -135,6 +136,8 @@ export function SummaryStep() {
             Al generar el contrato, se creará un PDF legal basado en la plantilla de <strong>{getStateName(contract.state)}</strong>, conforme al Código Civil de {getLegalStateName(contract.state).toUpperCase()}.
          </p>
       </div>
+
+      <PurchaseValue legalStateName={getLegalStateName(contract.state)} furnished={contract.property.furnished} />
 
       <div className="flex items-center justify-between pt-8 border-t border-gray-200 mt-10">
          <button onClick={prevStep} className="flex items-center gap-2 font-bold text-gray-600 hover:text-gray-900 transition-colors">
