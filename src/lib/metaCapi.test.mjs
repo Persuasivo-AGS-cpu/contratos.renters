@@ -81,6 +81,9 @@ test('sendTestPurchase manda el código de prueba y el token va en el cuerpo, no
     assert.equal(body.test_event_code, 'TEST12345');
     assert.equal(body.data[0].event_name, 'Purchase');
     assert.match(body.data[0].event_id, /^PRUEBA-CAPI-/);
+    // Sin datos de usuario Meta responde 400 Invalid parameter.
+    assert.ok(body.data[0].user_data.em?.length === 1);
+    assert.ok(body.data[0].user_data.client_user_agent);
     assert.ok(!url.includes('secreto'));
     assert.ok(!r.mensaje.includes('secreto'));
   } finally {
@@ -90,13 +93,14 @@ test('sendTestPurchase manda el código de prueba y el token va en el cuerpo, no
 
 test('sendTestPurchase reporta el error de Meta sin lanzar', async () => {
   const original = globalThis.fetch;
-  globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: 'Token inválido' } }), { status: 400 });
+  globalThis.fetch = async () =>
+    new Response(JSON.stringify({ error: { message: 'Token inválido', error_user_msg: 'Revisa el token', error_subcode: 33 } }), { status: 400 });
   try {
     process.env.NEXT_PUBLIC_META_PIXEL_ID = '123';
     process.env.META_CAPI_ACCESS_TOKEN = 'secreto';
     const r = await sendTestPurchase('TEST12345');
     assert.equal(r.ok, false);
-    assert.match(r.mensaje, /400.*Token inválido/);
+    assert.match(r.mensaje, /400.*Token inválido.*Revisa el token.*subcódigo 33/);
   } finally {
     globalThis.fetch = original;
   }

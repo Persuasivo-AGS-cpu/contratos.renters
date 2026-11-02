@@ -92,6 +92,9 @@ export async function sendTestPurchase(testEventCode: string): Promise<TestResul
     amountCentavos: 49900,
     eventTime: Math.floor(Date.now() / 1000),
     sourceUrl: 'https://contratos.renters.mx/admin/ajustes',
+    // Meta rechaza (400 Invalid parameter) un evento sin ningún dato de usuario.
+    email: 'prueba-capi@renters.mx',
+    context: { ua: 'Renters admin (prueba CAPI)' },
   });
 
   try {
@@ -103,10 +106,14 @@ export async function sendTestPurchase(testEventCode: string): Promise<TestResul
     });
     const body = (await res.json().catch(() => ({}))) as {
       events_received?: number;
-      error?: { message?: string };
+      error?: { message?: string; error_user_msg?: string; error_subcode?: number };
     };
     if (!res.ok) {
-      return { ok: false, mensaje: `Meta respondió ${res.status}: ${body.error?.message ?? 'sin detalle'}` };
+      const e = body.error;
+      const detalle = [e?.message ?? 'sin detalle', e?.error_user_msg, e?.error_subcode ? `subcódigo ${e.error_subcode}` : null]
+        .filter(Boolean)
+        .join(' · ');
+      return { ok: false, mensaje: `Meta respondió ${res.status}: ${detalle}` };
     }
     return {
       ok: (body.events_received ?? 0) > 0,
