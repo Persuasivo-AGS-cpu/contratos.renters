@@ -85,15 +85,9 @@ export function Navbar() {
         </Link>
         <Link
           href={`${WWW}/brokers`}
-          className="hidden lg:inline-flex border border-slate-200 text-slate-900 px-6 py-3 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors whitespace-nowrap"
-        >
-          Soy Broker
-        </Link>
-        <Link
-          href="/contrato"
           className="hidden sm:inline-flex bg-[#3563E9] text-white px-7 py-3 rounded-full text-sm font-semibold hover:bg-[#2951CB] transition-colors whitespace-nowrap"
         >
-          Generar contrato
+          Soy Broker
         </Link>
         <button
           type="button"
@@ -133,9 +127,6 @@ export function Navbar() {
           )}
           <Link href={`${WWW}/contacto`} className="px-8 py-4 text-[16px] font-medium text-slate-700 hover:bg-slate-50">Contacto</Link>
           <Link href={`${WWW}/brokers`} className="px-8 py-4 text-[16px] font-medium text-slate-700 hover:bg-slate-50">Soy Broker</Link>
-          <Link href="/contrato" className="mx-6 my-3 rounded-full bg-[#3563E9] px-6 py-3.5 text-center text-[16px] font-semibold text-white">
-            Generar contrato
-          </Link>
         </div>
       )}
     </nav>
