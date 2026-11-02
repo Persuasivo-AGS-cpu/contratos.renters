@@ -33,6 +33,16 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/pdf": ["./node_modules/@sparticuz/chromium/bin/**/*"],
   },
+  // Las preguntas frecuentes viven en www.renters.mx (una sola página con filtros).
+  async redirects() {
+    return [
+      {
+        source: "/preguntas-frecuentes",
+        destination: "https://www.renters.mx/preguntas-frecuentes?tema=contratos",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

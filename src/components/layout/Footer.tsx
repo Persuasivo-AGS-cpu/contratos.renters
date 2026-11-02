@@ -28,7 +28,7 @@ export function Footer() {
               <a href="https://www.renters.mx/paquetes" className="hover:text-brand-primary transition-colors">Póliza jurídica</a>
               <Link href="/como-funciona" className="hover:text-brand-primary transition-colors">Cómo Funciona</Link>
               <Link href="/#precios" className="hover:text-brand-primary transition-colors">Precios</Link>
-              <Link href="/preguntas-frecuentes" className="hover:text-brand-primary transition-colors">Preguntas Frecuentes</Link>
+              <a href="https://www.renters.mx/preguntas-frecuentes?tema=contratos" className="hover:text-brand-primary transition-colors">Preguntas Frecuentes</a>
            </div>
            
            <div className="flex flex-col gap-3">

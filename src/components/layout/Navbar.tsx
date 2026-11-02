@@ -23,7 +23,7 @@ const subLinks = [
   { name: "Cómo funciona", href: "/como-funciona" },
   { name: "Estados", href: "/#cobertura" },
   { name: "Precio", href: "/#precios" },
-  { name: "Preguntas del contrato", href: "/preguntas-frecuentes" },
+  { name: "Preguntas del contrato", href: `${WWW}/preguntas-frecuentes?tema=contratos` },
   { name: "Soporte", href: "/contacto" },
 ];
 
@@ -52,7 +52,14 @@ export function Navbar() {
           <ArrowLeft className="w-4 h-4" /> Volver
         </Link>
         <Logo />
-        <span className="w-16" aria-hidden="true" />
+        <a
+          href={`${WWW}/preguntas-frecuentes?tema=contratos`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-end min-h-11 w-16 text-sm font-medium text-slate-600 hover:text-slate-900"
+        >
+          ¿Dudas?
+        </a>
       </nav>
     );
   }
