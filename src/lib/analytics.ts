@@ -43,3 +43,11 @@ export function trackPurchase(folio: string) {
     { eventID: folio },
   );
 }
+
+// Clic en una oferta de la pantalla de éxito (hoy: póliza jurídica en NL). Da la línea
+// base de cuánta gente que compra el contrato se interesa por el siguiente producto.
+export function trackUpsellClick(destino: string, folio: string) {
+  if (typeof window === 'undefined') return;
+  window.gtag?.('event', 'select_promotion', { promotion_name: destino, transaction_id: folio });
+  window.fbq?.('trackCustom', 'ClickUpsell', { destino, content_name: 'Contrato de arrendamiento' });
+}
