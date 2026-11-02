@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { tokenCutoff, tokenFreshFilter } from '@/lib/token';
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 import { getAppUrl } from '@/lib/appUrl';
@@ -22,6 +23,7 @@ export async function GET(req: NextRequest) {
     .select('folio')
     .eq('pdf_token', token)
     .eq('status', 'paid')
+    .or(tokenFreshFilter(tokenCutoff()))
     .single();
 
   if (error || !data) {

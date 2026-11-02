@@ -1,6 +1,11 @@
 import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
 import { supabaseAdmin } from '@/lib/supabase';
+import { tokenCutoff, tokenFreshFilter } from '@/lib/token';
 import ImprimirClient from './ImprimirClient';
+
+// El token viaja en la URL: la página no se indexa ni se cachea.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 interface PageProps {
   searchParams: Promise<{ token?: string; folio?: string; pdf?: string }>;
@@ -20,10 +25,11 @@ export default async function ImprimirPage({ searchParams }: PageProps) {
     .select('id, folio, status, contract_data')
     .eq('pdf_token', token)
     .eq('status', 'paid')
+    .or(tokenFreshFilter(tokenCutoff()))
     .single();
 
   if (error || !data) {
-    redirect('/contrato?error=acceso_denegado');
+    redirect('/reenviar-enlace?motivo=acceso');
   }
 
   return <ImprimirClient contractData={data.contract_data} folio={data.folio} pdfMode={pdfMode} />;

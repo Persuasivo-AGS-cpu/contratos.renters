@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isOriginAllowed } from '@/lib/origin';
 
 const ADMIN_USER = process.env.ADMIN_USER;
 const ADMIN_PASS = process.env.ADMIN_PASSWORD;
@@ -65,10 +66,8 @@ function isAuthenticated(req: NextRequest): boolean {
 
 // Stripe llama /api/webhook server-to-server (sin Origin de browser);
 // la firma de Stripe ya lo autentica, así que no se valida Origin aquí.
-function isOriginAllowed(req: NextRequest): boolean {
-  const origin = req.headers.get('origin') ?? req.headers.get('referer');
-  if (!origin) return true; // llamadas no-browser (curl, server-to-server)
-  return ALLOWED_ORIGINS.some((allowed) => origin.startsWith(allowed));
+function isAllowed(req: NextRequest): boolean {
+  return isOriginAllowed(req.headers.get('origin') ?? req.headers.get('referer'), ALLOWED_ORIGINS);
 }
 
 export function proxy(req: NextRequest) {
@@ -79,7 +78,7 @@ export function proxy(req: NextRequest) {
   }
 
   if (pathname.startsWith('/api/') && !pathname.startsWith('/api/webhook')) {
-    if (!isOriginAllowed(req)) {
+    if (!isAllowed(req)) {
       return NextResponse.json({ error: 'Origin no permitido' }, { status: 403 });
     }
   }

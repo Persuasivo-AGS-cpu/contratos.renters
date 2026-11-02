@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isCronAuthorized } from '@/lib/cronAuth';
 import { buildAndSendWeeklyReport } from '@/lib/weeklyReport';
 
 // Disparo manual del reporte semanal (para pruebas o envío on-demand).
@@ -6,7 +7,7 @@ import { buildAndSendWeeklyReport } from '@/lib/weeklyReport';
 // Hobby limita a 2 crons, así que este endpoint no tiene cron propio).
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization');
-  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!isCronAuthorized(auth, process.env.CRON_SECRET)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   try {
