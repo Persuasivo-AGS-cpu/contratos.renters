@@ -2,6 +2,7 @@
 
 import { useContractStore } from "@/store/useContractStore";
 import { inventoryLabel } from '@/lib/inventory';
+import { formatDateEs } from '@/utils/dates';
 import { formatCurrencyText } from "@/utils/numberToWords";
 import { pendingIneText, pendingText } from "./pendingFields";
 import { ordinalClause } from "./clauseOrdinal";
@@ -113,7 +114,7 @@ export function NuevoLeonTemplate({ preview = false }: { preview?: boolean }) {
       </p>
 
       <p>
-        <span className="font-bold">SEXTA. - PLAZO DEL CONTRATO.</span> El plazo de arrendamiento será de <span className="font-bold">{c.terms.lease_duration_months} MESES forzosos</span> para ambas partes, iniciando el día <span className="font-bold">{c.terms.lease_start_date || '_________'}</span>. En términos de lo que establece el Código Civil vigente en el estado de <span className="font-bold">Nuevo León</span>, “LAS PARTES” convienen en que “EL ARRENDATARIO” no podrá en ningún caso prorrogar el plazo del presente contrato sin el consentimiento expreso y por escrito de “EL ARRENDADOR”. Si el contrato se celebra por un plazo forzoso y “EL ARRENDATARIO” desea desocupar antes de su término, para hacerlo deberá estar al corriente en el pago de la renta y pagar la penalidad de <span className="font-bold">{c.terms.early_termination_penalty_months} meses</span> de renta del presente contrato de arrendamiento.
+        <span className="font-bold">SEXTA. - PLAZO DEL CONTRATO.</span> El plazo de arrendamiento será de <span className="font-bold">{c.terms.lease_duration_months} MESES forzosos</span> para ambas partes, iniciando el día <span className="font-bold">{c.terms.lease_start_date ? formatDateEs(c.terms.lease_start_date) : '_________'}</span>. En términos de lo que establece el Código Civil vigente en el estado de <span className="font-bold">Nuevo León</span>, “LAS PARTES” convienen en que “EL ARRENDATARIO” no podrá en ningún caso prorrogar el plazo del presente contrato sin el consentimiento expreso y por escrito de “EL ARRENDADOR”. Si el contrato se celebra por un plazo forzoso y “EL ARRENDATARIO” desea desocupar antes de su término, para hacerlo deberá estar al corriente en el pago de la renta y pagar la penalidad de <span className="font-bold">{c.terms.early_termination_penalty_months} meses</span> de renta del presente contrato de arrendamiento.
       </p>
 
       <p>
