@@ -84,6 +84,7 @@ test('sendTestPurchase manda el código de prueba y el token va en el cuerpo, no
     // Sin datos de usuario Meta responde 400 Invalid parameter.
     assert.ok(body.data[0].user_data.em?.length === 1);
     assert.ok(body.data[0].user_data.client_user_agent);
+    assert.ok(body.data[0].user_data.client_ip_address);
     assert.ok(!url.includes('secreto'));
     assert.ok(!r.mensaje.includes('secreto'));
   } finally {
@@ -104,4 +105,28 @@ test('sendTestPurchase reporta el error de Meta sin lanzar', async () => {
   } finally {
     globalThis.fetch = original;
   }
+});
+
+test('una IP que no lo es ("unknown") no se manda a Meta', () => {
+  const e = buildPurchaseEvent({
+    folio: 'NL-1',
+    amountCentavos: 49900,
+    email: 'a@b.com',
+    eventTime: 1790000000,
+    sourceUrl: 'https://contratos.renters.mx/contrato',
+    context: { ip: 'unknown', ua: 'Mozilla/5.0' },
+  });
+  assert.equal(e.user_data.client_ip_address, undefined);
+  assert.equal(e.user_data.client_user_agent, 'Mozilla/5.0');
+});
+
+test('una IPv6 válida sí se manda', () => {
+  const e = buildPurchaseEvent({
+    folio: 'NL-2',
+    amountCentavos: 49900,
+    eventTime: 1790000000,
+    sourceUrl: 'https://contratos.renters.mx/contrato',
+    context: { ip: '2001:db8::1' },
+  });
+  assert.equal(e.user_data.client_ip_address, '2001:db8::1');
 });

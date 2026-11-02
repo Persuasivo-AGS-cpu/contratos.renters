@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { isIP } from 'node:net';
 
 // Verificar la versión vigente en https://developers.facebook.com/docs/graph-api/changelog
 // antes de desplegar; META_GRAPH_VERSION permite cambiarla sin tocar el código.
@@ -24,7 +25,8 @@ export const CONTRACT_CONTENT_NAME = 'Contrato de arrendamiento';
 export function buildPurchaseEvent(input: PurchaseInput) {
   const user_data: Record<string, unknown> = {};
   if (input.email) user_data.em = [sha256(input.email)];
-  if (input.context?.ip) user_data.client_ip_address = input.context.ip;
+  // getClientIp devuelve 'unknown' sin x-forwarded-for; Meta rechaza (400) una IP que no lo es.
+  if (input.context?.ip && isIP(input.context.ip)) user_data.client_ip_address = input.context.ip;
   if (input.context?.ua) user_data.client_user_agent = input.context.ua;
   if (input.context?.fbp) user_data.fbp = input.context.fbp;
   if (input.context?.fbc) user_data.fbc = input.context.fbc;
@@ -94,7 +96,8 @@ export async function sendTestPurchase(testEventCode: string): Promise<TestResul
     sourceUrl: 'https://contratos.renters.mx/admin/ajustes',
     // Meta rechaza (400 Invalid parameter) un evento sin ningún dato de usuario.
     email: 'prueba-capi@renters.mx',
-    context: { ua: 'Renters admin (prueba CAPI)' },
+    // Meta pide IP y user agent en eventos de sitio web; 203.0.113.0/24 es un rango reservado para documentación.
+    context: { ip: '203.0.113.10', ua: 'Renters admin (prueba CAPI)' },
   });
 
   try {
