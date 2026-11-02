@@ -13,6 +13,8 @@ export function Analytics() {
   // /imprimir lleva el token del contrato en la URL (y /api/pdf la abre con
   // Chromium): GA4 y el Pixel registrarían esa URL y se la enviarían a terceros.
   if (pathname?.startsWith("/imprimir")) return null;
+  // El panel de administración es interno: sin esto, tus propias visitas al admin cuentan como tráfico en GA4 y Meta.
+  if (pathname?.startsWith("/admin")) return null;
   return (
     <>
       {GA_ID && (
