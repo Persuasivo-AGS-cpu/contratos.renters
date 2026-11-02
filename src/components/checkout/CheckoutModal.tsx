@@ -18,7 +18,7 @@ export function CheckoutModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const plan = contract.selectedPlan || 'basico';
   const priceDisplay = plan === 'proteccion' ? '899' : plan === 'pack' ? '1,999' : '499';
   const planName = plan === 'proteccion'
-    ? 'Contrato legal + Póliza de Protección'
+    ? 'Contrato + Póliza de Protección'
     : plan === 'pack'
     ? 'Pack Inmobiliario (5 Contratos)'
     : 'Contrato de Arrendamiento Regionalizado';
@@ -64,7 +64,7 @@ export function CheckoutModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <h3 className="font-display font-bold text-xl flex items-center gap-2">
               <Lock className="w-5 h-5 text-brand-primary" /> Checkout Seguro
             </h3>
-            <p className="text-sm text-text-muted">Desbloquear Contrato Legal — {contract.state ? getStateName(contract.state) : 'General'}</p>
+            <p className="text-sm text-text-muted">Tu contrato de arrendamiento — {contract.state ? getStateName(contract.state) : 'General'}</p>
           </div>
           <p className="text-2xl font-mono font-bold text-text-main">
             ${priceDisplay}

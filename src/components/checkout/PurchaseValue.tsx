@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Check, FileText, Mail, LifeBuoy, ShieldCheck, Lock, CreditCard, Download, RefreshCw } from "lucide-react";
 import { CLAUSULAS } from "@/lib/clausulas";
 import { CORRECCION_GRATIS_HORAS, ENLACE_VIGENCIA_DIAS, SOPORTE_RESPUESTA } from "@/lib/compra";
+import { COPY } from "@/lib/copy";
 
 // Última pantalla antes de pagar: qué se obtiene y qué pasa al pagar.
 // Todo lo que promete sale de lib/compra.ts y lib/clausulas.ts, que tienen pruebas.
@@ -26,7 +27,7 @@ export function PurchaseValue({
           <li className="flex gap-3">
             <FileText className="w-5 h-5 text-brand-primary shrink-0 mt-0.5" />
             <span>
-              <strong>Tu contrato en PDF, listo para firmar</strong>, conforme al Código Civil de {legalStateName}.
+              <strong>Tu contrato en PDF, listo para firmar</strong>, basado en el Código Civil de {legalStateName}.
             </span>
           </li>
           <li className="flex gap-3">
@@ -74,7 +75,7 @@ export function PurchaseValue({
         <ul className="space-y-3 text-sm text-text-main">
           <li className="flex gap-3">
             <ShieldCheck className="w-5 h-5 text-brand-primary shrink-0 mt-0.5" />
-            <span>Redactado y validado por abogados expertos en el tema.</span>
+            <span>{COPY.autoria}.</span>
           </li>
           <li className="flex gap-3">
             <CreditCard className="w-5 h-5 text-brand-primary shrink-0 mt-0.5" />

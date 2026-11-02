@@ -133,7 +133,7 @@ export function SummaryStep() {
       <div className="mb-10 p-5 bg-[#ecfdf5] border border-[#a7f3d0] rounded-xl flex items-start gap-3">
          <Check className="w-5 h-5 text-[#059669] shrink-0 mt-0.5" />
          <p className="text-[14px] text-[#065f46]">
-            Al generar el contrato, se creará un PDF legal basado en la plantilla de <strong>{getStateName(contract.state)}</strong>, conforme al Código Civil de {getLegalStateName(contract.state).toUpperCase()}.
+            Al generar el contrato, se creará tu contrato en PDF, basado en la plantilla de <strong>{getStateName(contract.state)}</strong> y en el Código Civil de {getLegalStateName(contract.state).toUpperCase()}.
          </p>
       </div>
 

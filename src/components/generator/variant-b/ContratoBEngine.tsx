@@ -12,6 +12,7 @@ import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 import { PurchaseValue } from "@/components/checkout/PurchaseValue";
 import { ContractPreview } from "@/components/generator/ContractPreview";
 import { Minus, Plus } from "lucide-react";
+import { COPY } from "@/lib/copy";
 
 // Variante B del generador: un solo scroll continuo (vs. el wizard paso a
 // paso de /contrato) que se prueba A/B vía src/proxy.ts. Usa el mismo
@@ -982,9 +983,9 @@ export function ContratoBEngine() {
         active={active === "revision"}
       >
         <div className="flex flex-wrap gap-2 mb-5">
-          {["✓ Redactado por abogados", "✓ Conforme al código civil", "✓ Validado por abogados expertos"].map((b) => (
+          {COPY.insignias.map((b) => (
             <span key={b} className="text-xs font-semibold text-brand-primary bg-brand-primary/10 rounded-full px-3 py-1.5">
-              {b}
+              ✓ {b}
             </span>
           ))}
         </div>
