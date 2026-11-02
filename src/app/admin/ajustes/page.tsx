@@ -1,6 +1,9 @@
 import { Webhook, Info } from "lucide-react";
 import { CapiTestForm } from "./CapiTestForm";
 
+// Lee variables de entorno: sin esto Next la prerenderiza en el build y mostraría el estado de entonces.
+export const dynamic = 'force-dynamic';
+
 export default function AjustesPage() {
   const stripeKey = process.env.STRIPE_SECRET_KEY ?? "";
   const resendKey = process.env.RESEND_API_KEY ?? "";
