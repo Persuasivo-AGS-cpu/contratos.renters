@@ -60,7 +60,7 @@ export function ContractPreview() {
         <div className="px-4 md:px-8 pt-0 flex-1 relative overflow-y-auto scrollbar-hide pb-20 select-none">
           <StateTemplate preview />
           <div className="mt-6 space-y-3 opacity-60">
-            {LOCKED_CLAUSES.map((titulo) => (
+            {LOCKED_CLAUSES.filter((t) => contract.guarantor.includes || !t.includes('FIADOR')).map((titulo) => (
               <div key={titulo}>
                 <p className="font-bold font-serif text-gray-800">{titulo}</p>
                 <div className="mt-1 space-y-1.5">
