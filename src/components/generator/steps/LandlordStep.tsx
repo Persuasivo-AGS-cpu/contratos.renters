@@ -28,6 +28,7 @@ export function LandlordStep() {
             className="w-full h-12 px-4 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px]"
             placeholder="Nombre completo como aparece en su INE"
             value={landlord.name}
+            autoComplete="name"
             onChange={(e) => {
               const cleaned = e.target.value.replace(/[^a-zA-Z\sñÑáéíóúÁÉÍÓÚ]/g, '');
               updateContract('landlord', { name: cleaned })
@@ -76,6 +77,7 @@ export function LandlordStep() {
               className="w-full h-12 px-4 border border-gray-200 bg-blue-50/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px]"
               placeholder="correo@ejemplo.com"
               value={landlord.email}
+            autoComplete="email"
               onChange={(e) => updateContract('landlord', { email: e.target.value })}
             />
             {landlord.email.length > 0 && !isEmailValid && (
@@ -90,6 +92,7 @@ export function LandlordStep() {
               className="w-full h-12 px-4 border border-blue-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px]"
               placeholder="81 1234 5678"
               value={landlord.phone}
+            autoComplete="tel-national"
               onChange={(e) => {
                  const cleaned = e.target.value.replace(/\D/g, '');
                  updateContract('landlord', { phone: cleaned })
@@ -105,6 +108,7 @@ export function LandlordStep() {
             className="w-full h-12 px-4 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-[14px]"
             placeholder="Calle, Número, Colonia, Municipio, Estado, CP"
             value={landlord.address}
+            autoComplete="street-address"
             onChange={(e) => updateContract('landlord', { address: e.target.value })}
           />
           <span className="text-[11px] text-gray-400 mt-1 block">Se usará como domicilio legal para notificaciones en el contrato.</span>
