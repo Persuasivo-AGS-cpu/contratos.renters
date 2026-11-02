@@ -2,6 +2,8 @@ import Link from "next/link";
 import { FileText, Download, Pencil } from "lucide-react";
 import { supabaseAdmin } from "@/lib/supabase";
 import { sourceLabel } from "@/lib/sourceLabel";
+import { isTokenFresh } from "@/lib/token";
+import { renewTokenValidity } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +28,7 @@ export default async function ContratosAdminPage() {
   const { data: contracts, count } = await supabaseAdmin
     .from("contratos")
     .select(
-      "id, folio, estado, tipo_propiedad, arrendador_nombre, arrendador_email, inquilino_nombre, inquilino_email, monto_renta, status, paid_at, created_at, pdf_token, attribution",
+      "id, folio, estado, tipo_propiedad, arrendador_nombre, arrendador_email, inquilino_nombre, inquilino_email, monto_renta, status, paid_at, created_at, pdf_token, pdf_token_issued_at, attribution",
       { count: "exact" }
     )
     .order("created_at", { ascending: false })
@@ -132,7 +134,7 @@ export default async function ContratosAdminPage() {
                     {formatDate(c.paid_at ?? c.created_at)}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {c.status === "paid" && c.pdf_token ? (
+                    {c.status === "paid" && c.pdf_token && isTokenFresh(c.pdf_token_issued_at, c.paid_at) ? (
                       <a
                         href={`/api/pdf?token=${c.pdf_token}`}
                         target="_blank"
@@ -141,6 +143,16 @@ export default async function ContratosAdminPage() {
                       >
                         <Download className="w-4 h-4" />
                       </a>
+                    ) : c.status === "paid" && c.pdf_token ? (
+                      <form action={renewTokenValidity.bind(null, c.id)}>
+                        <button
+                          type="submit"
+                          className="px-2 py-1 rounded border border-amber-200 bg-amber-50 text-[11px] font-bold text-amber-700 hover:bg-amber-100"
+                          title="El enlace venció (90 días). Renovar su vigencia."
+                        >
+                          Vencido · Renovar
+                        </button>
+                      </form>
                     ) : (
                       <span className="p-1.5 inline-flex text-gray-200 cursor-not-allowed">
                         <Download className="w-4 h-4" />

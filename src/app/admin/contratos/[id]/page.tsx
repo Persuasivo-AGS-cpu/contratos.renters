@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Check, Download, User, UserCheck, Home, DollarSign, Users, Scale } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase';
 import { getStateName } from '@/lib/states';
+import { isTokenFresh } from '@/lib/token';
 import { updateContract } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -61,7 +62,7 @@ export default async function EditContratoPage({ params, searchParams }: PagePro
 
   const { data: row, error } = await supabaseAdmin
     .from('contratos')
-    .select('id, folio, estado, status, pdf_token, contract_data')
+    .select('id, folio, estado, status, pdf_token, pdf_token_issued_at, paid_at, contract_data')
     .eq('id', id)
     .single();
 
@@ -90,7 +91,7 @@ export default async function EditContratoPage({ params, searchParams }: PagePro
             {getStateName(row.estado)} · {row.status === 'paid' ? 'Pagado' : 'Pendiente'} · Al guardar, el PDF se regenera con los datos corregidos (mismo link del cliente).
           </p>
         </div>
-        {row.status === 'paid' && row.pdf_token && (
+        {row.status === 'paid' && row.pdf_token && isTokenFresh(row.pdf_token_issued_at, row.paid_at) && (
           <a
             href={`/api/pdf?token=${row.pdf_token}`}
             target="_blank"
@@ -98,6 +99,11 @@ export default async function EditContratoPage({ params, searchParams }: PagePro
           >
             <Download className="w-4 h-4" /> Ver PDF actual
           </a>
+        )}
+        {row.status === 'paid' && row.pdf_token && !isTokenFresh(row.pdf_token_issued_at, row.paid_at) && (
+          <span className="shrink-0 text-[12px] font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+            Enlace vencido: renuévalo desde la lista de contratos
+          </span>
         )}
       </div>
 
