@@ -1,4 +1,5 @@
 import { Webhook, Info } from "lucide-react";
+import { CapiTestForm } from "./CapiTestForm";
 
 export default function AjustesPage() {
   const stripeKey = process.env.STRIPE_SECRET_KEY ?? "";
@@ -96,6 +97,28 @@ export default function AjustesPage() {
                 Variable <code className="bg-gray-100 px-1 rounded">NEXT_PUBLIC_APP_URL</code> — debe ser <code className="bg-gray-100 px-1 rounded">https://contratos.renters.mx</code> en producción
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Meta Conversions API */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
+            <Webhook className="w-4 h-4 text-gray-400" />
+            <h2 className="text-[14px] font-semibold text-gray-900">Meta Conversions API</h2>
+          </div>
+          <div className="p-6 space-y-4">
+            <p className="text-[12px] text-gray-600">
+              Token de acceso:{" "}
+              <strong className={process.env.META_CAPI_ACCESS_TOKEN ? "text-emerald-700" : "text-red-600"}>
+                {process.env.META_CAPI_ACCESS_TOKEN ? "configurado" : "falta"}
+              </strong>
+              . Pixel: <code className="bg-gray-100 px-1 rounded">{process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "no configurado"}</code>
+            </p>
+            <p className="text-[12px] text-gray-500">
+              En Meta abre Administrador de eventos → Probar eventos → Eventos del servidor, copia el código de prueba
+              (empieza con TEST) y pégalo aquí. El evento solo aparece en ese panel y no cuenta como venta.
+            </p>
+            <CapiTestForm />
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { sha256, buildPurchaseEvent } from './metaCapi.ts';
+import { sha256, buildPurchaseEvent, sendTestPurchase, TEST_EVENT_CODE_RE } from './metaCapi.ts';
 
 test('sha256 normaliza espacios y mayúsculas antes de hashear', () => {
   const esperado = createHash('sha256').update('test@example.com').digest('hex');
@@ -42,4 +42,62 @@ test('sin correo ni contexto el user_data queda vacío, no con campos undefined'
   });
   assert.deepEqual(e.user_data, {});
   assert.equal(e.custom_data.value, 0);
+});
+
+test('el código de prueba debe parecerse al de Meta', () => {
+  for (const ok of ['TEST12345', 'test98765']) assert.ok(TEST_EVENT_CODE_RE.test(ok), ok);
+  for (const mal of ['', '12345', 'TEST', 'PRODUCCION', 'TEST 123', 'TEST12345; DROP']) assert.ok(!TEST_EVENT_CODE_RE.test(mal), mal);
+});
+
+test('sendTestPurchase no llama a Meta sin un código de prueba válido', async () => {
+  const original = globalThis.fetch;
+  let llamadas = 0;
+  globalThis.fetch = async () => { llamadas++; return new Response('{}'); };
+  try {
+    process.env.NEXT_PUBLIC_META_PIXEL_ID = '123';
+    process.env.META_CAPI_ACCESS_TOKEN = 'secreto';
+    const r = await sendTestPurchase('');
+    assert.equal(r.ok, false);
+    assert.equal(llamadas, 0);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('sendTestPurchase manda el código de prueba y el token va en el cuerpo, no en la URL', async () => {
+  const original = globalThis.fetch;
+  let url = '';
+  let body = null;
+  globalThis.fetch = async (u, init) => {
+    url = String(u);
+    body = JSON.parse(init.body);
+    return new Response(JSON.stringify({ events_received: 1 }), { status: 200 });
+  };
+  try {
+    process.env.NEXT_PUBLIC_META_PIXEL_ID = '123';
+    process.env.META_CAPI_ACCESS_TOKEN = 'secreto';
+    const r = await sendTestPurchase(' TEST12345 ');
+    assert.equal(r.ok, true);
+    assert.equal(body.test_event_code, 'TEST12345');
+    assert.equal(body.data[0].event_name, 'Purchase');
+    assert.match(body.data[0].event_id, /^PRUEBA-CAPI-/);
+    assert.ok(!url.includes('secreto'));
+    assert.ok(!r.mensaje.includes('secreto'));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('sendTestPurchase reporta el error de Meta sin lanzar', async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: 'Token inválido' } }), { status: 400 });
+  try {
+    process.env.NEXT_PUBLIC_META_PIXEL_ID = '123';
+    process.env.META_CAPI_ACCESS_TOKEN = 'secreto';
+    const r = await sendTestPurchase('TEST12345');
+    assert.equal(r.ok, false);
+    assert.match(r.mensaje, /400.*Token inválido/);
+  } finally {
+    globalThis.fetch = original;
+  }
 });
