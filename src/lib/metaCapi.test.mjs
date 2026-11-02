@@ -81,6 +81,10 @@ test('sendTestPurchase manda el código de prueba y el token va en el cuerpo, no
     assert.equal(body.test_event_code, 'TEST12345');
     assert.equal(body.data[0].event_name, 'Purchase');
     assert.match(body.data[0].event_id, /^PRUEBA-CAPI-/);
+    // Sin datos de usuario Meta responde 400 Invalid parameter.
+    assert.ok(body.data[0].user_data.em?.length === 1);
+    assert.ok(body.data[0].user_data.client_user_agent);
+    assert.ok(body.data[0].user_data.client_ip_address);
     assert.ok(!url.includes('secreto'));
     assert.ok(!r.mensaje.includes('secreto'));
   } finally {
@@ -90,14 +94,39 @@ test('sendTestPurchase manda el código de prueba y el token va en el cuerpo, no
 
 test('sendTestPurchase reporta el error de Meta sin lanzar', async () => {
   const original = globalThis.fetch;
-  globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: 'Token inválido' } }), { status: 400 });
+  globalThis.fetch = async () =>
+    new Response(JSON.stringify({ error: { message: 'Token inválido', error_user_msg: 'Revisa el token', error_subcode: 33 } }), { status: 400 });
   try {
     process.env.NEXT_PUBLIC_META_PIXEL_ID = '123';
     process.env.META_CAPI_ACCESS_TOKEN = 'secreto';
     const r = await sendTestPurchase('TEST12345');
     assert.equal(r.ok, false);
-    assert.match(r.mensaje, /400.*Token inválido/);
+    assert.match(r.mensaje, /400.*Token inválido.*Revisa el token.*subcódigo 33/);
   } finally {
     globalThis.fetch = original;
   }
+});
+
+test('una IP que no lo es ("unknown") no se manda a Meta', () => {
+  const e = buildPurchaseEvent({
+    folio: 'NL-1',
+    amountCentavos: 49900,
+    email: 'a@b.com',
+    eventTime: 1790000000,
+    sourceUrl: 'https://contratos.renters.mx/contrato',
+    context: { ip: 'unknown', ua: 'Mozilla/5.0' },
+  });
+  assert.equal(e.user_data.client_ip_address, undefined);
+  assert.equal(e.user_data.client_user_agent, 'Mozilla/5.0');
+});
+
+test('una IPv6 válida sí se manda', () => {
+  const e = buildPurchaseEvent({
+    folio: 'NL-2',
+    amountCentavos: 49900,
+    eventTime: 1790000000,
+    sourceUrl: 'https://contratos.renters.mx/contrato',
+    context: { ip: '2001:db8::1' },
+  });
+  assert.equal(e.user_data.client_ip_address, '2001:db8::1');
 });
