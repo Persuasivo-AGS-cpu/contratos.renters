@@ -68,12 +68,12 @@ export function FaqSection() {
 
         <div className="mt-10 pt-8 border-t border-gray-200/80 max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4">
           <p className="text-gray-500 font-medium mr-2">¿Tienes una pregunta diferente?</p>
-          <Link
-            href="/preguntas-frecuentes"
+          <a
+            href="https://www.renters.mx/preguntas-frecuentes?tema=contratos"
             className="px-5 py-2.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-[14px] text-gray-700 font-bold shadow-sm transition-colors"
           >
             Ver todas las preguntas
-          </Link>
+          </a>
           <Link
             href="/contacto"
             className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#3563E9] hover:bg-[#2951CB] text-white text-[14px] font-bold shadow-md shadow-blue-500/20 transition-colors"
