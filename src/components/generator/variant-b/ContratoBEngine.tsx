@@ -6,10 +6,11 @@ import clsx from "clsx";
 import { useContractStore } from "@/store/useContractStore";
 import { STATES, getStateName, getLegalStateName } from "@/lib/states";
 import { trackFunnelStep } from "@/lib/funnel";
-import { trackGeneratorStep } from "@/lib/analytics";
+import { trackEvent, trackGeneratorStep } from "@/lib/analytics";
 import { analyzeClabe } from "@/utils/clabeValidator";
 import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 import { PurchaseValue } from "@/components/checkout/PurchaseValue";
+import { ContractPreview } from "@/components/generator/ContractPreview";
 import { Minus, Plus } from "lucide-react";
 
 // Variante B del generador: un solo scroll continuo (vs. el wizard paso a
@@ -69,6 +70,17 @@ const SECTION_STEP: Record<SectionId, number> = {
   revision: 7,
 };
 
+const PANEL_LABELS: Record<string, string> = {
+  estado: "Estado",
+  tipo: "Tipo de inmueble",
+  estatus: "¿Ya tienes inquilino?",
+  inmueble: "Dirección del inmueble",
+  arrendador: "Datos del propietario",
+  arrendatario: "Datos del inquilino",
+  aval: "Aval o fiador",
+  terminos: "Renta y condiciones",
+};
+
 function Chip({
   selected,
   onClick,
@@ -107,7 +119,6 @@ function BlankLine() {
 
 function Section({
   id,
-  step,
   title,
   subtitle,
   registerRef,
@@ -126,12 +137,14 @@ function Section({
   active: boolean;
   children: React.ReactNode;
 }) {
+  // Número que ve el cliente: el orden real en pantalla. `step` es el de funnel_events y no se muestra.
+  const numero = SECTION_ORDER.indexOf(id) + 1;
   return (
     <section
       ref={registerRef}
       id={`seccion-${id}`}
       className={clsx(
-        "max-w-xl mx-auto px-6 py-14 transition-all duration-500 ease-out",
+        "max-w-xl mx-auto px-6 py-10 lg:py-12 transition-all duration-500 ease-out",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
         done && !active && "opacity-60"
       )}
@@ -143,9 +156,9 @@ function Section({
             done || active ? "bg-brand-primary border-brand-primary text-white" : "border-border-layout text-text-muted"
           )}
         >
-          {step}
+          {numero}
         </span>
-        <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Paso {step} de 7</span>
+        <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Paso {numero} de {SECTION_ORDER.length}</span>
       </div>
       <h2 className="text-2xl font-display font-bold mb-2 text-text-main">{title}</h2>
       {subtitle && <p className="text-text-muted mb-6">{subtitle}</p>}
@@ -319,6 +332,30 @@ export function ContratoBEngine() {
   const doneCount = progressKeys.filter((k) => status[k]).length;
   const progressPct = Math.round((doneCount / progressKeys.length) * 100);
   const canCheckout = progressKeys.every((k) => status[k]);
+  const pendientes = progressKeys.filter((k) => !status[k]);
+
+  const irASeccion = (id: SectionId) =>
+    sectionRefs.current.get(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  // Pagar si está completo; si no, llevar al primer dato que falta (en vez de un botón apagado sin explicación).
+  const onCta = (fuente: "barra" | "panel" | "final") => {
+    trackEvent("generator_cta_click", { fuente, completo: canCheckout ? 1 : 0 });
+    if (canCheckout) setCheckoutOpen(true);
+    else if (pendientes[0]) irASeccion(pendientes[0] as SectionId);
+  };
+  const ctaTexto = canCheckout
+    ? "Pagar $499 MXN"
+    : `Faltan ${pendientes.length} ${pendientes.length === 1 ? "dato" : "datos"}`;
+
+  const finalCtaRef = useRef<HTMLDivElement>(null);
+  const [finalCtaVisible, setFinalCtaVisible] = useState(false);
+  useEffect(() => {
+    const el = finalCtaRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => setFinalCtaVisible(e.isIntersecting), { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const selectTenantStatus = (value: "con" | "sin") => {
     setTenantStatus(value);
@@ -345,7 +382,8 @@ export function ContratoBEngine() {
     additionalItems.reduce((a, i) => a + (i.name.trim() && i.qty > 0 ? i.qty : 0), 0);
 
   return (
-    <div className="bg-surface-subtle pb-28">
+    <div className="bg-surface-subtle pb-28 lg:pb-0 lg:grid lg:grid-cols-[minmax(0,1fr)_460px] xl:grid-cols-[minmax(0,1fr)_540px] lg:items-start">
+      <div className="min-w-0 lg:pb-16">
       {/* HERO */}
       <div className="bg-[radial-gradient(circle_at_top_right,#E0E7FF_0%,#F4F7FB_40%,#FFFFFF_100%)] text-slate-900 px-6 py-14 md:py-20">
         <div className="max-w-xl mx-auto">
@@ -951,7 +989,7 @@ export function ContratoBEngine() {
           ))}
         </div>
 
-        <div className="bg-white border border-border-layout rounded-2xl p-6 shadow-sm text-[15px] leading-relaxed space-y-3">
+        <div className="lg:hidden bg-white border border-border-layout rounded-2xl p-6 shadow-sm text-[15px] leading-relaxed space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-widest text-text-muted">Contrato de arrendamiento residencial</h3>
           <p>Código Civil para el Estado de <Filled>{contract.state ? getLegalStateName(contract.state) : "[estado]"}</Filled></p>
           <p>
@@ -1009,10 +1047,79 @@ export function ContratoBEngine() {
           furnished={contract.property.furnished}
           includesGuarantor={contract.guarantor.includes}
         />
-      </Section>
 
-      {/* STICKY BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur text-slate-900 px-4 py-3 flex items-center justify-between gap-3 border-t border-border-layout">
+        <div ref={finalCtaRef} className="mt-8">
+          <button
+            type="button"
+            onClick={() => onCta("final")}
+            aria-disabled={!canCheckout}
+            className={`w-full rounded-full py-4 text-base font-bold transition-colors ${
+              canCheckout ? "bg-brand-primary text-white hover:opacity-90" : "bg-slate-200 text-slate-600"
+            }`}
+          >
+            {canCheckout ? "Pagar $499 MXN con tarjeta" : `${ctaTexto} para continuar`}
+          </button>
+          <p className="text-xs text-text-muted text-center mt-3">
+            Pago seguro con Stripe · IVA incluido · Corrección de datos gratis las primeras 24 horas
+          </p>
+        </div>
+      </Section>
+      </div>
+
+      {/* PANEL DE ESCRITORIO: avance, precio, botón y contrato en vivo */}
+      <aside className="hidden lg:block sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto border-l border-border-layout bg-surface-clean px-6 py-6">
+        <div className="bg-white border border-border-layout rounded-2xl p-5 shadow-sm">
+          <div className="flex items-baseline justify-between mb-3">
+            <h2 className="font-display text-lg font-bold text-text-main">Tu contrato</h2>
+            <span className="text-brand-primary font-bold">$499 MXN</span>
+          </div>
+          <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden mb-4" aria-hidden="true">
+            <div className="h-full bg-brand-primary transition-all duration-500" style={{ width: `${progressPct}%` }} />
+          </div>
+          <ul className="space-y-1.5 text-sm">
+            {progressKeys.map((k) => (
+              <li key={k}>
+                <button
+                  type="button"
+                  onClick={() => irASeccion(k as SectionId)}
+                  className="w-full flex items-center gap-2 text-left rounded-md px-1 py-0.5 hover:bg-slate-50"
+                >
+                  <span
+                    className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                      status[k] ? "bg-brand-accent text-white" : "border border-border-layout text-transparent"
+                    }`}
+                    aria-hidden="true"
+                  >
+                    ✓
+                  </span>
+                  <span className={status[k] ? "text-text-main" : "text-text-muted"}>{PANEL_LABELS[k]}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => onCta("panel")}
+            aria-disabled={!canCheckout}
+            className={`mt-4 w-full rounded-full py-3 text-sm font-bold transition-colors ${
+              canCheckout ? "bg-brand-primary text-white hover:opacity-90" : "bg-slate-200 text-slate-600"
+            }`}
+          >
+            {canCheckout ? "Pagar $499 MXN con tarjeta" : ctaTexto}
+          </button>
+          <p className="text-[11px] text-text-muted text-center mt-2">Pago seguro con Stripe · IVA incluido</p>
+        </div>
+        <div className="mt-6">
+          <ContractPreview />
+        </div>
+      </aside>
+
+      {/* BARRA FIJA (celular y tableta): se oculta cuando el botón del final ya se ve */}
+      <div
+        className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur text-slate-900 px-4 py-3 flex items-center justify-between gap-3 border-t border-border-layout transition-transform duration-300 ${
+          finalCtaVisible ? "translate-y-full" : "translate-y-0"
+        }`}
+      >
         <div className="min-w-0">
           <p className="text-[11px] font-mono text-slate-500 tracking-wide truncate">
             {contract.state ? `Contrato · ${getStateName(contract.state)}` : "Generador de contrato"}
@@ -1023,11 +1130,13 @@ export function ContratoBEngine() {
         </div>
         <button
           type="button"
-          disabled={!canCheckout}
-          onClick={() => setCheckoutOpen(true)}
-          className="shrink-0 bg-brand-primary text-white font-bold text-sm px-6 py-3 rounded-full disabled:opacity-35 transition-opacity"
+          onClick={() => onCta("barra")}
+          aria-disabled={!canCheckout}
+          className={`shrink-0 font-bold text-sm px-6 py-3 rounded-full transition-colors ${
+            canCheckout ? "bg-brand-primary text-white" : "bg-slate-200 text-slate-600"
+          }`}
         >
-          {canCheckout ? "Pagar y desbloquear — $499 MXN" : "Continuar"}
+          {ctaTexto}
         </button>
       </div>
 
