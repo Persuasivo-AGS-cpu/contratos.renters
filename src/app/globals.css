@@ -45,3 +45,12 @@ body {
   }
 }
 
+
+/* iOS Safari hace zoom al enfocar campos con fuente menor a 16px (los del generador usan 14px). */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

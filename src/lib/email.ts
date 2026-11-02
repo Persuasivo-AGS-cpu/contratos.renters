@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { getStateName } from './states';
 import { escapeHtml } from './rateLimit';
+import { TOKEN_TTL_DAYS } from './token';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -46,6 +47,21 @@ export async function sendContractEmail(params: SendContractEmailParams) {
            style="display: inline-block; background: #4F46E5; color: #fff; font-weight: 700; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 16px; margin-bottom: 24px;">
           Descargar Contrato PDF
         </a>
+
+        <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+          Este enlace es válido por ${TOKEN_TTL_DAYS} días. Descarga tu PDF y guárdalo.
+          Si vence, pide uno nuevo en
+          <a href="https://contratos.renters.mx/reenviar-enlace" style="color: #4F46E5;">contratos.renters.mx/reenviar-enlace</a>.
+        </p>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px;">
+          <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700; color: #0f172a;">Qué sigue</p>
+          <p style="margin: 0; font-size: 14px; color: #475569; line-height: 1.6;">
+            1. Revisa los datos y los campos que dejaste en blanco.<br/>
+            2. Imprímelo y fírmalo con el inquilino (y el aval, si lo hay).<br/>
+            3. Cada parte conserva una copia firmada.
+          </p>
+        </div>
 
         <p style="color: #94a3b8; font-size: 13px; border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 24px; line-height: 1.6;">
           Si tienes problemas para descargar tu contrato, responde este correo y te ayudamos en menos de 24 horas.<br/><br/>
