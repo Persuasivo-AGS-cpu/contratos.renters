@@ -174,12 +174,12 @@ function SuccessContent() {
             <div className="w-full bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-left">
               <div className="flex items-center gap-2 mb-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
-                <h5 className="text-[14px] font-bold text-slate-900">Da el siguiente paso: protégete si tu inquilino no paga</h5>
+                <h5 className="text-[14px] font-bold text-slate-900">¿Necesitas respaldo, no solo el documento?</h5>
               </div>
               <p className="text-[13px] text-slate-600 leading-relaxed mb-4">
-                Tu contrato te blinda en papel. Con la <strong className="text-slate-900">Póliza Jurídica de Renters</strong>,
-                si tu inquilino deja de pagar, nosotros lo gestionamos por ti — cobranza y desalojo incluidos.
-                Escríbenos y te contamos cómo funciona.
+                Tu contrato ya está listo. En Nuevo León también ofrecemos la <strong className="text-slate-900">Póliza Jurídica de Renters</strong>,
+                que incluye un contrato personalizado y los servicios de tu paquete.
+                Escríbenos y te contamos qué incluye cada uno.
               </p>
               <a
                 href={`https://wa.me/528110610111?text=${encodeURIComponent(
