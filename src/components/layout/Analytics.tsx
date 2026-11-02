@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+// Etiqueta de Google Ads (cuenta Renters, renters.mkt@gmail.com). Es público, como el ID de GA4; se carga junto con
+// gtag.js de GA4 (una sola descarga del script) y solo si GA4 está configurado, así dev/preview no ensucian los datos.
+const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID ?? "AW-18552626970";
 
 // GA4 + Meta Pixel. Solo se cargan si sus IDs están configurados en env,
 // así dev/preview no ensucian los datos de producción.
@@ -29,6 +32,7 @@ export function Analytics() {
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', '${GA_ID}');
+              gtag('config', '${GOOGLE_ADS_ID}');
             `}
           </Script>
         </>
