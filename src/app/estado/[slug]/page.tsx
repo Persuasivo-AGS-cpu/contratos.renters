@@ -42,7 +42,7 @@ export default async function EstadoPage({ params }: PageProps) {
     'Cláusulas de protección incluidas: deudor solidario, fiador, penalidades',
     'Anexo de inventario si la propiedad está amueblada',
     'PDF profesional listo para imprimir y firmar',
-    'Entrega inmediata por correo tras el pago',
+    'Entrega por correo tras el pago',
   ];
 
   const faqs = [
@@ -59,7 +59,7 @@ export default async function EstadoPage({ params }: PageProps) {
     },
     {
       q: '¿Necesito abogado o notario?',
-      a: 'No. El contrato de arrendamiento es válido con la firma de las partes. Las plantillas ya incluyen las cláusulas que un abogado redactaría.',
+      a: `Puedes llenar tu contrato tú mismo: la plantilla ya incluye las cláusulas y está basada en el Código Civil de ${legalName}. Si tu caso tiene condiciones especiales, te recomendamos consultarlo con un abogado.`,
     },
   ];
 
@@ -110,9 +110,9 @@ export default async function EstadoPage({ params }: PageProps) {
       <section className="w-full bg-white py-16 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {[
-            { icon: <FileText className="w-6 h-6 text-[#3563E9]" />, t: '1. Llena el formulario', d: 'Datos de la propiedad, arrendador, inquilino y términos. ~6 minutos.' },
+            { icon: <FileText className="w-6 h-6 text-[#3563E9]" />, t: '1. Llena el formulario', d: 'Datos de la propiedad, arrendador, inquilino y términos.' },
             { icon: <Zap className="w-6 h-6 text-[#3563E9]" />, t: '2. Paga $499 MXN', d: 'Pago único y seguro con tarjeta vía Stripe. IVA incluido.' },
-            { icon: <ShieldCheck className="w-6 h-6 text-[#3563E9]" />, t: '3. Descarga tu PDF', d: 'Contrato listo para firmar, en tu correo al instante.' },
+            { icon: <ShieldCheck className="w-6 h-6 text-[#3563E9]" />, t: '3. Descarga tu PDF', d: 'Contrato listo para firmar, en tu correo después del pago.' },
           ].map((s) => (
             <div key={s.t} className="flex flex-col items-center">
               <div className="w-14 h-14 rounded-2xl bg-[#E8F0FE] flex items-center justify-center mb-4">{s.icon}</div>

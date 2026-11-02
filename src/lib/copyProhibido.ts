@@ -16,4 +16,9 @@ export const PROHIBIDAS: RegExp[] = [
   /contrato\s+legal\b/i,
   /\bPDF\s+legal\b/i,
   /100\s?%\s+protegid/i,
+  /es\s+v[aá]lido\s+con/i,
+  /cl[aá]usulas\s+que\s+un\s+abogado/i,
+  /~\s?\d+\s+minutos/i,
+  /entrega\s+inmediata/i,
+  /en\s+tu\s+correo\s+al\s+instante/i,
 ];
