@@ -16,7 +16,7 @@ export function FaqFinalCta() {
         </h2>
         
         <p className="text-[#4b5563] text-[18px] md:text-[20px] mb-10 font-medium">
-          En menos de 10 minutos tienes un contrato legal, personalizado y listo para firmar.
+          En menos de 6 minutos tienes un contrato legal, personalizado y listo para firmar.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">

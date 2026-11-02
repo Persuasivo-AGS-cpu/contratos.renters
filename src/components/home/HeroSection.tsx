@@ -122,7 +122,7 @@ export function HeroSection() {
              </div>
              <div>
                 <p className="text-3xl md:text-4xl font-black text-white">
-                  &lt; <CountUp target={10} /> <span className="text-xl md:text-2xl font-normal">min</span>
+                  &lt; <CountUp target={6} /> <span className="text-xl md:text-2xl font-normal">min</span>
                 </p>
                 <p className="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-[0.15em] mt-1">Tiempo Promedio</p>
              </div>

@@ -40,7 +40,7 @@ const faqData: FaqItem[] = [
     id: "con-1",
     category: "Contratos",
     question: "¿Cuánto tiempo tarda generar un contrato?",
-    answer: "El proceso toma menos de 10 minutos. Solo debes responder preguntas básicas sobre el arrendador, el inquilino, el inmueble y las condiciones de renta. Nuestro motor ensambla el PDF de inmediato."
+    answer: "El proceso toma menos de 6 minutos. Solo debes responder preguntas básicas sobre el arrendador, el inquilino, el inmueble y las condiciones de renta. Nuestro motor ensambla el PDF de inmediato."
   },
   {
     id: "con-2",

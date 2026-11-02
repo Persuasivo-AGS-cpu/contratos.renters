@@ -355,7 +355,7 @@ export function ContratoBEngine() {
             Responde unas preguntas simples y mira cómo se arma tu documento legal frente a ti.
           </p>
           <div className="flex flex-wrap gap-2 mt-6">
-            {["$499 MXN", "< 10 min", `${ACTIVE_STATES.length} estados`].map((b) => (
+            {["$499 MXN", "< 6 min", `${ACTIVE_STATES.length} estados`].map((b) => (
               <span key={b} className="text-xs font-semibold text-gray-200 bg-white/10 border border-white/15 rounded-full px-3 py-1.5">
                 {b}
               </span>

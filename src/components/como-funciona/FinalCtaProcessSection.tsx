@@ -9,7 +9,7 @@ export function FinalCtaProcessSection() {
           ¿Listo para generar tu contrato?
         </h2>
         <p className="text-[#4b5563] text-[18px] md:text-[20px] mb-10 font-medium">
-          Comienza ahora y ten tu contrato legal en menos de 10 minutos.
+          Comienza ahora y ten tu contrato legal en menos de 6 minutos.
         </p>
         <Link 
           href="/contrato"
