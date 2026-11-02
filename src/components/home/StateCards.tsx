@@ -22,11 +22,11 @@ export function StateCards() {
   const comingSoon = ALL_STATES.filter((s) => !s.available);
 
   return (
-    <section id="cobertura" className="w-full py-24 px-6 bg-surface-clean">
+    <section id="estados" className="w-full py-24 px-6 bg-surface-clean">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
            <h2 className="text-3xl md:text-5xl font-display font-bold text-text-main tracking-tight mb-4">Contratos adaptados a tu estado</h2>
-           <p className="text-lg text-text-muted max-w-2xl mx-auto leading-relaxed">Cada contrato cumple con la legislación local vigente. Selecciona tu estado y genera tu contrato en minutos.</p>
+           <p className="text-lg text-text-muted max-w-2xl mx-auto leading-relaxed">Cada contrato se basa en el Código Civil de tu estado. Selecciona el tuyo y genera tu contrato en minutos.</p>
         </div>
 
         {/* Estados disponibles — flex centrado para que la última fila (2) no quede huérfana */}

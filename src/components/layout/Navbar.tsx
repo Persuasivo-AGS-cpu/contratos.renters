@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ArrowLeft, Menu, X } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { ContratosMenu } from './ContratosMenu';
+import { CONTRATOS_MENU } from '@/lib/contratosNav';
 
 const WWW = 'https://www.renters.mx';
 
 // Mismo menú que www.renters.mx (mismos enlaces, mismo orden), todo en la misma pestaña.
-// "Contratos" es esta sección; lo que es solo del contrato vive en el submenú de abajo.
+// "Contratos" es esta sección: abre la burbuja con las secciones de la página.
 const links = [
   { name: "Inicio", href: `${WWW}/` },
   { name: "Servicios", href: `${WWW}/servicios` },
@@ -17,14 +19,6 @@ const links = [
   { name: "Paquetes", href: `${WWW}/paquetes` },
   { name: "Contratos", href: "/" },
   { name: "Preguntas frecuentes", href: `${WWW}/preguntas-frecuentes` },
-];
-
-const subLinks = [
-  { name: "Cómo funciona", href: "/como-funciona" },
-  { name: "Estados", href: "/#cobertura" },
-  { name: "Precio", href: "/#precios" },
-  { name: "Preguntas del contrato", href: `${WWW}/preguntas-frecuentes?tema=contratos` },
-  { name: "Soporte", href: "/contacto" },
 ];
 
 function Logo() {
@@ -64,93 +58,77 @@ export function Navbar() {
     );
   }
 
-  const showSubNav = !pathname.startsWith("/admin");
-
   return (
-    <>
-      <nav className="w-full h-20 border-b border-border-layout bg-white/95 backdrop-blur flex items-center justify-between px-6 md:px-12 z-50 sticky top-0">
-        <Logo />
+    <nav className="w-full h-20 border-b border-border-layout bg-white/95 backdrop-blur flex items-center justify-between px-6 md:px-12 z-50 sticky top-0">
+      <Logo />
 
-        <ul className="hidden xl:flex items-center gap-1">
-          {links.map((link) => (
-            <li key={link.name}>
-              <Link
-                href={link.href}
-                className={`px-3 py-2 text-[13.5px] font-medium rounded-full transition-colors ${
-                  link.href === "/" ? 'bg-[#EEF2FF] text-[#3563E9]' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
+      <ul className="hidden xl:flex items-center gap-1">
+        {links.map((link) => (
+          <li key={link.name}>
+            {link.name === "Contratos" ? (
+              <ContratosMenu />
+            ) : (
+              <Link href={link.href} className="px-3 py-2 text-[13.5px] font-medium rounded-full text-slate-600 hover:text-slate-900 transition-colors">
                 {link.name}
               </Link>
-            </li>
-          ))}
-        </ul>
+            )}
+          </li>
+        ))}
+      </ul>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href={`${WWW}/contacto`}
-            className="hidden md:inline-flex border border-slate-200 text-slate-900 px-6 py-3 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors"
-          >
-            Contacto
-          </Link>
-          <Link
-            href={`${WWW}/brokers`}
-            className="hidden sm:inline-flex bg-[#3563E9] text-white px-7 py-3 rounded-full text-sm font-semibold hover:bg-[#2951CB] transition-colors whitespace-nowrap"
-          >
-            Soy Broker
-          </Link>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-            aria-expanded={menuOpen}
-            className="xl:hidden flex items-center justify-center w-11 h-11 rounded-full text-slate-700 hover:bg-slate-50 transition-colors"
-          >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
+      <div className="flex items-center gap-2">
+        <Link
+          href={`${WWW}/contacto`}
+          className="hidden md:inline-flex border border-slate-200 text-slate-900 px-6 py-3 rounded-full text-sm font-semibold hover:bg-slate-50 transition-colors"
+        >
+          Contacto
+        </Link>
+        <Link
+          href={`${WWW}/brokers`}
+          className="hidden sm:inline-flex bg-[#3563E9] text-white px-7 py-3 rounded-full text-sm font-semibold hover:bg-[#2951CB] transition-colors whitespace-nowrap"
+        >
+          Soy Broker
+        </Link>
+        <button
+          type="button"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
+          className="xl:hidden flex items-center justify-center w-11 h-11 rounded-full text-slate-700 hover:bg-slate-50 transition-colors"
+        >
+          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
 
-        {menuOpen && (
-          <div className="xl:hidden absolute top-20 left-0 w-full bg-white border-b border-border-layout shadow-lg py-2 flex flex-col">
-            {[...links, { name: "Contacto", href: `${WWW}/contacto` }, { name: "Soy Broker", href: `${WWW}/brokers` }].map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`px-8 py-4 text-[16px] font-medium transition-colors ${
-                  link.href === "/" ? 'bg-[#EEF2FF] text-[#3563E9]' : 'text-slate-700 hover:bg-slate-50'
-                }`}
-              >
+      {menuOpen && (
+        <div className="xl:hidden absolute top-20 left-0 w-full max-h-[calc(100vh-5rem)] overflow-y-auto bg-white border-b border-border-layout shadow-lg py-2 flex flex-col">
+          {links.map((link) =>
+            link.name === "Contratos" ? (
+              <details key={link.name} open className="group">
+                <summary className="flex cursor-pointer list-none items-center justify-between px-8 py-4 text-[16px] font-medium bg-[#EEF2FF] text-[#3563E9]">
+                  Contratos <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                </summary>
+                {CONTRATOS_MENU.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-12 py-3 text-[15px] text-slate-600 hover:bg-slate-50"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </details>
+            ) : (
+              <Link key={link.name} href={link.href} className="px-8 py-4 text-[16px] font-medium text-slate-700 hover:bg-slate-50 transition-colors">
                 {link.name}
               </Link>
-            ))}
-          </div>
-        )}
-      </nav>
-
-      {showSubNav && (
-        <div className="w-full h-12 bg-[#F8FAFC] border-b border-border-layout flex items-center justify-between gap-4 px-6 md:px-12 sticky top-20 z-40">
-          <div className="flex items-center gap-1 min-w-0 overflow-x-auto [scrollbar-width:none]">
-            <span className="hidden md:inline text-[13px] font-semibold text-slate-900 mr-3 whitespace-nowrap">Contratos de arrendamiento</span>
-            {subLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`px-3 py-1.5 text-[13px] font-medium rounded-full whitespace-nowrap transition-colors ${
-                  pathname === link.href ? 'bg-[#EEF2FF] text-[#3563E9]' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-          <Link
-            href="/contrato"
-            className="shrink-0 bg-[#3563E9] text-white px-5 py-1.5 rounded-full text-[13px] font-semibold hover:bg-[#2951CB] transition-colors whitespace-nowrap"
-          >
-            Generar contrato
-          </Link>
+            ),
+          )}
+          <Link href={`${WWW}/contacto`} className="px-8 py-4 text-[16px] font-medium text-slate-700 hover:bg-slate-50">Contacto</Link>
+          <Link href={`${WWW}/brokers`} className="px-8 py-4 text-[16px] font-medium text-slate-700 hover:bg-slate-50">Soy Broker</Link>
         </div>
       )}
-    </>
+    </nav>
   );
 }

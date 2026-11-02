@@ -10,14 +10,13 @@ const features = [
   "Adaptado a legislación de tu estado",
   "Descarga en PDF",
   "Envío por correo electrónico",
-  "Guía de uso incluida",
 ];
 
 export function PricingSection() {
   const updateContract = useContractStore((state) => state.updateContract);
 
   return (
-    <section id="precios" className="w-full py-24 px-6 bg-surface-clean relative overflow-hidden">
+    <section id="precio" className="w-full py-24 px-6 bg-surface-clean relative overflow-hidden">
       <div className="max-w-4xl mx-auto text-center mb-16">
         <div className="inline-block px-3 py-1 font-bold text-xs uppercase tracking-[0.2em] mb-4 text-[#3563E9]">PRECIOS</div>
         <h2 className="text-3xl md:text-5xl font-display font-black text-text-main mb-4 tracking-tight">
@@ -31,7 +30,7 @@ export function PricingSection() {
 
           {/* Badge */}
           <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#3563E9] text-white px-5 py-1 rounded-full text-xs font-bold shadow-md whitespace-nowrap flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5" /> Legalmente válido
+            <ShieldCheck className="w-3.5 h-3.5" /> Pago único
           </div>
 
           {/* Plan name */}
@@ -40,9 +39,6 @@ export function PricingSection() {
 
           {/* Price */}
           <div className="mb-8">
-            <p className="text-sm font-semibold text-gray-400 mb-1">
-              Un despacho tradicional: <span className="line-through">$2,500 – $5,000</span>
-            </p>
             <div className="flex items-start justify-center gap-1">
               <span className="text-2xl font-bold text-gray-400 mt-3">$</span>
               <span className="text-7xl font-black font-display tracking-tight text-[#111]">499</span>

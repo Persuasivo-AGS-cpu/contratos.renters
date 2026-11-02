@@ -41,6 +41,11 @@ const nextConfig: NextConfig = {
         destination: "https://www.renters.mx/preguntas-frecuentes?tema=contratos",
         permanent: true,
       },
+      {
+        source: "/como-funciona",
+        destination: "/#como",
+        permanent: false, // pasar a true una semana después de verificar en producción
+      },
     ];
   },
   async headers() {

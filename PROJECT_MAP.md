@@ -64,7 +64,21 @@ duración/fecha/día pago; INE/CLABE solo saltables con su flag.
 - Verificar en prod tras deploy (curl/Chrome MCP). Typecheck+build antes de commit.
 - Vercel Hobby: máx 2 crons (hoy usa 1). CLI sin login persistente.
 
-## Hecho (2026-07-17): scrollytelling /como-funciona
+## Hecho (2026-11-02): home como one-page
+La home (`src/app/page.tsx`) es una sola página con secciones en
+`src/components/home`: Hero, ComoFuncionaSection, StateCards, PricingSection,
+DudasRapidasSection, CtaSection, SoporteSection. `/como-funciona` ya no existe
+como página: redirige a `/#como` (307, pasar a permanente tras verificar en prod).
+Se borraron TrustBar, AboutRenters, FaqSection y `src/components/como-funciona/`.
+El menú "Contratos" (burbuja) vive en `src/lib/contratosNav.ts` +
+`src/components/layout/ContratosMenu.tsx`; un test (`contratosNav.test.mjs`)
+verifica que cada ancla exista como `id` en `src/components/home`.
+Datos de contacto visibles en `src/lib/contactInfo.ts`.
+Las entradas históricas de abajo (scrollytelling, FaqSection, ProcessScrollytelling)
+describen archivos que ya no existen. Las imágenes
+`public/images/como-funciona/` se conservan y las usa ComoFuncionaSection.
+
+## Hecho (2026-07-17): scrollytelling /como-funciona (reemplazado por el one-page, ver arriba)
 `StepByStepSection` (fotos stock) reemplazado por
 `src/components/como-funciona/ProcessScrollytelling.tsx`. Desktop (≥1024px):
 teléfono sticky + 4 pantallazos reales del generador en crossfade + barra de

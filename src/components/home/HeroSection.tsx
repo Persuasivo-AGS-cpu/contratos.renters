@@ -37,7 +37,7 @@ export function HeroSection() {
   const ctaHref = selectedState ? `/contrato?estado=${selectedState}` : "/contrato";
 
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center pt-24 pb-20 px-6 bg-[radial-gradient(circle_at_top_right,#E0E7FF_0%,#F4F7FB_40%,#FFFFFF_100%)]">
+    <section id="resumen" className="relative w-full min-h-[90vh] flex items-center pt-24 pb-20 px-6 bg-[radial-gradient(circle_at_top_right,#E0E7FF_0%,#F4F7FB_40%,#FFFFFF_100%)]">
       <AmbientBlobs reducedMotion={!!reducedMotion} />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-center gap-16">
@@ -45,18 +45,18 @@ export function HeroSection() {
         <div className="flex flex-col items-start text-left">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#3563E9]/20 bg-[#EEF2FF] text-xs font-bold text-[#3563E9] uppercase tracking-wide mb-6">
-            <ShieldCheck className="w-4 h-4" /> Protección Legal Certificada
+            <ShieldCheck className="w-4 h-4" /> Contratos por estado
           </div>
 
           {/* Headlines */}
           <h1 className="text-5xl md:text-7xl font-display font-extrabold text-slate-900 tracking-tight leading-[1.05] mb-6 max-w-4xl">
             Contratos de arrendamiento <br className="hidden md:block" />
-            <span className="text-[#3563E9]">legalmente válidos</span> <br className="hidden md:block" />
+            <span className="text-[#3563E9]">por estado</span> <br className="hidden md:block" />
             en minutos
           </h1>
 
           <p className="text-lg md:text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">
-            Genera tu contrato de renta personalizado, redactado por abogados y adaptado a la legislación de tu estado. Sin complicaciones.
+            Genera tu contrato de renta personalizado según el Código Civil de tu estado. Revísalo antes de pagar y descárgalo en PDF para firmar.
           </p>
 
           {/* CTA Form mimicking mockup */}
