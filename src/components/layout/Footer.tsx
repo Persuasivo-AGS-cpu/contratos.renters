@@ -12,7 +12,7 @@ export function Footer() {
             <Image src="/logo-renters.png" alt="Renters" width={666} height={440} className="h-14 w-auto" />
           </Link>
           <p className="text-sm text-text-muted text-center md:text-left max-w-xs mt-2">
-             El motor de generación legal que asegura tu patrimonio sin complicaciones ni despachos costosos.
+             Contratos de arrendamiento personalizados por estado: los llenas en línea y descargas el PDF.
           </p>
           <a
             href="https://www.renters.mx"

@@ -45,11 +45,11 @@ export default function OpenGraphImage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', fontSize: 68, fontWeight: 900, lineHeight: 1.1, letterSpacing: -2 }}>
           <span>Contratos de arrendamiento</span>
-          <span style={{ color: '#4D6BFE' }}>legalmente válidos en minutos</span>
+          <span style={{ color: '#4D6BFE' }}>por estado, listos para firmar</span>
         </div>
 
         <div style={{ display: 'flex', gap: 40, marginTop: 56, fontSize: 28, color: '#9ca3af', fontWeight: 600 }}>
-          <span style={{ display: 'flex' }}>✓ Redactado por abogados</span>
+          <span style={{ display: 'flex' }}>✓ Basado en el Código Civil</span>
           <span style={{ display: 'flex' }}>✓ $499 MXN</span>
           <span style={{ display: 'flex' }}>✓ {AVAILABLE_STATES_COUNT} estados</span>
         </div>

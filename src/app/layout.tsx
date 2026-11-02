@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Contratos de Arrendamiento Legales por Estado — desde $499 | Renters",
-  description: `Genera tu contrato de arrendamiento personalizado y legalmente válido para ${getAvailableStatesList()}. Basado en el Código Civil estatal. Listo para firmar en minutos. $499 MXN.`,
+  description: `Genera tu contrato de arrendamiento personalizado para ${getAvailableStatesList()}. Plantilla basada en el Código Civil de cada estado. Revísalo antes de pagar y descárgalo en PDF para firmar. $499 MXN.`,
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://contratos.renters.mx'),
   openGraph: {
     type: 'website',

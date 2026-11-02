@@ -19,7 +19,7 @@ export function CtaSection() {
 
         <Reveal className="relative z-10 flex flex-col items-center text-center">
           <h2 className="text-4xl md:text-[56px] font-display font-extrabold text-white mb-5 tracking-tight">
-            Protege tu patrimonio hoy
+            Genera tu contrato hoy
           </h2>
 
           <p className="text-blue-50 text-[18px] md:text-[20px] max-w-[700px] mx-auto leading-relaxed mb-12 font-medium">
