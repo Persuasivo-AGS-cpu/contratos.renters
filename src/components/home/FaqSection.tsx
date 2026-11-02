@@ -40,7 +40,7 @@ export function FaqSection() {
     <section className="w-full py-20 px-6 bg-[#f8f9fa] overflow-hidden flex flex-col items-center justify-center">
       <div className="max-w-4xl mx-auto w-full">
         <div className="text-center mb-10">
-          <div className="inline-block font-bold text-xs uppercase tracking-[0.2em] mb-4 text-[#1a56ff]">PREGUNTAS FRECUENTES</div>
+          <div className="inline-block font-bold text-xs uppercase tracking-[0.2em] mb-4 text-[#3563E9]">PREGUNTAS FRECUENTES</div>
           <h2 className="text-3xl md:text-[40px] font-display font-black text-text-main mb-3 tracking-tight">Todo lo que necesitas saber</h2>
           <p className="text-lg text-gray-500 font-medium">Respuestas directas a las dudas más comunes de arrendadores en México.</p>
         </div>
@@ -50,10 +50,10 @@ export function FaqSection() {
              <Reveal key={i} delay={Math.min(i * 0.05, 0.25)} className="rounded-xl overflow-hidden bg-white shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-gray-100/50">
                 <button 
                   onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                  className="w-full text-left px-8 py-5 flex items-center justify-between gap-4 font-bold text-[17px] text-[#111] hover:text-[#1a56ff] transition-colors"
+                  className="w-full text-left px-8 py-5 flex items-center justify-between gap-4 font-bold text-[17px] text-[#111] hover:text-[#3563E9] transition-colors"
                 >
                   {faq.q}
-                  <ChevronDown className={`w-6 h-6 shrink-0 transition-transform ${openIndex === i ? 'rotate-180 text-[#1a56ff]' : 'text-gray-400'}`} />
+                  <ChevronDown className={`w-6 h-6 shrink-0 transition-transform ${openIndex === i ? 'rotate-180 text-[#3563E9]' : 'text-gray-400'}`} />
                 </button>
                 <div 
                    className={`grid transition-all duration-300 ${openIndex === i ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
@@ -76,7 +76,7 @@ export function FaqSection() {
           </Link>
           <Link
             href="/contacto"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#0d52ff] hover:bg-[#003ee6] text-white text-[14px] font-bold shadow-md shadow-blue-500/20 transition-colors"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#3563E9] hover:bg-[#2951CB] text-white text-[14px] font-bold shadow-md shadow-blue-500/20 transition-colors"
           >
             <MessageCircle className="w-5 h-5" /> Contáctanos
           </Link>

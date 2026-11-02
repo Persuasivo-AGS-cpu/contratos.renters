@@ -3,17 +3,17 @@ import { Shield, Zap, FileText } from "lucide-react";
 export function ProcessFeaturesSection() {
   const features = [
     {
-      icon: <Shield className="w-6 h-6 text-[#1a56ff] stroke-[2.5]" />,
+      icon: <Shield className="w-6 h-6 text-[#3563E9] stroke-[2.5]" />,
       title: "Abogados especializados",
       desc: "Cada plantilla fue revisada por expertos en derecho inmobiliario mexicano."
     },
     {
-      icon: <Zap className="w-6 h-6 text-[#1a56ff] stroke-[2.5]" />,
+      icon: <Zap className="w-6 h-6 text-[#3563E9] stroke-[2.5]" />,
       title: "Entrega en segundos",
       desc: "Pago confirmado → contrato en tu correo. Sin esperas, sin filas."
     },
     {
-      icon: <FileText className="w-6 h-6 text-[#1a56ff] stroke-[2.5]" />,
+      icon: <FileText className="w-6 h-6 text-[#3563E9] stroke-[2.5]" />,
       title: "PDF profesional",
       desc: "Formato listo para imprimir, firmar y presentar ante cualquier autoridad."
     }

@@ -13,7 +13,7 @@ import { Phone } from "@/components/shared/Phone";
 import { BackgroundBlobs } from "@/components/shared/BackgroundBlobs";
 import { getAvailableStatesList } from "@/lib/states";
 
-const BRAND = "#4D6BFE";
+const BRAND = "#3563E9";
 
 type Step = {
   n: string;

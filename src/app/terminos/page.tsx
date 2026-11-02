@@ -12,27 +12,27 @@ export default function TerminosPage() {
     <main className="min-h-[calc(100vh-64px)] bg-surface-subtle flex flex-col font-sans relative">
       
       {/* Decorative Header Background */}
-      <div className="absolute top-0 left-0 right-0 h-64 bg-[#0a0f1c] z-0 overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-64 bg-[radial-gradient(circle_at_top_right,#E0E7FF_0%,#F4F7FB_40%,#FFFFFF_100%)] z-0 overflow-hidden">
         <div 
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(#0f172a 1px, transparent 1px)',
             backgroundSize: '24px 24px',
-            opacity: 0.1
+            opacity: 0.06
           }}
         />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#4D6BFE] rounded-full blur-[120px] opacity-20 pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#3563E9] rounded-full blur-[120px] opacity-10 pointer-events-none" />
       </div>
 
       <div className="flex-1 w-full max-w-4xl mx-auto px-6 py-20 relative z-10">
         
         {/* Header content */}
         <div className="mb-10 text-center md:text-left">
-           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-[#3B5998] bg-[#1A2352]/80 backdrop-blur-sm text-xs font-bold text-[#4D6BFE] uppercase tracking-wide mb-6">
+           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#3563E9]/20 bg-[#EEF2FF] text-xs font-bold text-[#3563E9] uppercase tracking-wide mb-6">
              <Scale className="w-4 h-4" /> Normativa de Plataforma
            </div>
-           <h1 className="text-4xl md:text-5xl font-display font-black text-white mb-4">Términos y Condiciones</h1>
-           <p className="text-gray-400">Última actualización: 8 de Abril de 2026</p>
+           <h1 className="text-4xl md:text-5xl font-display font-extrabold text-slate-900 mb-4">Términos y Condiciones</h1>
+           <p className="text-slate-500">Última actualización: 8 de Abril de 2026</p>
         </div>
         
         {/* Prose Container */}

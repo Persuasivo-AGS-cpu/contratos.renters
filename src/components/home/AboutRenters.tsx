@@ -10,7 +10,7 @@ export function AboutRenters() {
     <section className="w-full py-24 px-6 bg-[#f8f9fa] border-y border-gray-200/60">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
-          <div className="inline-block px-3 py-1 font-bold text-[11px] uppercase tracking-[0.2em] mb-4 text-[#1a56ff]">
+          <div className="inline-block px-3 py-1 font-bold text-[11px] uppercase tracking-[0.2em] mb-4 text-[#3563E9]">
             Parte de Renters
           </div>
           <h2 className="text-3xl md:text-[42px] font-display font-black text-text-main tracking-tight mb-4">
@@ -26,7 +26,7 @@ export function AboutRenters() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           <Reveal className="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
             <div className="w-12 h-12 rounded-xl bg-[#E8F0FE] flex items-center justify-center mb-4">
-              <FileText className="w-6 h-6 text-[#1a56ff]" />
+              <FileText className="w-6 h-6 text-[#3563E9]" />
             </div>
             <h3 className="font-black text-gray-900 text-lg mb-2">Tu contrato: protección en papel</h3>
             <p className="text-gray-500 text-[15px] leading-relaxed">

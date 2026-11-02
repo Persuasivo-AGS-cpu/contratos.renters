@@ -64,11 +64,11 @@ export default async function EstadoPage({ params }: PageProps) {
       {/* Hero */}
       <section className="w-full bg-white pt-20 pb-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-[#1a56ff] uppercase tracking-wide mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-[#3563E9] uppercase tracking-wide mb-6">
             <Scale className="w-3.5 h-3.5" /> Código Civil de {legalName}
           </div>
           <h1 className="text-4xl md:text-6xl font-display font-black text-gray-900 tracking-tight leading-tight mb-6">
-            Contrato de Arrendamiento en <span className="text-[#1a56ff]">{name}</span>
+            Contrato de Arrendamiento en <span className="text-[#3563E9]">{name}</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
             Genera tu contrato de renta personalizado y legalmente válido para {name} en menos de 6 minutos.
@@ -76,7 +76,7 @@ export default async function EstadoPage({ params }: PageProps) {
           </p>
           <Link
             href={`/contrato?estado=${slug}`}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#1a56ff] hover:bg-[#003ee6] text-white text-lg font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#3563E9] hover:bg-[#2951CB] text-white text-lg font-bold rounded-full transition-all shadow-lg shadow-blue-500/20"
           >
             Generar mi contrato para {name} <ArrowRight className="w-5 h-5" />
           </Link>
@@ -106,9 +106,9 @@ export default async function EstadoPage({ params }: PageProps) {
       <section className="w-full bg-white py-16 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {[
-            { icon: <FileText className="w-6 h-6 text-[#1a56ff]" />, t: '1. Llena el formulario', d: 'Datos de la propiedad, arrendador, inquilino y términos. ~6 minutos.' },
-            { icon: <Zap className="w-6 h-6 text-[#1a56ff]" />, t: '2. Paga $499 MXN', d: 'Pago único y seguro con tarjeta vía Stripe. IVA incluido.' },
-            { icon: <ShieldCheck className="w-6 h-6 text-[#1a56ff]" />, t: '3. Descarga tu PDF', d: 'Contrato listo para firmar, en tu correo al instante.' },
+            { icon: <FileText className="w-6 h-6 text-[#3563E9]" />, t: '1. Llena el formulario', d: 'Datos de la propiedad, arrendador, inquilino y términos. ~6 minutos.' },
+            { icon: <Zap className="w-6 h-6 text-[#3563E9]" />, t: '2. Paga $499 MXN', d: 'Pago único y seguro con tarjeta vía Stripe. IVA incluido.' },
+            { icon: <ShieldCheck className="w-6 h-6 text-[#3563E9]" />, t: '3. Descarga tu PDF', d: 'Contrato listo para firmar, en tu correo al instante.' },
           ].map((s) => (
             <div key={s.t} className="flex flex-col items-center">
               <div className="w-14 h-14 rounded-2xl bg-[#E8F0FE] flex items-center justify-center mb-4">{s.icon}</div>
@@ -143,7 +143,7 @@ export default async function EstadoPage({ params }: PageProps) {
         </h2>
         <Link
           href={`/contrato?estado=${slug}`}
-          className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#1a56ff] hover:bg-[#003ee6] text-white text-lg font-bold rounded-xl transition-all shadow-lg shadow-blue-500/20"
+          className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#3563E9] hover:bg-[#2951CB] text-white text-lg font-bold rounded-full transition-all shadow-lg shadow-blue-500/20"
         >
           Empezar ahora <ArrowRight className="w-5 h-5" />
         </Link>

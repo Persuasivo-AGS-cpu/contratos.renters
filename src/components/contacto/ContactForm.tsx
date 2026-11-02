@@ -89,7 +89,7 @@ export function ContactForm() {
                 onClick={() => setSelectedMotiveId(motive.id)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-bold transition-all ${
                   isActive 
-                    ? "bg-[#0d52ff] border-2 border-[#0d52ff] text-white shadow-md shadow-blue-500/20" 
+                    ? "bg-[#3563E9] border-2 border-[#3563E9] text-white shadow-md shadow-blue-500/20" 
                     : "bg-white border text-gray-600 border-gray-200 hover:border-gray-300"
                 }`}
               >
@@ -110,7 +110,7 @@ export function ContactForm() {
                 placeholder="Tu nombre"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#1a56ff] focus:border-transparent transition-all"
+                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#3563E9] focus:border-transparent transition-all"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -121,7 +121,7 @@ export function ContactForm() {
                 placeholder="tu@email.com"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
-                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#1a56ff] focus:border-transparent transition-all"
+                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#3563E9] focus:border-transparent transition-all"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ export function ContactForm() {
               placeholder={activeMotiveInfo.msgPlaceholder}
               value={mensaje}
               onChange={(e) => setMensaje(e.target.value)}
-              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#1a56ff] focus:border-transparent transition-all resize-none"
+              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#3563E9] focus:border-transparent transition-all resize-none"
             ></textarea>
           </div>
 
@@ -154,7 +154,7 @@ export function ContactForm() {
           <button
             type="submit"
             disabled={status === "loading" || status === "success"}
-            className="w-full flex items-center justify-center gap-2 bg-[#0d52ff] hover:bg-[#003ee6] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all text-[16px] mt-2"
+            className="w-full flex items-center justify-center gap-2 bg-[#3563E9] hover:bg-[#2951CB] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-4 rounded-full shadow-lg shadow-blue-500/20 transition-all text-[16px] mt-2"
           >
             <Send className="w-5 h-5" />
             {status === "loading" ? "Enviando..." : "Enviar mensaje"}

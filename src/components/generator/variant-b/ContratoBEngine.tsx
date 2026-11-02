@@ -343,20 +343,20 @@ export function ContratoBEngine() {
   return (
     <div className="bg-surface-subtle pb-28">
       {/* HERO */}
-      <div className="bg-[#0F1729] text-white px-6 py-14 md:py-20">
+      <div className="bg-[radial-gradient(circle_at_top_right,#E0E7FF_0%,#F4F7FB_40%,#FFFFFF_100%)] text-slate-900 px-6 py-14 md:py-20">
         <div className="max-w-xl mx-auto">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-primary/80 mb-3 block">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#3563E9] mb-3 block">
             Instrumento legal · Renters
           </span>
           <h1 className="font-display text-3xl md:text-4xl font-bold leading-tight max-w-[18ch]">
             Tu contrato de arrendamiento, listo en minutos.
           </h1>
-          <p className="text-gray-300 mt-4 max-w-[38ch]">
+          <p className="text-slate-600 mt-4 max-w-[38ch]">
             Responde unas preguntas simples y mira cómo se arma tu documento legal frente a ti.
           </p>
           <div className="flex flex-wrap gap-2 mt-6">
             {["$499 MXN", "< 6 min", `${ACTIVE_STATES.length} estados`].map((b) => (
-              <span key={b} className="text-xs font-semibold text-gray-200 bg-white/10 border border-white/15 rounded-full px-3 py-1.5">
+              <span key={b} className="text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-full px-3 py-1.5">
                 {b}
               </span>
             ))}
@@ -946,12 +946,12 @@ export function ContratoBEngine() {
       </Section>
 
       {/* STICKY BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#0F1729]/95 backdrop-blur text-white px-4 py-3 flex items-center justify-between gap-3 border-t border-white/10">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur text-slate-900 px-4 py-3 flex items-center justify-between gap-3 border-t border-border-layout">
         <div className="min-w-0">
-          <p className="text-[11px] font-mono text-brand-primary/80 tracking-wide truncate">
+          <p className="text-[11px] font-mono text-slate-500 tracking-wide truncate">
             {contract.state ? `Contrato · ${getStateName(contract.state)}` : "Generador de contrato"}
           </p>
-          <div className="w-36 h-[3px] bg-white/15 rounded-full mt-1.5 overflow-hidden">
+          <div className="w-36 h-[3px] bg-slate-200 rounded-full mt-1.5 overflow-hidden">
             <div className="h-full bg-brand-primary transition-all duration-500" style={{ width: `${progressPct}%` }} />
           </div>
         </div>
