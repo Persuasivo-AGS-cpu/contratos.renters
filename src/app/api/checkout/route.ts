@@ -3,6 +3,7 @@ import { stripe, PLAN_PRICES, PLAN_NAMES, generateFolio, getFolioPrefix } from '
 import { supabaseAdmin } from '@/lib/supabase';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { getAppUrl } from '@/lib/appUrl';
+import { sanitizeAttribution, cleanString } from '@/lib/attribution';
 
 // Máx 5 sesiones de checkout por IP por 10 minutos
 const RATE_LIMIT = 5;
@@ -69,8 +70,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Demasiadas solicitudes. Intenta en unos minutos.' }, { status: 429 });
   }
   try {
-    const body = await req.json() as { contract?: JsonRecord; plan?: keyof typeof PLAN_PRICES; variant?: unknown };
+    const body = await req.json() as {
+      contract?: JsonRecord;
+      plan?: keyof typeof PLAN_PRICES;
+      variant?: unknown;
+      attribution?: unknown;
+      meta?: { fbp?: unknown; fbc?: unknown };
+    };
     const { contract, plan, variant } = body;
+    const attribution = sanitizeAttribution(body.attribution);
+    // Solo sirve para enviar el Purchase a Meta; se borra a los 90 días.
+    const clientContext = {
+      ip: ip,
+      ua: cleanString(req.headers.get('user-agent')),
+      fbp: cleanString(body.meta?.fbp),
+      fbc: cleanString(body.meta?.fbc),
+    };
 
     if (!contract || !plan) {
       return NextResponse.json({ error: 'Datos incompletos' }, { status: 400 });
@@ -143,6 +158,7 @@ export async function POST(req: NextRequest) {
         plan,
         arrendador_email: landlordEmail,
         inquilino_email: tenantEmail,
+        ...(attribution ?? {}),
       },
     });
 
@@ -162,6 +178,8 @@ export async function POST(req: NextRequest) {
       stripe_session_id: session.id,
       contract_data: contract,
       status: 'pending',
+      attribution,
+      client_context: clientContext,
     });
 
     if (insertError) {

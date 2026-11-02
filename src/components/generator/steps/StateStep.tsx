@@ -1,5 +1,6 @@
 "use client";
 
+import { getAttribution } from "@/lib/attributionClient";
 import { useContractStore } from "@/store/useContractStore";
 import { STATES } from "@/lib/states";
 import { WaitlistCapture } from "@/components/generator/WaitlistCapture";
@@ -47,7 +48,7 @@ export function StateStep() {
     fetch("/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: leadEmail.trim(), estado: contract.state || null }),
+      body: JSON.stringify({ email: leadEmail.trim(), estado: contract.state || null, attribution: getAttribution() }),
     }).catch(() => {});
   };
 

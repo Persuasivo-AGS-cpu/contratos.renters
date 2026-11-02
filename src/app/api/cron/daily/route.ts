@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isCronAuthorized } from '@/lib/cronAuth';
-import { runRecoverPending, runReviewRequest } from '@/lib/cronTasks';
+import { runRecoverPending, runReviewRequest, runPurgeClientContext } from '@/lib/cronTasks';
 import { buildAndSendWeeklyReport } from '@/lib/weeklyReport';
 
 // Único cron diario (vercel.json). Consolida las tareas diarias para no exceder
@@ -26,6 +26,13 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     console.error('[cron/daily] review-request failed:', err);
     results.reviewRequest = { error: true };
+  }
+
+  try {
+    results.purgeClientContext = await runPurgeClientContext();
+  } catch (err) {
+    console.error('[cron/daily] purge-client-context failed:', err);
+    results.purgeClientContext = { error: true };
   }
 
   // Reporte semanal: solo los lunes (UTC). El cron corre 16:00 UTC = 10:00 CDMX,

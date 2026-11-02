@@ -3,6 +3,7 @@ import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Analytics } from "@/components/layout/Analytics";
+import { AttributionCapture } from "@/components/layout/AttributionCapture";
 import { getAvailableStatesList } from "@/lib/states";
 
 const inter = Inter({
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-surface-clean text-text-main font-sans">
         <Navbar />
         {children}
+        <AttributionCapture />
         <Analytics />
       </body>
     </html>

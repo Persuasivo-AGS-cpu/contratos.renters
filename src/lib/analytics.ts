@@ -34,5 +34,12 @@ export function trackPurchase(folio: string) {
   window.gtag?.('event', 'purchase', {
     transaction_id: folio, currency: 'MXN', value: 499,
   });
-  window.fbq?.('track', 'Purchase', { currency: 'MXN', value: 499 });
+  // event_id = folio: el webhook manda el mismo Purchase por servidor y Meta deduplica.
+  // content_name distingue las compras de contratos en el Pixel compartido con la póliza.
+  window.fbq?.(
+    'track',
+    'Purchase',
+    { currency: 'MXN', value: 499, content_name: 'Contrato de arrendamiento', content_type: 'product' },
+    { eventID: folio },
+  );
 }

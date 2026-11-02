@@ -1,5 +1,6 @@
 "use client";
 
+import { getAttribution, getMetaCookies } from '@/lib/attributionClient';
 import { useContractStore } from "@/store/useContractStore";
 import { getStateName } from "@/lib/states";
 import { trackBeginCheckout } from "@/lib/analytics";
@@ -31,7 +32,13 @@ export function CheckoutModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contract, plan, variant: getAbVariant() }),
+        body: JSON.stringify({
+          contract,
+          plan,
+          variant: getAbVariant(),
+          attribution: getAttribution(),
+          meta: getMetaCookies(),
+        }),
       });
 
       const data = await res.json();
