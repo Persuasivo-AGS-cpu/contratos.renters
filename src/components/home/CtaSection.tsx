@@ -23,7 +23,7 @@ export function CtaSection() {
           </h2>
 
           <p className="text-gray-200 text-[18px] md:text-[20px] max-w-[700px] mx-auto leading-relaxed mb-12 font-medium">
-            No arriesgues tu propiedad con contratos improvisados. Genera un contrato legal profesional en menos de 10 minutos.
+            No arriesgues tu propiedad con contratos improvisados. Genera un contrato legal profesional en menos de 6 minutos.
           </p>
 
           <Link

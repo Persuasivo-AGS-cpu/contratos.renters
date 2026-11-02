@@ -19,7 +19,7 @@ export function HeroProcessSection() {
           
           <h1 className="text-5xl md:text-[64px] font-display font-black text-[#111] leading-[1.05] tracking-tight mb-8">
             Tu contrato legal,<br/>
-            <span className="text-[#1a56ff]">en menos de 10 minutos</span>
+            <span className="text-[#1a56ff]">en menos de 6 minutos</span>
           </h1>
           
           <p className="text-[#4b5563] text-[20px] md:text-[22px] leading-relaxed mb-10 font-medium">
@@ -41,7 +41,7 @@ export function HeroProcessSection() {
             {/* Box 1 */}
             <div className="bg-[#fbfcff] border border-gray-100 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-sm">
               <div className="text-4xl lg:text-[44px] font-display font-black text-[#1a56ff] mb-2 tracking-tight">
-                &lt; 10 min
+                &lt; 6 min
               </div>
               <p className="text-gray-600 font-medium text-[15px]">Para tener tu contrato</p>
             </div>

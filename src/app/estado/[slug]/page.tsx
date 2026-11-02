@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const name = state.name;
   return {
     title: `Contrato de Arrendamiento en ${name} | Renters`,
-    description: `Genera tu contrato de arrendamiento para ${name} en menos de 10 minutos. Redactado por abogados conforme al Código Civil de ${state.legalName}. $499 MXN, listo para firmar.`,
+    description: `Genera tu contrato de arrendamiento para ${name} en menos de 6 minutos. Redactado por abogados conforme al Código Civil de ${state.legalName}. $499 MXN, listo para firmar.`,
     alternates: { canonical: `/estado/${slug}` },
   };
 }
@@ -71,7 +71,7 @@ export default async function EstadoPage({ params }: PageProps) {
             Contrato de Arrendamiento en <span className="text-[#1a56ff]">{name}</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Genera tu contrato de renta personalizado y legalmente válido para {name} en menos de 10 minutos.
+            Genera tu contrato de renta personalizado y legalmente válido para {name} en menos de 6 minutos.
             Redactado por abogados, adaptado a la legislación local. $499 MXN, pago único.
           </p>
           <Link

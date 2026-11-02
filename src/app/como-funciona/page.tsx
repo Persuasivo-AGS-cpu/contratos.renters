@@ -7,7 +7,7 @@ import { FinalCtaProcessSection } from "@/components/como-funciona/FinalCtaProce
 
 export const metadata = {
   title: "Cómo Funciona | Renters",
-  description: "Descubre cómo generar tu contrato legal de arrendamiento en menos de 10 minutos con Renters.",
+  description: "Descubre cómo generar tu contrato legal de arrendamiento en menos de 6 minutos con Renters.",
 };
 
 export default function ComoFuncionaPage() {
