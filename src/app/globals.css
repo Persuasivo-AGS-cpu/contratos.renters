@@ -31,14 +31,9 @@ body {
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 6rem; /* barra fija de 5rem + aire */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  /* Barra fija de 5rem + aire. Sin scroll-behavior: smooth: con carga directa de /#id se cancelaba
+     al cambiar el tamaño de la página y no bajaba a la sección. */
+  scroll-padding-top: 6rem;
 }
 
 @media print {
