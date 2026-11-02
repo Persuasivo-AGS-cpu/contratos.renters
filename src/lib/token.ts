@@ -11,3 +11,10 @@ export function tokenCutoff(now = Date.now()): string {
 export function tokenFreshFilter(cutoff: string): string {
   return `pdf_token_issued_at.gte.${cutoff},and(pdf_token_issued_at.is.null,paid_at.gte.${cutoff})`;
 }
+
+// ¿Sigue vigente el enlace? Misma regla que tokenFreshFilter, para decidirlo en la UI.
+export function isTokenFresh(issuedAt: string | null, paidAt: string | null, now = Date.now()): boolean {
+  const since = issuedAt ?? paidAt;
+  if (!since) return false;
+  return new Date(since).getTime() >= new Date(tokenCutoff(now)).getTime();
+}
