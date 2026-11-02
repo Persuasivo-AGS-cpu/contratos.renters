@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, FileSignature, CheckCircle, MapPin, ShieldCheck, MessageCircle, Mail } from "lucide-react";
 import { CONTRATOS_MENU, type ContratosMenuId } from "@/lib/contratosNav";
@@ -21,11 +20,6 @@ const hayHover = () => typeof window !== "undefined" && window.matchMedia("(hove
 export function ContratosMenu() {
   const [abierto, setAbierto] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    setAbierto(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!abierto) return;
