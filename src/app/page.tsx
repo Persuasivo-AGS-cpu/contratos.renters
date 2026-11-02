@@ -1,27 +1,24 @@
-import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
-import { TrustBar } from "@/components/home/TrustBar";
+import { ComoFuncionaSection } from "@/components/home/ComoFuncionaSection";
 import { StateCards } from "@/components/home/StateCards";
 import { PricingSection } from "@/components/home/PricingSection";
-import { AboutRenters } from "@/components/home/AboutRenters";
-import { FaqSection } from "@/components/home/FaqSection";
+import { DudasRapidasSection } from "@/components/home/DudasRapidasSection";
 import { CtaSection } from "@/components/home/CtaSection";
+import { SoporteSection } from "@/components/home/SoporteSection";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-surface-clean flex flex-col font-sans">
-      
       <div className="flex-1">
         <HeroSection />
-        <TrustBar />
+        <ComoFuncionaSection />
         <StateCards />
         <PricingSection />
-        <AboutRenters />
-        <FaqSection />
+        <DudasRapidasSection />
         <CtaSection />
+        <SoporteSection />
       </div>
-
       <Footer />
     </main>
   );
