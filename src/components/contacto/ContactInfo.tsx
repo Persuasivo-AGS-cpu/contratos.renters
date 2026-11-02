@@ -25,7 +25,7 @@ export function ContactInfo() {
         </h1>
         
         <p className="text-[#a1a1aa] text-[18px] md:text-[20px] mb-10 font-medium leading-relaxed max-w-md">
-          ¿Tienes dudas sobre tus contratos, necesitas algo especial o quieres tu factura? Escríbenos, respondemos rápido.
+          ¿Tienes dudas sobre tus contratos o necesitas algo especial? Escríbenos, respondemos en menos de 1 día.
         </p>
 
         {/* Status Pill */}

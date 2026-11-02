@@ -9,6 +9,7 @@ import { trackFunnelStep } from "@/lib/funnel";
 import { trackGeneratorStep } from "@/lib/analytics";
 import { analyzeClabe } from "@/utils/clabeValidator";
 import { CheckoutModal } from "@/components/checkout/CheckoutModal";
+import { PurchaseValue } from "@/components/checkout/PurchaseValue";
 import { Minus, Plus } from "lucide-react";
 
 // Variante B del generador: un solo scroll continuo (vs. el wizard paso a
@@ -338,7 +339,10 @@ export function ContratoBEngine() {
   const addressLine = [addr.street, addr.ext_num].filter(Boolean).join(" ");
   const fullAddressLine = [addressLine, addr.neighborhood, addr.municipality].filter(Boolean).join(", ");
   const typeLabel = PROPERTY_TYPES.find((t) => t.id === contract.property.type)?.label;
-  const inventoryCount = Object.values(contract.property.inventory).reduce((a, b) => a + b, 0);
+  const additionalItems = contract.property.additional_items ?? [];
+  const inventoryCount =
+    Object.values(contract.property.inventory).reduce((a, b) => a + b, 0) +
+    additionalItems.reduce((a, i) => a + (i.name.trim() && i.qty > 0 ? i.qty : 0), 0);
 
   return (
     <div className="bg-surface-subtle pb-28">
@@ -522,7 +526,7 @@ export function ContratoBEngine() {
           <div className="grid grid-cols-2 gap-3">
             <Chip
               selected={!contract.property.furnished}
-              onClick={() => updateContract("property", { furnished: false, inventory: {} })}
+              onClick={() => updateContract("property", { furnished: false, inventory: {}, additional_items: [] })}
             >
               📦 Sin amueblar
             </Chip>
@@ -569,6 +573,66 @@ export function ContratoBEngine() {
                   </div>
                 );
               })}
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-border-layout">
+              <p className="text-sm font-bold text-text-main mb-1">Otro</p>
+              <p className="text-xs text-text-muted mb-3">¿Algo que no está en la lista? Agrégalo y aparecerá en el anexo de inventario.</p>
+              <div className="space-y-2">
+                {additionalItems.map((item) => (
+                  <div key={item.id} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      maxLength={60}
+                      value={item.name}
+                      placeholder="Ej. Espejo de sala, escritorio, microondas"
+                      aria-label="Nombre del artículo"
+                      className="flex-1 min-w-0 h-11 px-3 rounded-lg border border-border-layout bg-white text-sm"
+                      onChange={(e) =>
+                        updateContract("property", {
+                          additional_items: additionalItems.map((i) => (i.id === item.id ? { ...i, name: e.target.value } : i)),
+                        })
+                      }
+                    />
+                    <input
+                      type="number"
+                      min={1}
+                      max={99}
+                      value={item.qty}
+                      aria-label="Cantidad"
+                      className="w-16 h-11 px-2 rounded-lg border border-border-layout bg-white text-sm text-center"
+                      onChange={(e) =>
+                        updateContract("property", {
+                          additional_items: additionalItems.map((i) =>
+                            i.id === item.id ? { ...i, qty: Math.min(99, Math.max(1, Math.floor(Number(e.target.value)) || 1)) } : i
+                          ),
+                        })
+                      }
+                    />
+                    <button
+                      type="button"
+                      aria-label="Quitar artículo"
+                      className="w-11 h-11 flex items-center justify-center rounded-lg border border-border-layout text-text-muted"
+                      onClick={() =>
+                        updateContract("property", { additional_items: additionalItems.filter((i) => i.id !== item.id) })
+                      }
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-primary"
+                onClick={() =>
+                  updateContract("property", {
+                    additional_items: [...additionalItems, { id: crypto.randomUUID(), name: "", qty: 1 }],
+                  })
+                }
+              >
+                <Plus className="w-4 h-4" /> Agregar otro artículo
+              </button>
             </div>
           </div>
         )}
@@ -880,7 +944,7 @@ export function ContratoBEngine() {
         active={active === "revision"}
       >
         <div className="flex flex-wrap gap-2 mb-5">
-          {["✓ Redactado por abogados", "✓ Conforme al código civil", "✓ Válido ante autoridades"].map((b) => (
+          {["✓ Redactado por abogados", "✓ Conforme al código civil", "✓ Validado por abogados expertos"].map((b) => (
             <span key={b} className="text-xs font-semibold text-brand-primary bg-brand-primary/10 rounded-full px-3 py-1.5">
               {b}
             </span>
@@ -942,7 +1006,12 @@ export function ContratoBEngine() {
             <strong className="text-brand-primary text-xl">$499 MXN</strong>
           </div>
         </div>
-        <p className="text-xs text-text-muted text-center mt-3">Corrección de datos gratis las primeras 24 horas.</p>
+        <p className="text-xs text-text-muted text-center mt-3">Pago único · IVA incluido · Sin suscripción</p>
+
+        <PurchaseValue
+          legalStateName={contract.state ? getLegalStateName(contract.state) : "tu estado"}
+          furnished={contract.property.furnished}
+        />
       </Section>
 
       {/* STICKY BAR */}

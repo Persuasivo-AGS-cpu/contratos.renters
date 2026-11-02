@@ -1,6 +1,7 @@
 "use client";
 
 import { useContractStore } from "@/store/useContractStore";
+import { inventoryLabel } from '@/lib/inventory';
 import { formatCurrencyText } from "@/utils/numberToWords";
 import { pendingIneText, pendingText } from "./pendingFields";
 import { ordinalClause } from "./clauseOrdinal";
@@ -143,13 +144,7 @@ export function CoahuilaTemplate({ preview = false }: { preview?: boolean }) {
           <ul className="list-disc pl-8 space-y-2">
             {Object.entries(c.property.inventory).map(([key, qty]) => {
               if (qty <= 0) return null;
-              const labelMap: Record<string, string> = {
-                sofas: 'Sofás o Sillones', camas: 'Camas / Colchones', tv: 'Televisiones',
-                comedor: 'Mesas de Comedor y Sillas', refrigerador: 'Refrigerador',
-                estufa: 'Estufa / Horno', climas: 'Aires Acondicionados / Minisplits',
-                abanicos: 'Abanicos de Techo', boiler: 'Boiler / Calentador de Agua',
-              };
-              return <li key={key}><span className="font-bold">{qty}</span> x {labelMap[key] || key}</li>;
+              return <li key={key}><span className="font-bold">{qty}</span> x {inventoryLabel(key)}</li>;
             })}
             {c.property.additional_items?.filter(i => i.name.trim() && i.qty > 0).map((item) => (
               <li key={item.id}><span className="font-bold">{item.qty}</span> x {item.name}</li>
