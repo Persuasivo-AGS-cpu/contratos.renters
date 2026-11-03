@@ -37,7 +37,7 @@ export function HeroSection() {
   const ctaHref = selectedState ? `/contrato?estado=${selectedState}` : "/contrato";
 
   return (
-    <section id="resumen" className="relative w-full min-h-[90vh] flex items-center pt-24 pb-20 px-6 bg-[radial-gradient(circle_at_top_right,#E0E7FF_0%,#F4F7FB_40%,#FFFFFF_100%)]">
+    <section id="resumen" className="relative w-full min-h-[90vh] flex items-center pt-[8.5rem] pb-20 px-6 bg-[radial-gradient(circle_at_top_right,#E0E7FF_0%,#F4F7FB_40%,#FFFFFF_100%)]">
       <AmbientBlobs reducedMotion={!!reducedMotion} />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-center gap-16">

@@ -1,0 +1,239 @@
+/* Encabezado portado de www.renters.mx (src/components/organisms/Header/Header.css).
+   Mismas medidas: barra de 114 px (12 + 90 + 12), contenedor de 1320 px, enlaces de .85rem,
+   botones de 51 px. Cambios respecto a www, a propósito:
+   - el desenfoque va en un elemento hijo (.fondo): un `backdrop-filter` en el propio header haría que el menú
+     móvil (position: fixed) se midiera contra el header y no contra la pantalla;
+   - el menú de hamburguesa aparece por debajo de 1200 px (en www se rompe entre 769 y ~1000 px);
+   - menú cerrado con `visibility: hidden` (no queda en el orden de tabulación), 100dvh, 250 ms y
+     sin animación si el sistema pide reducir movimiento;
+   - anillo de foco visible y enlace "Saltar al contenido". */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0.75rem 0;
+  background-color: transparent;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  transition: padding 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: rgba(255, 255, 255, 0.95);
+  /* el desenfoque (blur de 8px) lo pone la clase de Tailwind en SiteHeader.tsx: este proceso de CSS
+     descarta backdrop-filter en módulos */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scrolled {
+  padding: 0.5rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.scrolled .fondo {
+  opacity: 1;
+}
+
+.spacer {
+  height: 114px;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1320px;
+  height: 90px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logoImg {
+  width: 90px;
+  height: auto;
+}
+
+.nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  font-weight: 500;
+  color: #475569;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #0f172a;
+}
+
+.active {
+  background-color: #eef2ff;
+  color: #3563e9;
+}
+
+.link:focus-visible,
+.btn:focus-visible,
+.burger:focus-visible,
+.logo:focus-visible {
+  outline: 2px solid #3563e9;
+  outline-offset: 2px;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  height: 51px;
+  padding: 0 2rem;
+  border-radius: 30px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.btnOutline {
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  background-color: transparent;
+}
+
+.btnOutline:hover {
+  background-color: #f8fafc;
+}
+
+.btnPrimary {
+  border: 2px solid transparent;
+  color: #ffffff;
+  background-color: #3563e9;
+}
+
+.btnPrimary:hover {
+  background-color: #2951cb;
+}
+
+.burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: #0f172a;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.burger svg {
+  width: 34px;
+  height: 34px;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.skip {
+  position: fixed;
+  left: -9999px;
+  top: 8px;
+  z-index: 1100;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: #3563e9;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip:focus {
+  left: 8px;
+}
+
+@media (max-width: 1199px) {
+  .actions {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  .mobileOnly {
+    display: list-item;
+  }
+
+  .nav {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, visibility 0s linear 0.25s;
+    z-index: 999;
+  }
+
+  .navOpen {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .link {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .fondo,
+  .nav,
+  .link,
+  .btn {
+    transition: none;
+  }
+}
