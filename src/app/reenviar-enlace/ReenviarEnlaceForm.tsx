@@ -34,7 +34,7 @@ export function ReenviarEnlaceForm() {
     return (
       <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-700">
         Si el folio y el correo coinciden, te enviamos un enlace nuevo. Revisa tu bandeja y la carpeta de
-        spam. Si no llega en unos minutos, escríbenos a hola@renters.mx.
+        spam. Si no llega en unos minutos, escríbenos a contacto@renters.mx.
       </div>
     );
   }
