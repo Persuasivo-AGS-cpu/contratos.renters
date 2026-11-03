@@ -4,9 +4,10 @@ import Link from "next/link";
 import { Check, ArrowRight, ShieldCheck } from "lucide-react";
 import { useContractStore } from "@/store/useContractStore";
 import { Reveal } from "@/components/shared/Reveal";
+import { PolizaNota } from "./PolizaNota";
 
 const features = [
-  "Contrato legal completo",
+  "Contrato de arrendamiento personalizado",
   "Adaptado a legislación de tu estado",
   "Descarga en PDF",
   "Envío por correo electrónico",
@@ -20,7 +21,7 @@ export function PricingSection() {
       <div className="max-w-4xl mx-auto text-center mb-16">
         <div className="inline-block px-3 py-1 font-bold text-xs uppercase tracking-[0.2em] mb-4 text-[#3563E9]">PRECIOS</div>
         <h2 className="text-3xl md:text-5xl font-display font-black text-text-main mb-4 tracking-tight">
-          Inversión que protege tu patrimonio
+          Un precio, sin suscripción
         </h2>
         <p className="text-xl text-text-muted">Precio único. Sin suscripciones. Sin cargos ocultos.</p>
       </div>
@@ -74,6 +75,10 @@ export function PricingSection() {
           </p>
         </div>
       </Reveal>
+
+      <div className="mx-auto mt-10 max-w-md">
+        <PolizaNota />
+      </div>
     </section>
   );
 }

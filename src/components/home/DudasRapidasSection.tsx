@@ -1,5 +1,6 @@
 import { CORRECCION_GRATIS_HORAS, ENLACE_VIGENCIA_DIAS } from "@/lib/compra";
 import { getAvailableStatesList } from "@/lib/states";
+import { COPY } from "@/lib/copy";
 import { DudasAccordion, type Duda } from "./DudasAccordion";
 
 const DUDAS: Duda[] = [
@@ -23,6 +24,11 @@ const DUDAS: Duda[] = [
     q: "¿Qué recibo y por cuánto tiempo puedo descargarlo?",
     a: `Un PDF por correo, con un enlace de descarga que dura ${ENLACE_VIGENCIA_DIAS} días. Si lo necesitas de nuevo, puedes pedir que te reenviemos el enlace.`,
     accion: { label: "Reenviar mi enlace", href: "/reenviar-enlace" },
+  },
+  {
+    q: "¿Qué diferencia hay entre el contrato y la póliza jurídica?",
+    a: COPY.diferencia,
+    accion: { label: COPY.polizaEnlace.label, href: COPY.polizaEnlace.href },
   },
 ];
 

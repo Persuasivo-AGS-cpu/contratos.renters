@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, Check, Scale, Zap, FileText, ShieldCheck } from 'lucide-react';
 import { STATES, type StateId, getStateName, getLegalStateName } from '@/lib/states';
+import { COPY } from '@/lib/copy';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const name = state.name;
   return {
     title: `Contrato de Arrendamiento en ${name} | Renters`,
-    description: `Genera tu contrato de arrendamiento para ${name} en menos de 6 minutos. Redactado por abogados conforme al Código Civil de ${state.legalName}. $499 MXN, listo para firmar.`,
+    description: `Genera tu contrato de arrendamiento para ${name}. Plantilla basada en el Código Civil de ${state.legalName}. $499 MXN, listo para firmar.`,
     alternates: { canonical: `/estado/${slug}` },
   };
 }
@@ -36,26 +37,29 @@ export default async function EstadoPage({ params }: PageProps) {
   const legalName = getLegalStateName(slug);
 
   const beneficios = [
-    `Conforme al Código Civil de ${legalName} vigente`,
-    'Redactado y revisado por abogados especializados en arrendamiento',
+    `Basado en el Código Civil de ${legalName}`,
+    COPY.autoria,
     'Cláusulas de protección incluidas: deudor solidario, fiador, penalidades',
     'Anexo de inventario si la propiedad está amueblada',
     'PDF profesional listo para imprimir y firmar',
-    'Entrega inmediata por correo tras el pago',
+    'Entrega por correo tras el pago',
   ];
 
   const faqs = [
     {
-      q: `¿El contrato es válido en ${name}?`,
-      a: `Sí. La plantilla está redactada conforme al Código Civil de ${legalName} y contiene las cláusulas obligatorias para que el contrato sea plenamente exigible ante los tribunales locales.`,
+      q: `¿El contrato aplica en ${name}?`,
+      a: `Es una plantilla basada en el Código Civil de ${legalName}. Si tu caso tiene condiciones especiales, te recomendamos consultarlo con un abogado.`,
     },
+    ...(slug === 'nuevo-leon'
+      ? [{ q: '¿Y la póliza jurídica?', a: `${COPY.soloContrato} ${COPY.polizaNota}` }]
+      : []),
     {
       q: '¿Cuánto cuesta y qué incluye?',
       a: 'Pago único de $499 MXN con IVA incluido. Incluye el contrato completo personalizado, anexo de inventario opcional, descarga en PDF y envío por correo al arrendador y al inquilino.',
     },
     {
       q: '¿Necesito abogado o notario?',
-      a: 'No. El contrato de arrendamiento es válido con la firma de las partes. Las plantillas ya incluyen las cláusulas que un abogado redactaría.',
+      a: `Puedes llenar tu contrato tú mismo: la plantilla ya incluye las cláusulas y está basada en el Código Civil de ${legalName}. Si tu caso tiene condiciones especiales, te recomendamos consultarlo con un abogado.`,
     },
   ];
 
@@ -71,8 +75,8 @@ export default async function EstadoPage({ params }: PageProps) {
             Contrato de Arrendamiento en <span className="text-[#3563E9]">{name}</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Genera tu contrato de renta personalizado y legalmente válido para {name} en menos de 6 minutos.
-            Redactado por abogados, adaptado a la legislación local. $499 MXN, pago único.
+            Genera tu contrato de renta personalizado para {name}. {COPY.autoria}, basada en el Código Civil de {legalName}.
+            $499 MXN, pago único.
           </p>
           <Link
             href={`/contrato?estado=${slug}`}
@@ -106,9 +110,9 @@ export default async function EstadoPage({ params }: PageProps) {
       <section className="w-full bg-white py-16 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {[
-            { icon: <FileText className="w-6 h-6 text-[#3563E9]" />, t: '1. Llena el formulario', d: 'Datos de la propiedad, arrendador, inquilino y términos. ~6 minutos.' },
+            { icon: <FileText className="w-6 h-6 text-[#3563E9]" />, t: '1. Llena el formulario', d: 'Datos de la propiedad, arrendador, inquilino y términos.' },
             { icon: <Zap className="w-6 h-6 text-[#3563E9]" />, t: '2. Paga $499 MXN', d: 'Pago único y seguro con tarjeta vía Stripe. IVA incluido.' },
-            { icon: <ShieldCheck className="w-6 h-6 text-[#3563E9]" />, t: '3. Descarga tu PDF', d: 'Contrato listo para firmar, en tu correo al instante.' },
+            { icon: <ShieldCheck className="w-6 h-6 text-[#3563E9]" />, t: '3. Descarga tu PDF', d: 'Contrato listo para firmar, en tu correo después del pago.' },
           ].map((s) => (
             <div key={s.t} className="flex flex-col items-center">
               <div className="w-14 h-14 rounded-2xl bg-[#E8F0FE] flex items-center justify-center mb-4">{s.icon}</div>
@@ -159,7 +163,7 @@ export default async function EstadoPage({ params }: PageProps) {
               {
                 '@type': 'Product',
                 name: `Contrato de Arrendamiento — ${name}`,
-                description: `Contrato de arrendamiento conforme al Código Civil de ${legalName}, redactado por abogados.`,
+                description: `Contrato de arrendamiento basado en el Código Civil de ${legalName}.`,
                 offers: {
                   '@type': 'Offer',
                   price: '499',
