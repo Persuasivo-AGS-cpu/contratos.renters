@@ -1,5 +1,6 @@
-// Datos de contacto visibles. PROVISIONAL: correo y horario pendientes de confirmar con Abraham.
-// El destino real del formulario (/api/contact) es hola@renters.mx.
+// Datos de contacto visibles. hola@renters.mx es el correo oficial para toda comunicación (confirmado por Abraham, 2026-11-02);
+// el horario sigue provisional. El formulario (src/app/api/contact/route.ts) y el Reply-To de los correos de compra
+// (src/lib/email.ts) ya usan el mismo correo.
 export const CONTACTO = {
   email: 'hola@renters.mx',
   telefono: '+52 81 1061 0111',
