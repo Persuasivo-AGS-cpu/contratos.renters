@@ -18,7 +18,7 @@ const securityHeaders = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://googleads.g.doubleclick.net",   // unsafe-eval needed by Next.js dev/recharts
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://www.google-analytics.com https://www.facebook.com https://*.g.doubleclick.net https://www.google.com https://www.google.com.mx https://www.googleadservices.com https://ad.doubleclick.net",
+      "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://www.facebook.com https://*.g.doubleclick.net https://www.google.com https://www.google.com.mx https://www.googleadservices.com https://ad.doubleclick.net",
       "font-src 'self'",
       "connect-src 'self' https://*.supabase.co https://api.stripe.com https://www.google-analytics.com https://*.google-analytics.com https://www.facebook.com https://*.g.doubleclick.net https://www.google.com https://www.google.com.mx https://*.googleadservices.com https://ad.doubleclick.net",
       "frame-src https://js.stripe.com https://hooks.stripe.com https://td.doubleclick.net",
