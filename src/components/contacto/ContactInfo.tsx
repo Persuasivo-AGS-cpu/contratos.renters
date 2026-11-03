@@ -58,7 +58,7 @@ export function ContactInfo() {
         <ul className="space-y-6 mb-12 border-b border-gray-800 pb-12">
           <li className="flex items-center gap-4">
             <Mail className="w-5 h-5 text-gray-500" />
-            <span className="text-gray-300 font-medium">contacto@renters.mx</span>
+            <span className="text-gray-300 font-medium">hola@renters.mx</span>
           </li>
           <li className="flex items-center gap-4">
             <Phone className="w-5 h-5 text-gray-500" />
